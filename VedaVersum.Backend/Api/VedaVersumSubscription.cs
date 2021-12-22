@@ -24,7 +24,7 @@ namespace Centigrade.VedaVersum.Api
         /// <returns></returns>
         [Subscribe]
         [Topic]
-        public User UserLeaved([EventMessage] User user)
+        public User UserLeft([EventMessage] User user)
         {
             return user;
         }

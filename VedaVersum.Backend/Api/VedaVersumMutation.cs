@@ -48,7 +48,7 @@ namespace Centigrade.VedaVersum.Api
             };
 
             await _eventSender.SendAsync(
-                nameof(VedaVersumSubscription.UserLeaved),
+                nameof(VedaVersumSubscription.UserLeft),
                 user);
             return user;
         }
