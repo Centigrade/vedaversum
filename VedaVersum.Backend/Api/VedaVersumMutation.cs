@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Centigrade.VedaVersum.Model;
+using HotChocolate;
+using HotChocolate.AspNetCore.Authorization;
 using HotChocolate.Subscriptions;
 using HotChocolate.Types;
 
 namespace VedaVersum.Backend.Api
 {
     [ExtendObjectType(Name = "Mutation")]
+    [Authorize]
     public class VedaVersumMutation
     {
         private readonly ITopicEventSender _eventSender;
@@ -20,14 +23,12 @@ namespace VedaVersum.Backend.Api
         /// <summary>
         /// Notification about user enter
         /// </summary>
-        public async Task<User> UserEnters(string userId)
+        public async Task<User?> UserEnters([GlobalState("GitLabUser")] User user)
         {
-            // ToDo: Mock implementation.
-            var user = new User
+            if(user == null)
             {
-                Name = "Anakin Skywalker",
-                AvatarUrl = "https://static.wikia.nocookie.net/starwars/images/6/6f/Anakin_Skywalker_RotS.png"
-            };
+                throw new ApplicationException("User can not be found");
+            }
 
             await _eventSender.SendAsync(
                 nameof(VedaVersumSubscription.UserArrived),
@@ -38,14 +39,12 @@ namespace VedaVersum.Backend.Api
         /// <summary>
         /// Notification about user going offline
         /// </summary>
-        public async Task<User> UserLeaves(string userId)
+        public async Task<User> UserLeaves([GlobalState("GitLabUser")] User user)
         {
-            // ToDo: Mock implementation.
-            var user = new User
+            if(user == null)
             {
-                Name = "Anakin Skywalker",
-                AvatarUrl = "https://static.wikia.nocookie.net/starwars/images/6/6f/Anakin_Skywalker_RotS.png"
-            };
+                throw new ApplicationException("User can not be found");
+            }
 
             await _eventSender.SendAsync(
                 nameof(VedaVersumSubscription.UserLeft),
@@ -57,7 +56,8 @@ namespace VedaVersum.Backend.Api
             VedaVersumCardAction action,
             string title,
             string content,
-            ICollection<string>? relatedCards)
+            ICollection<string>? relatedCards,
+            [GlobalState("GitLabUser")] User user)
         {
             // ToDo: Mock implementation
             var card = new VedaVersumCard

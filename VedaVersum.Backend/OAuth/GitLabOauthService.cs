@@ -35,18 +35,21 @@ namespace VedaVersum.Backend.OAuth
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.JwtSecret));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var serializedUser = JsonSerializer.Serialize(user);
 
             // generate jwt token
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, user.Email?? "unknown"),
+                new Claim(ClaimTypes.Name, user.Name?? "unknown"),
+                new Claim(ClaimTypes.Email, user.Email?? "unknown"),
+                new Claim(ClaimTypes.UserData, serializedUser)
             };
 
             var token = new JwtSecurityToken(
                 issuer: JwtIssuer,
                 audience: JwtIssuer,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
+                expires: DateTime.Now.AddDays(30), // Token is valid for 1 month. Don't use this parameter in production!
                 signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

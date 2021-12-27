@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Centigrade.VedaVersum.Model;
+using HotChocolate;
+using HotChocolate.AspNetCore.Authorization;
 
 namespace VedaVersum.Backend.Api
 {
+    [Authorize]
     public class VedaVersumQuery
     {
         /// <summary>
@@ -34,9 +37,8 @@ namespace VedaVersum.Backend.Api
         /// <summary>
         /// Returns all cards assigned to user
         /// </summary>
-        /// <param name="userId"></param>
         /// <returns></returns>
-        public Task<IEnumerable<VedaVersumCard>> GetAllCardsAssignedToUser(string userId)
+        public Task<IEnumerable<VedaVersumCard>> GetAllCardsAssignedToUser([GlobalState("GitLabUser")] User user)
         {
             throw new NotImplementedException();
         }
@@ -46,6 +48,7 @@ namespace VedaVersum.Backend.Api
         /// </summary>
         public Task<IEnumerable<User>> ActiveUsers()
         {
+            // TODO: Use https://docs.microsoft.com/en-us/aspnet/core/performance/caching/memory?view=aspnetcore-6.0
             throw new NotImplementedException();
         }
 
