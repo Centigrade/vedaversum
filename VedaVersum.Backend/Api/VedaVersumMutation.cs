@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Centigrade.VedaVersum.Model;
 using HotChocolate.Subscriptions;
+using HotChocolate.Types;
 
-namespace Centigrade.VedaVersum.Api
+namespace VedaVersum.Backend.Api
 {
+    [ExtendObjectType(Name = "Mutation")]
     public class VedaVersumMutation
     {
         private readonly ITopicEventSender _eventSender;
@@ -23,9 +25,8 @@ namespace Centigrade.VedaVersum.Api
             // ToDo: Mock implementation.
             var user = new User
             {
-                Id = userId,
                 Name = "Anakin Skywalker",
-                UserImage = "https://static.wikia.nocookie.net/starwars/images/6/6f/Anakin_Skywalker_RotS.png"
+                AvatarUrl = "https://static.wikia.nocookie.net/starwars/images/6/6f/Anakin_Skywalker_RotS.png"
             };
 
             await _eventSender.SendAsync(
@@ -42,9 +43,8 @@ namespace Centigrade.VedaVersum.Api
             // ToDo: Mock implementation.
             var user = new User
             {
-                Id = userId,
                 Name = "Anakin Skywalker",
-                UserImage = "https://static.wikia.nocookie.net/starwars/images/6/6f/Anakin_Skywalker_RotS.png"
+                AvatarUrl = "https://static.wikia.nocookie.net/starwars/images/6/6f/Anakin_Skywalker_RotS.png"
             };
 
             await _eventSender.SendAsync(

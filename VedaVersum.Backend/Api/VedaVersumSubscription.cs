@@ -3,7 +3,7 @@ using Centigrade.VedaVersum.Model;
 using HotChocolate;
 using HotChocolate.Types;
 
-namespace Centigrade.VedaVersum.Api
+namespace VedaVersum.Backend.Api
 {
     public class VedaVersumSubscription
     {

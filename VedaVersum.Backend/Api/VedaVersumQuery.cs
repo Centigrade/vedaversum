@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Centigrade.VedaVersum.Model;
 
-namespace Centigrade.VedaVersum.Api
+namespace VedaVersum.Backend.Api
 {
     public class VedaVersumQuery
     {
