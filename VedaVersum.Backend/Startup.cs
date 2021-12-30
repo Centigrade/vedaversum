@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using VedaVersum.Backend.Api;
+using VedaVersum.Backend.DataAccess;
 using VedaVersum.Backend.OAuth;
 
 namespace Centigrade.VedaVersum
@@ -54,6 +55,10 @@ namespace Centigrade.VedaVersum
             
             services.AddAuthorization();
 
+            // DataAccess
+            var connectionString = Configuration.GetConnectionString("mongo");
+            services.AddTransient<IVedaVersumDataAccess, VedaVersumDataAccess>((p) => new VedaVersumDataAccess(connectionString));
+
             services
                 .AddGraphQLServer()
                 .AddInMemorySubscriptions()
@@ -75,9 +80,7 @@ namespace Centigrade.VedaVersum
                             {
                                 var user = JsonSerializer.Deserialize<User>(serializedUser);
                                 builder.SetProperty("GitLabUser", user);
-
                             }
-
                         }
                         return ValueTask.CompletedTask;
                     })

@@ -4,43 +4,43 @@ using System.Threading.Tasks;
 using Centigrade.VedaVersum.Model;
 using HotChocolate;
 using HotChocolate.AspNetCore.Authorization;
+using VedaVersum.Backend.DataAccess;
 
 namespace VedaVersum.Backend.Api
 {
     [Authorize]
     public class VedaVersumQuery
     {
+
+        private readonly IVedaVersumDataAccess _dataAccess;
+
+        public VedaVersumQuery(IVedaVersumDataAccess dataAccess)
+        {
+            _dataAccess = dataAccess;
+        }
+
         /// <summary>
         /// Returns all cards in the base
         /// </summary>
         public Task<IEnumerable<VedaVersumCard>> GetAllCards()
         {
-            return Task.FromResult<IEnumerable<VedaVersumCard>>(new[] {new VedaVersumCard
-            {
-                Id = Guid.NewGuid().ToString(),
-                Title = "Very First Card.",
-                Created = DateTimeOffset.Now,
-                Content =
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                UserCreated = Guid.NewGuid().ToString()
-            }});
+            return _dataAccess.GetAll();
         }
 
         /// <summary>
         /// Returns card by ID
         /// </summary>
-        public Task<VedaVersumCard> GetCard(string cardId)
+        public Task<VedaVersumCard?> GetCard(string cardId)
         {
-            throw new NotImplementedException();
+            return _dataAccess.GetCardById(cardId);
         }
 
         /// <summary>
         /// Returns all cards assigned to user
         /// </summary>
-        /// <returns></returns>
         public Task<IEnumerable<VedaVersumCard>> GetAllCardsAssignedToUser([GlobalState("GitLabUser")] User user)
         {
-            throw new NotImplementedException();
+            return _dataAccess.GetCardsAssignedTo(user.Email);
         }
 
         /// <summary>
