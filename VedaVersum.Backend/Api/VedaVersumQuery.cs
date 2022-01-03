@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Centigrade.VedaVersum.Model;
 using HotChocolate;
@@ -30,9 +31,9 @@ namespace VedaVersum.Backend.Api
         /// <summary>
         /// Returns card by ID
         /// </summary>
-        public Task<VedaVersumCard?> GetCard(string cardId)
+        public async Task<VedaVersumCard?> GetCard(string cardId, VedaVersumCardDataLoader dataLoader)
         {
-            return _dataAccess.GetCardById(cardId);
+            return await dataLoader.LoadAsync(cardId, CancellationToken.None);
         }
 
         /// <summary>

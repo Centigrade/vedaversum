@@ -88,21 +88,25 @@ namespace VedaVersum.Backend.Api
                     {
                         card.Title = title;
                         card.Content = title;
-                        card.RelatedCards = (await _dataAccess.GetCardsById(relatedCards)).ToList();
+                        card.RelatedCardIds = relatedCards;
                         // TODO: Assigned users logic will be implemented later
                         await _dataAccess.UpdateCard(card);
                     }
                     break;
                 case VedaVersumCardAction.Delete:
-                    await _dataAccess.DeleteCard(cardId);
+                    if(! string.IsNullOrEmpty(cardId))
+                    {
+                        await _dataAccess.DeleteCard(cardId);
+                    }
                     break;
-
+                default:
+                    throw new ArgumentException($"Unknown action: {action}");
             }
 
             await _eventSender.SendAsync(nameof(VedaVersumSubscription.CardChanged),
                 new CardActionMessage {VedaVersumCard = card, Action = action});
 
-            return card;
+            return card!;
         }
     }
 }

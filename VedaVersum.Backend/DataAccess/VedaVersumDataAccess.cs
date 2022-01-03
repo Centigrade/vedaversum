@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Centigrade.VedaVersum.Model;
+using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Core.Events;
 
 namespace VedaVersum.Backend.DataAccess
 {
@@ -12,10 +15,16 @@ namespace VedaVersum.Backend.DataAccess
         private const string DatabaseName = "VedaVersum";
         private const string VedaVersumCardsCollectionName = "Cards";
         private readonly IMongoDatabase _database;
-
-        public VedaVersumDataAccess(string mongoDbConnectionString)
+        public VedaVersumDataAccess(string mongoDbConnectionString, ILogger<VedaVersumDataAccess> logger)
         {
-            var client = new MongoClient(mongoDbConnectionString);
+            var mongoConnectionUrl = new MongoUrl(mongoDbConnectionString);
+            var mongoClientSettings = MongoClientSettings.FromUrl(mongoConnectionUrl);
+            mongoClientSettings.ClusterConfigurator = cb => {
+                cb.Subscribe<CommandStartedEvent>(e => {
+                    logger.LogDebug($"{e.CommandName} - {e.Command.ToJson()}");
+                });
+            };
+            var client = new MongoClient(mongoClientSettings);
             _database = client.GetDatabase(DatabaseName);
         }
 
@@ -70,7 +79,7 @@ namespace VedaVersum.Backend.DataAccess
                 Id = Guid.NewGuid().ToString(),
                 Title = title,
                 Content = content,
-                RelatedCards = (await GetCardsById(relatedCards)).ToList(),
+                RelatedCardIds = relatedCards,
                 Created = DateTime.Now,
                 AssignedUsers = new [] {user},
                 UserCreated = user.Email

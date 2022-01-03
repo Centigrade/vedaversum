@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using VedaVersum.Backend.Api;
 using VedaVersum.Backend.DataAccess;
@@ -57,34 +58,37 @@ namespace Centigrade.VedaVersum
 
             // DataAccess
             var connectionString = Configuration.GetConnectionString("mongo");
-            services.AddTransient<IVedaVersumDataAccess, VedaVersumDataAccess>((p) => new VedaVersumDataAccess(connectionString));
+            services.AddTransient<IVedaVersumDataAccess, VedaVersumDataAccess>((p) => new VedaVersumDataAccess(
+                connectionString, 
+                p.GetService<ILogger<VedaVersumDataAccess>>()!));
 
-            services
-                .AddGraphQLServer()
-                .AddInMemorySubscriptions()
-                .AddQueryType<VedaVersumQuery>()
-                .AddMutationType(d => d.Name("Mutation"))
-                    .AddType<OAuthMutation>()
-                    .AddType<VedaVersumMutation>()
-                .AddSubscriptionType<VedaVersumSubscription>()
-                .AddAuthorization()
-                .AddHttpRequestInterceptor(
-                    (context, executor, builder, ct) =>
+        services
+            .AddGraphQLServer()
+            .AddInMemorySubscriptions()
+            .AddQueryType<VedaVersumQuery>()
+                .AddType<VedaVersumCardObjectType>()
+            .AddMutationType(d => d.Name("Mutation"))
+                .AddType<OAuthMutation>()
+                .AddType<VedaVersumMutation>()
+            .AddSubscriptionType<VedaVersumSubscription>()
+            .AddAuthorization()
+            .AddHttpRequestInterceptor(
+                (context, executor, builder, ct) =>
+                {
+                    // Deserializing GitLab user from JWT token data
+                    if(context.User != null)
                     {
-                        // Deserializing GitLab user from JWT token data
-                        if(context.User != null)
+                        var serializedUser = context.User.Claims.Where(c => c.Type == ClaimTypes.UserData)
+                            .Select(c => c.Value).SingleOrDefault();
+                        if(!string.IsNullOrEmpty(serializedUser))
                         {
-                            var serializedUser = context.User.Claims.Where(c => c.Type == ClaimTypes.UserData)
-                                .Select(c => c.Value).SingleOrDefault();
-                            if(!string.IsNullOrEmpty(serializedUser))
-                            {
-                                var user = JsonSerializer.Deserialize<User>(serializedUser);
-                                builder.SetProperty("GitLabUser", user);
-                            }
+                            var user = JsonSerializer.Deserialize<User>(serializedUser);
+                            builder.SetProperty("GitLabUser", user);
                         }
-                        return ValueTask.CompletedTask;
-                    })
-                .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = true);
+                    }
+                    return ValueTask.CompletedTask;
+                })
+            .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = true);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
