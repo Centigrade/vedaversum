@@ -39,8 +39,8 @@ namespace Centigrade.VedaVersum.Model
         public ICollection<User>? AssignedUsers { get; set; }
 
         /// <summary>
-        /// Related cards
+        /// Related cards Ids
         /// </summary>
-        public ICollection<VedaVersumCard>? RelatedCards { get; set; }
+        public ICollection<string>? RelatedCardIds { get; set; }
     }
 }

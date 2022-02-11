@@ -1,32 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Centigrade.VedaVersum.Model;
+using HotChocolate;
+using HotChocolate.AspNetCore.Authorization;
 using HotChocolate.Subscriptions;
+using HotChocolate.Types;
+using VedaVersum.Backend.DataAccess;
 
-namespace Centigrade.VedaVersum.Api
+namespace VedaVersum.Backend.Api
 {
+    [ExtendObjectType(Name = "Mutation")]
+    [Authorize]
     public class VedaVersumMutation
     {
         private readonly ITopicEventSender _eventSender;
+        private readonly IVedaVersumDataAccess _dataAccess;
 
-        public VedaVersumMutation(ITopicEventSender eventSender)
+
+        public VedaVersumMutation(ITopicEventSender eventSender, IVedaVersumDataAccess dataAccess)
         {
             _eventSender = eventSender;
+            _dataAccess = dataAccess;
         }
 
         /// <summary>
         /// Notification about user enter
         /// </summary>
-        public async Task<User> UserEnters(string userId)
+        public async Task<User?> UserEnters([GlobalState("GitLabUser")] User user)
         {
-            // ToDo: Mock implementation.
-            var user = new User
+            if(user == null)
             {
-                Id = userId,
-                Name = "Anakin Skywalker",
-                UserImage = "https://static.wikia.nocookie.net/starwars/images/6/6f/Anakin_Skywalker_RotS.png"
-            };
+                throw new ApplicationException("User can not be found");
+            }
 
             await _eventSender.SendAsync(
                 nameof(VedaVersumSubscription.UserArrived),
@@ -37,18 +44,15 @@ namespace Centigrade.VedaVersum.Api
         /// <summary>
         /// Notification about user going offline
         /// </summary>
-        public async Task<User> UserLeaves(string userId)
+        public async Task<User> UserLeaves([GlobalState("GitLabUser")] User user)
         {
-            // ToDo: Mock implementation.
-            var user = new User
+            if(user == null)
             {
-                Id = userId,
-                Name = "Anakin Skywalker",
-                UserImage = "https://static.wikia.nocookie.net/starwars/images/6/6f/Anakin_Skywalker_RotS.png"
-            };
+                throw new ApplicationException("User can not be found");
+            }
 
             await _eventSender.SendAsync(
-                nameof(VedaVersumSubscription.UserLeaved),
+                nameof(VedaVersumSubscription.UserLeft),
                 user);
             return user;
         }
@@ -57,22 +61,52 @@ namespace Centigrade.VedaVersum.Api
             VedaVersumCardAction action,
             string title,
             string content,
-            ICollection<string>? relatedCards)
+            ICollection<string>? relatedCards,
+            string? cardId,
+            [GlobalState("GitLabUser")] User user)
         {
-            // ToDo: Mock implementation
-            var card = new VedaVersumCard
+            VedaVersumCard? card = null;
+            if(action != VedaVersumCardAction.Create)
             {
-                Id = Guid.NewGuid().ToString(),
-                Title = title,
-                Content = content,
-                Created = DateTimeOffset.Now,
-                UserCreated = Guid.NewGuid().ToString() // Take from authentication
-            };
+                if(string.IsNullOrEmpty(cardId))
+                {
+                    throw new ArgumentNullException(nameof(cardId));
+                }
+                card = await _dataAccess.GetCardById(cardId);
+                if(card == null)
+                {
+                    throw new ArgumentException($"Can not find card by id '{cardId}'");
+                }
+            }
+            switch(action)
+            {
+                case VedaVersumCardAction.Create:
+                    card = await _dataAccess.InsertNewCard(title, content, relatedCards, user);
+                    break;
+                case VedaVersumCardAction.Update:
+                    if(card != null)
+                    {
+                        card.Title = title;
+                        card.Content = title;
+                        card.RelatedCardIds = relatedCards;
+                        // TODO: Assigned users logic will be implemented later
+                        await _dataAccess.UpdateCard(card);
+                    }
+                    break;
+                case VedaVersumCardAction.Delete:
+                    if(! string.IsNullOrEmpty(cardId))
+                    {
+                        await _dataAccess.DeleteCard(cardId);
+                    }
+                    break;
+                default:
+                    throw new ArgumentException($"Unknown action: {action}");
+            }
 
             await _eventSender.SendAsync(nameof(VedaVersumSubscription.CardChanged),
                 new CardActionMessage {VedaVersumCard = card, Action = action});
 
-            return card;
+            return card!;
         }
     }
 }

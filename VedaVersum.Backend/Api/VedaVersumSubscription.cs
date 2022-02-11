@@ -1,10 +1,12 @@
 ﻿using System;
 using Centigrade.VedaVersum.Model;
 using HotChocolate;
+using HotChocolate.AspNetCore.Authorization;
 using HotChocolate.Types;
 
-namespace Centigrade.VedaVersum.Api
+namespace VedaVersum.Backend.Api
 {
+    [Authorize]
     public class VedaVersumSubscription
     {
         /// <summary>
@@ -24,7 +26,7 @@ namespace Centigrade.VedaVersum.Api
         /// <returns></returns>
         [Subscribe]
         [Topic]
-        public User UserLeaved([EventMessage] User user)
+        public User UserLeft([EventMessage] User user)
         {
             return user;
         }

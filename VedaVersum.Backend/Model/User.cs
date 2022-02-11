@@ -1,23 +1,47 @@
-﻿namespace Centigrade.VedaVersum.Model
+﻿using System.Text.Json.Serialization;
+
+namespace Centigrade.VedaVersum.Model
 {
     /// <summary>
-    /// User information
+    /// GitLab User information
     /// </summary>
     public class User
     {
         /// <summary>
         /// User ID
         /// </summary>
-        public string Id { get; set; } = string.Empty;
+        [JsonPropertyName("id")]
+        public long Id { get; set; }
+
+        /// <summary>
+        /// User friendly name
+        /// </summary>
+        [JsonPropertyName("name")]
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// User name
         /// </summary>
-        public string Name { get; set; } = string.Empty;
+        [JsonPropertyName("username")]
+        public string UserName { get; set; } = string.Empty;
+
+        /// <summary>
+        /// User e-mail
+        /// </summary>
+        [JsonPropertyName("email")]
+        public string Email { get; set; } = string.Empty;
 
         /// <summary>
         /// User image
         /// </summary>
-        public string UserImage { get; set; } = string.Empty;
+        [JsonPropertyName("avatar_url")]
+        public string AvatarUrl { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Link to the user's web profile
+        /// </summary>
+        [JsonPropertyName("web_url")]
+        public string WebProfileUrl { get; set; } = string.Empty;
+       
     }
 }
