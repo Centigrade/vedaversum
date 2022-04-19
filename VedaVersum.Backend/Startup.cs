@@ -20,6 +20,8 @@ namespace Centigrade.VedaVersum
 {
     public class Startup
     {
+        const string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
@@ -29,6 +31,17 @@ namespace Centigrade.VedaVersum
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+                {
+                    options.AddPolicy(name: MyAllowSpecificOrigins,
+                        policy  =>
+                        {
+                            policy.WithOrigins("http://localhost:3000/", "http://localhost:3000", "http://localhost:4200/", "http://localhost:4200")
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+                        });
+                });
+
             // GitLab authorization configuration
             var gitLabOauthConfig = new GitLabOauthSettings();
             Configuration.GetSection("GitLabOauth").Bind(gitLabOauthConfig);
@@ -102,6 +115,7 @@ namespace Centigrade.VedaVersum
             app
                 .UseWebSockets()
                 .UseRouting()
+                .UseCors(MyAllowSpecificOrigins)
                 .UseAuthentication()
                 .UseAuthorization()
                 .UseEndpoints(endpoints =>
