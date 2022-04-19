@@ -12,7 +12,6 @@ using VedaVersum.Backend.DataAccess;
 namespace VedaVersum.Backend.Api
 {
     [ExtendObjectType(Name = "Mutation")]
-    [Authorize]
     public class VedaVersumMutation
     {
         private readonly ITopicEventSender _eventSender;
@@ -28,6 +27,7 @@ namespace VedaVersum.Backend.Api
         /// <summary>
         /// Notification about user enter
         /// </summary>
+        [Authorize]
         public async Task<User?> UserEnters([GlobalState("GitLabUser")] User user)
         {
             if(user == null)
@@ -44,6 +44,7 @@ namespace VedaVersum.Backend.Api
         /// <summary>
         /// Notification about user going offline
         /// </summary>
+        [Authorize]
         public async Task<User> UserLeaves([GlobalState("GitLabUser")] User user)
         {
             if(user == null)
@@ -57,6 +58,7 @@ namespace VedaVersum.Backend.Api
             return user;
         }
 
+        [Authorize]
         public async Task<VedaVersumCard> CardAction(
             VedaVersumCardAction action,
             string title,
