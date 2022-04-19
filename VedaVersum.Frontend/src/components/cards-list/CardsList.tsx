@@ -1,16 +1,10 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
 import { ALL_CARDS_QUERY } from '../../api/cards-queries';
-
-interface Card {
-  id: string;
-  title: string;
-}
+import { GetAllCards } from '../../model/veda-versum.model';
 
 function CardsList() {
-  const { error, data, loading } = useQuery<{ allCards: Card[] }>(
-    ALL_CARDS_QUERY
-  );
+  const { error, data, loading } = useQuery<GetAllCards>(ALL_CARDS_QUERY);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error.message} :(</p>;

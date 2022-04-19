@@ -25,7 +25,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "codegen": "apollo client:codegen src/model/veda-versum.model.ts --endpoint http://localhost:5000/graphql --target typescript --includes=src/**/*.{ts,tsx,js,jsx,graphql} --outputFlat"
   },
   "eslintConfig": {
     "extends": [
