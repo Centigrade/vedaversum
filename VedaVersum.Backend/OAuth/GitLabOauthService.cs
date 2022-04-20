@@ -70,7 +70,7 @@ namespace VedaVersum.Backend.OAuth
                 { "client_secret", _settings.Secret },
                 { "code", oAuthCode },
                 { "grant_type", "authorization_code" },
-                { "redirect_uri", "https://localhost:5001" }
+                { "redirect_uri", "http://localhost:3000/login" } // TODO: Use environment variable
             };
             var encodedContent = new FormUrlEncodedContent(parameters!);
 
@@ -79,7 +79,11 @@ namespace VedaVersum.Backend.OAuth
             var url = $"{_settings.BaseAddress}/oauth/token";
 
             var response = await client.PostAsync(url, encodedContent).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
+            if(!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                throw new ApplicationException($"Authentication server returned code {((int)response.StatusCode)} ({response.StatusCode}). Error: '{error}'");
+            }
 
             await using var responseStream = await response.Content.ReadAsStreamAsync();
             var authTokenResponse = await JsonSerializer.DeserializeAsync<OAuthTokenResponse?>(responseStream);

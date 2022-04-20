@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using HotChocolate.Types;
 using Microsoft.Extensions.Logging;
+using VedaVersum.Backend.Model;
 using VedaVersum.Backend.OAuth;
 
 namespace VedaVersum.Backend.Api
@@ -25,8 +26,10 @@ namespace VedaVersum.Backend.Api
         /// <remarks>
         /// More info about GitLab OAuth https://docs.gitlab.com/ee/api/oauth2.html
         /// </remarks>
-        public async Task<string> GitLabAuthenticate(string oauthCode)
+        public async Task<AuthResponse> GitLabAuthenticate(string oauthCode)
         {
+            _logger.LogDebug($"Authenticating '{oauthCode}'");
+
             try
             {
                 var user = await _oauthService.GetUser(oauthCode);
@@ -34,7 +37,9 @@ namespace VedaVersum.Backend.Api
                 {
                     throw new ApplicationException($"Can not find GitLab user by code {oauthCode}");
                 }
-                return _oauthService.GenerateToken(user);
+                var token = _oauthService.GenerateToken(user);
+                _logger.LogDebug($"{user.Name} was authenticated");
+                return new AuthResponse { AuthenticationToken = token, AuthenticatedUser = user };
             }
             catch (Exception e)
             {
