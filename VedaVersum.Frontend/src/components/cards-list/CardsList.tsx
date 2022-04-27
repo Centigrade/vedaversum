@@ -2,6 +2,7 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 import { ALL_CARDS_QUERY } from '../../api/cards-queries';
 import { GetAllCardsResponse } from '../../model';
+import CardListItem from './CardListItem';
 
 function CardsList() {
   const { error, data, loading } = useQuery<GetAllCardsResponse>(
@@ -16,17 +17,16 @@ function CardsList() {
 
   if (!data) return <p>Data is empty</p>;
 
-  console.log(data);
+  console.log(data.allCards);
 
   return (
-    <>
-      <h1>Cards list</h1>
-      <ul>
-        {data.allCards.map(({ id, title }) => (
-          <li key={id}>{title}</li>
+    <div>
+      <h2>Cards list</h2>
+      <h5>Sort by</h5>
+        {data.allCards.map((card, index) => (
+          <CardListItem key={index} cardData={card}/>
         ))}
-      </ul>
-    </>
+    </div>
   );
 }
 

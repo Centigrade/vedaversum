@@ -1,0 +1,15 @@
+.user-name {
+    /* border-radius: 12.5%; */
+    border: 1px solid lightseagreen;
+    color: lightseagreen;
+}
+
+a {
+    color: lightseagreen;
+}
+
+.user-name-circle {
+    border-radius: 50%;
+    background-color: lightseagreen;
+    color: black;
+}
