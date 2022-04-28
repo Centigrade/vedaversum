@@ -5,6 +5,7 @@ import { RequireAuth } from "../authentication/RequreAuth";
 import "./App.css";
 import CardsList from "./cards-list/CardsList";
 import Header from "./common/Header";
+import UsersList from "./common/UsersList";
 import PageNotFound from "./PageNotFound";
 
 function App() {
@@ -17,7 +18,10 @@ function App() {
             path="/"
             element={
               <RequireAuth>
-                <CardsList />
+                <div className="d-flex">
+                  <CardsList />
+                  <UsersList />
+                </div>
               </RequireAuth>
             }
           />

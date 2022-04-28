@@ -1,7 +1,14 @@
-.user-name {
-    /* border-radius: 12.5%; */
+.veda-versum-button {
     border: 1px solid lightseagreen;
     color: lightseagreen;
+    background: none;
+}
+
+.user-name {
+    border-radius: 5%;
+    border: 1px solid lightseagreen;
+    color: lightseagreen;
+    background-color: white;
 }
 
 a {
@@ -12,4 +19,8 @@ a {
     border-radius: 50%;
     background-color: lightseagreen;
     color: black;
+}
+
+.article-image {
+    width: 150px; /* todo: change this */
 }
