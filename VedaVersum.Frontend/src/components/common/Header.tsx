@@ -1,40 +1,30 @@
 import React from "react";
-import dummyUsersList from "../../assets/dummyUsersList";
 import UserName from "./UserName";
-// not yet implemented in the backend => see VedaVersumQuery.cs
-/* import { useQuery } from "@apollo/client";
-import { PERSONAL_USER_DATA } from '../../api/users-queries';
-import { GetPersonalUserData } from '../../model/get-personal-user-data'; */
+import dummyIcon from "../../assets/dummy.png";
+import { readAuthContextFromLocalStorage } from "../../authentication/AutContext";
 
 function Header() {
-  /* const { error, data, loading } = useQuery<GetPersonalUserData>(
-    PERSONAL_USER_DATA,
-    {
-      errorPolicy: "all",
-    }
-  );
+  const loginData = readAuthContextFromLocalStorage();
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error.message} :(</p>;
-
-  if (!data) return <p>Data is empty</p>;
-
-  console.log(data.personalUser); */
-
-  const mockData = {
-    personalUser: dummyUsersList[0]
-  };
+  console.log(loginData);
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark header">
       <div className="container-fluid px-4 py-3 d-flex justify-space-between">
         <h1 className="text-white">Veda Versum</h1>
         <input type="text" placeholder="Search.." />
-        <div className="d-flex">
-          <UserName
-            name={mockData.personalUser.userName}
-            profile={mockData.personalUser.webProfileUrl}
-          />
+        <div className="d-flex align-items-center">
+          {/* notification icon for new assignments */}
+          <img className="notification-icon" src={dummyIcon} alt="some pic" />
+          {/* number of new assignments */}
+          <h5 className="mr-2">2</h5>
+          {/* show logged in as + username */}
+          {loginData && loginData.user && (
+            <UserName
+              name={loginData.user.userName}
+              profile={loginData.user.webProfileUrl}
+            />
+          )}
           <button className="veda-versum-button mx-2">Logout</button>
         </div>
       </div>
