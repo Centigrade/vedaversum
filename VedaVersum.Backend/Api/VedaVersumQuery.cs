@@ -81,9 +81,9 @@ namespace VedaVersum.Backend.Api
         /// <summary>
         /// Returns all cards assigned to user
         /// </summary>
-        public Task<IEnumerable<VedaVersumCard>> GetAllCardsAssignedToUser([GlobalState("GitLabUser")] User user)
+        public Task<IEnumerable<VedaVersumCard>> GetAllCardsAssignedToUser(String userEmail)
         {
-            return _dataAccess.GetCardsAssignedTo(user.Email);
+            return _dataAccess.GetCardsAssignedTo(userEmail);
         }
 
         /// <summary>

@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
-import { ALL_CARDS_QUERY,
-  // ASSIGNED_CARDS_QUERY,
-  CREATED_CARDS_QUERY } from "../../api/cards-queries";
+import {
+  ALL_CARDS_QUERY,
+  ASSIGNED_CARDS_QUERY,
+  CREATED_CARDS_QUERY,
+} from "../../api/cards-queries";
 import { GetAllCardsResponse } from "../../model";
 import CardListItem from "./CardListItem";
 import Menu from "../common/Menu";
 import { readAuthContextFromLocalStorage } from "../../authentication/AutContext";
-import { GetUserCardsResponse } from "../../model/get-user-cards-response";
+import { GetUserCreatedCardsResponse } from "../../model/get-user-created-cards-response";
+import { GetUserAssignedCardsResponse } from "../../model/get-user-assigned-cards-response";
 
 function CardsList() {
   // set tab selection
@@ -23,6 +26,8 @@ function CardsList() {
   const loginUser = loginData?.user;
   const loginUserEmail = loginUser?.email!;
 
+
+  // TODO: is it possible to set a switch case around so that not every time the tab changes all data must be reloaded again?
   /* get data from the database */
   // load all cards
   const {
@@ -38,20 +43,20 @@ function CardsList() {
     error: errorCreatedData,
     data: allCreatedCardsData,
     loading: loadingCreatedData,
-  } = useQuery<GetUserCardsResponse>(CREATED_CARDS_QUERY, {
+  } = useQuery<GetUserCreatedCardsResponse>(CREATED_CARDS_QUERY, {
     errorPolicy: "all",
     variables: { userEmail: loginUserEmail },
   });
 
   // load all cards assigned to the user
-  /* const {
+  const {
     error: errorAssignedCards,
     data: allAssignedCardsData,
     loading: loadingAssignedCards,
-  } = useQuery<GetUserCardsResponse>(ASSIGNED_CARDS_QUERY, {
+  } = useQuery<GetUserAssignedCardsResponse>(ASSIGNED_CARDS_QUERY, {
     errorPolicy: "all",
-    variables: { loginUser },
-  }); */
+    variables: { userEmail: loginUserEmail },
+  });
 
   // load all cards bookmarked by the user
   /* const {
@@ -63,10 +68,15 @@ function CardsList() {
     variables: { loginUser },
   }); */
 
-
-  allCardsData ? console.log(allCardsData.allCards) : console.error(errorAllCards);
-  allCreatedCardsData ? console.log(allCreatedCardsData.allCardsCreatedByUser) : console.error(errorCreatedData);
-  // allAssignedCardsData ? console.log(allAssignedCardsData.allCards) : console.error(errorAssignedCards);
+  /* allCardsData
+    ? console.log(allCardsData.allCards)
+    : console.error(errorAllCards);
+  allCreatedCardsData
+    ? console.log(allCreatedCardsData.allCardsCreatedByUser)
+    : console.error(errorCreatedData);
+  allAssignedCardsData
+    ? console.log(allAssignedCardsData.allCardsAssignedToUser)
+    : console.error(errorAssignedCards); */
 
   return (
     <div className="px-4 py-3 w-75">
@@ -118,9 +128,10 @@ function CardsList() {
         )}
 
         {/* show articles CREATED BY the user */}
-        {activeTab === "myArticles" && <div>
-          {/* data available */}
-          {allCreatedCardsData &&
+        {activeTab === "myArticles" && (
+          <div>
+            {/* data available */}
+            {allCreatedCardsData &&
               allCreatedCardsData.allCardsCreatedByUser.map((card, index) => (
                 <CardListItem key={index} cardData={card} />
               ))}
@@ -128,30 +139,33 @@ function CardsList() {
             {loadingCreatedData && <p>Loading...</p>}
             {!allCreatedCardsData && <p>Data is empty</p>}
             {errorCreatedData && <p>{errorCreatedData.message} :(</p>}
-            </div>}
+          </div>
+        )}
 
         {/* show articles the user is ASSIGNED TO */}
-        {/* {activeTab === "assignedArticles" && <div> */}
-          {/* data available */}
-         {/*  {allAssignedCardsData &&
-              allAssignedCardsData.allCards.map((card, index) => (
+        {activeTab === "assignedArticles" && (
+          <div>
+            {/* data available */}
+            {allAssignedCardsData &&
+              allAssignedCardsData.allCardsAssignedToUser.map((card, index) => (
                 <CardListItem key={index} cardData={card} />
-              ))} */}
+              ))}
             {/* catch other states */}
-           {/*  {loadingAssignedCards && <p>Loading...</p>}
+            {loadingAssignedCards && <p>Loading...</p>}
             {!allAssignedCardsData && <p>Data is empty</p>}
             {errorAssignedCards && <p>{errorAssignedCards.message} :(</p>}
-            </div>} */}
+          </div>
+        )}
 
         {/* show articles the user BOOKMARKED */}
         {/* {activeTab === "bookmarkedArticles" && <div> */}
-          {/* data available */}
-         {/*  {allBookmarkedCardsData &&
+        {/* data available */}
+        {/*  {allBookmarkedCardsData &&
               allBookmarkedCardsData.allCards.map((card, index) => (
                 <CardListItem key={index} cardData={card} />
               ))} */}
-            {/* catch other states */}
-           {/*  {loadingBookmarkedCards && <p>Loading...</p>}
+        {/* catch other states */}
+        {/*  {loadingBookmarkedCards && <p>Loading...</p>}
             {!allBookmarkedCardsData && <p>Data is empty</p>}
             {errorBookmarkedCards && <p>{errorBookmarkedCards.message} :(</p>}
             </div>} */}

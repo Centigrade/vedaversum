@@ -1,6 +1,6 @@
 import { VedaVersumCard } from './veda-versum-card';
 
-export interface GetUserCardsResponse {
+export interface GetUserCreatedCardsResponse {
   /**
    * Returns all cards in the base
    */

@@ -19,8 +19,10 @@ namespace VedaVersum.Backend.DataAccess
         {
             var mongoConnectionUrl = new MongoUrl(mongoDbConnectionString);
             var mongoClientSettings = MongoClientSettings.FromUrl(mongoConnectionUrl);
-            mongoClientSettings.ClusterConfigurator = cb => {
-                cb.Subscribe<CommandStartedEvent>(e => {
+            mongoClientSettings.ClusterConfigurator = cb =>
+            {
+                cb.Subscribe<CommandStartedEvent>(e =>
+                {
                     logger.LogDebug($"{e.CommandName} - {e.Command.ToJson()}");
                 });
             };
@@ -28,13 +30,9 @@ namespace VedaVersum.Backend.DataAccess
             _database = client.GetDatabase(DatabaseName);
         }
 
-        /// <inheritdoc />
-        public async Task DeleteCard(string cardId)
-        {
-            var cardsCollection = _database.GetCollection<VedaVersumCard>(VedaVersumCardsCollectionName);
-            await cardsCollection.DeleteOneAsync(Builders<VedaVersumCard>.Filter.Where(c => c.Id == cardId));
-        }
-
+        /* ******************* */
+        /* *** GET queries *** */
+        /* ******************* */
         /// <inheritdoc />
         public async Task<IEnumerable<VedaVersumCard>> GetAll()
         {
@@ -63,7 +61,7 @@ namespace VedaVersum.Backend.DataAccess
         /// <inheritdoc />
         public async Task<IEnumerable<VedaVersumCard>> GetCardsById(IEnumerable<string>? cardIds)
         {
-            if(cardIds == null)
+            if (cardIds == null)
             {
                 return new List<VedaVersumCard>();
             }
@@ -80,16 +78,20 @@ namespace VedaVersum.Backend.DataAccess
             return filteredCards;
         }
 
+        /* ********************** */
+        /* *** INSERT queries *** */
+        /* ********************** */
         /// <inheritdoc />
         public async Task<VedaVersumCard> InsertNewCard(string title, string content, ICollection<string>? relatedCards, User user)
         {
-            var card = new VedaVersumCard {
+            var card = new VedaVersumCard
+            {
                 Id = Guid.NewGuid().ToString(),
                 Title = title,
                 Content = content,
                 RelatedCardIds = relatedCards,
                 Created = DateTime.Now,
-                AssignedUsers = new [] {user},
+                AssignedUsers = new[] { user },
                 UserCreated = user.Email
             };
 
@@ -98,6 +100,9 @@ namespace VedaVersum.Backend.DataAccess
             return card;
         }
 
+        /* ********************** */
+        /* *** UPDATE queries *** */
+        /* ********************** */
         /// <inheritdoc />
         public Task UpdateCard(VedaVersumCard card)
         {
@@ -107,6 +112,16 @@ namespace VedaVersum.Backend.DataAccess
                     card,
                     new ReplaceOptions { IsUpsert = true }
                 );
+        }
+
+        /* ********************** */
+        /* *** DELETE queries *** */
+        /* ********************** */
+        /// <inheritdoc />
+        public async Task DeleteCard(string cardId)
+        {
+            var cardsCollection = _database.GetCollection<VedaVersumCard>(VedaVersumCardsCollectionName);
+            await cardsCollection.DeleteOneAsync(Builders<VedaVersumCard>.Filter.Where(c => c.Id == cardId));
         }
     }
 }

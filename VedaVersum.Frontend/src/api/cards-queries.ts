@@ -23,7 +23,7 @@ export const ALL_CARDS_QUERY = gql`
 
 // query to get all articles that are created by the user
 export const CREATED_CARDS_QUERY = gql`
-  query GetAllCardsCreatedByUser($userEmail: String) {
+  query GetAllCardsCreatedByUser($userEmail: String!) {
     allCardsCreatedByUser(userEmail: $userEmail){
       id
       title
@@ -45,8 +45,8 @@ export const CREATED_CARDS_QUERY = gql`
 
 // query to get all articles that are assigned to the user
 export const ASSIGNED_CARDS_QUERY = gql`
-  query GetAllCardsAssignedToUser($user: User) {
-    allCards (assignedUsers: $user){
+  query GetAllCardsAssignedToUser($userEmail: String!) {
+    allCardsAssignedToUser (userEmail: $userEmail){
       id
       title
       content

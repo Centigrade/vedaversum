@@ -26,14 +26,14 @@ namespace VedaVersum.Backend.DataAccess
         /// Returns all cards assigned to user
         /// </summary>
         /// <param name="userEmail">User to filter</param>
-        /// <returns>List of Veda Versum cards</returns>
+        /// <returns>List of Veda Versum cards assigned to the user</returns>
         Task<IEnumerable<VedaVersumCard>> GetCardsAssignedTo(string userEmail);
 
         /// <summary>
         /// Returns all cards created by user
         /// </summary>
         /// <param name="userEmail">User to filter</param>
-        /// <returns>List of Veda Versum cards</returns>
+        /// <returns>List of Veda Versum cards created by the user</returns>
         Task<IEnumerable<VedaVersumCard>> GetCardsCreatedBy(string userEmail);
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace VedaVersum.Backend.DataAccess
             ICollection<string>? relatedCards,
             User user
         );
-        
+
         /* ********************** */
         /* *** UPDATE queries *** */
         /* ********************** */

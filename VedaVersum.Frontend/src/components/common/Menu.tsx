@@ -8,6 +8,7 @@ function Menu() {
         <button className="veda-versum-button mx-2">Create new article</button>
         <button className="veda-versum-button mx-2">Edit article</button>
         <button className="veda-versum-button mx-2">Delete article</button>
+        <button className="veda-versum-button mx-2">Assign article</button>
       </nav>
     </div>
   );
