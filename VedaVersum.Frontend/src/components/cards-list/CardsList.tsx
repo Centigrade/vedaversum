@@ -1,32 +1,72 @@
 import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
-import { ALL_CARDS_QUERY } from "../../api/cards-queries";
+import { ALL_CARDS_QUERY,
+  // ASSIGNED_CARDS_QUERY,
+  CREATED_CARDS_QUERY } from "../../api/cards-queries";
 import { GetAllCardsResponse } from "../../model";
 import CardListItem from "./CardListItem";
 import Menu from "../common/Menu";
+import { readAuthContextFromLocalStorage } from "../../authentication/AutContext";
+import { GetUserCardsResponse } from "../../model/get-user-cards-response";
 
 function CardsList() {
-  // Tab selection
+  // set tab selection
   const tabs: any[] = [
     { name: "all articles", type: "allArticles" },
     { name: "my articles", type: "myArticles" },
     { name: "articles assigned to me", type: "assignedArticles" },
+    { name: "my bookmarks", type: "bookmarkedArticles" },
   ];
   const [activeTab, setActiveTab] = useState("allArticles");
 
-  const { error, data, loading } = useQuery<GetAllCardsResponse>(
-    ALL_CARDS_QUERY,
-    {
-      errorPolicy: "all",
-    }
-  );
+  const loginData = readAuthContextFromLocalStorage();
+  const loginUser = loginData?.user;
+  const loginUserEmail = loginUser?.email!;
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error.message} :(</p>;
+  /* get data from the database */
+  // load all cards
+  const {
+    error: errorAllCards,
+    data: allCardsData,
+    loading: loadingAllCards,
+  } = useQuery<GetAllCardsResponse>(ALL_CARDS_QUERY, {
+    errorPolicy: "all",
+  });
 
-  if (!data) return <p>Data is empty</p>;
+  // load all cards created by the user
+  const {
+    error: errorCreatedData,
+    data: allCreatedCardsData,
+    loading: loadingCreatedData,
+  } = useQuery<GetUserCardsResponse>(CREATED_CARDS_QUERY, {
+    errorPolicy: "all",
+    variables: { userEmail: loginUserEmail },
+  });
 
-  console.log(data.allCards);
+  // load all cards assigned to the user
+  /* const {
+    error: errorAssignedCards,
+    data: allAssignedCardsData,
+    loading: loadingAssignedCards,
+  } = useQuery<GetUserCardsResponse>(ASSIGNED_CARDS_QUERY, {
+    errorPolicy: "all",
+    variables: { loginUser },
+  }); */
+
+  // load all cards bookmarked by the user
+  /* const {
+    error: errorBookmarkedCards,
+    data: allBookmarkedCardsData,
+    loading: loadingBookmarkedCards,
+  } = useQuery<GetUserCardsResponse>(BOOKMARKED_CARDS_QUERY, {
+    errorPolicy: "all",
+    variables: { loginUser },
+  }); */
+
+
+  allCardsData ? console.log(allCardsData.allCards) : console.error(errorAllCards);
+  allCreatedCardsData ? console.log(allCreatedCardsData.allCardsCreatedByUser) : console.error(errorCreatedData);
+  // allAssignedCardsData ? console.log(allAssignedCardsData.allCards) : console.error(errorAssignedCards);
 
   return (
     <div className="px-4 py-3 w-75">
@@ -65,17 +105,56 @@ function CardsList() {
         {/* show ALL articles */}
         {activeTab === "allArticles" && (
           <div>
-            {data.allCards.map((card, index) => (
-              <CardListItem key={index} cardData={card} />
-            ))}
+            {/* data available */}
+            {allCardsData &&
+              allCardsData.allCards.map((card, index) => (
+                <CardListItem key={index} cardData={card} />
+              ))}
+            {/* catch other states */}
+            {loadingAllCards && <p>Loading...</p>}
+            {!allCardsData && <p>Data is empty</p>}
+            {errorAllCards && <p>{errorAllCards.message} :(</p>}
           </div>
         )}
 
         {/* show articles CREATED BY the user */}
-        {activeTab === "myArticles" && <div>MY ARTICLES</div>}
+        {activeTab === "myArticles" && <div>
+          {/* data available */}
+          {allCreatedCardsData &&
+              allCreatedCardsData.allCardsCreatedByUser.map((card, index) => (
+                <CardListItem key={index} cardData={card} />
+              ))}
+            {/* catch other states */}
+            {loadingCreatedData && <p>Loading...</p>}
+            {!allCreatedCardsData && <p>Data is empty</p>}
+            {errorCreatedData && <p>{errorCreatedData.message} :(</p>}
+            </div>}
 
         {/* show articles the user is ASSIGNED TO */}
-        {activeTab === "assignedArticles" && <div>ARTICLES ASSIGNED TO ME</div>}
+        {/* {activeTab === "assignedArticles" && <div> */}
+          {/* data available */}
+         {/*  {allAssignedCardsData &&
+              allAssignedCardsData.allCards.map((card, index) => (
+                <CardListItem key={index} cardData={card} />
+              ))} */}
+            {/* catch other states */}
+           {/*  {loadingAssignedCards && <p>Loading...</p>}
+            {!allAssignedCardsData && <p>Data is empty</p>}
+            {errorAssignedCards && <p>{errorAssignedCards.message} :(</p>}
+            </div>} */}
+
+        {/* show articles the user BOOKMARKED */}
+        {/* {activeTab === "bookmarkedArticles" && <div> */}
+          {/* data available */}
+         {/*  {allBookmarkedCardsData &&
+              allBookmarkedCardsData.allCards.map((card, index) => (
+                <CardListItem key={index} cardData={card} />
+              ))} */}
+            {/* catch other states */}
+           {/*  {loadingBookmarkedCards && <p>Loading...</p>}
+            {!allBookmarkedCardsData && <p>Data is empty</p>}
+            {errorBookmarkedCards && <p>{errorBookmarkedCards.message} :(</p>}
+            </div>} */}
       </div>
     </div>
   );

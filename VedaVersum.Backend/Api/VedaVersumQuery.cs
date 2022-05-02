@@ -13,7 +13,7 @@ namespace VedaVersum.Backend.Api
     public class VedaVersumQuery
     {
         // list of users with dummy data
-        /* IEnumerable<User> dummyUserList = new IEnumerable<User> {
+        IEnumerable<User> dummyUserList = new List<User> {
             new User() {
                 Id= 0,
                 Name="Gandalf",
@@ -38,7 +38,7 @@ namespace VedaVersum.Backend.Api
                 AvatarUrl="https://en.wikipedia.org/wiki/File:Legolas600ppx.jpg",
                 WebProfileUrl="https://en.wikipedia.org/wiki/Legolas"
             },
-        }; */
+        };
 
 
         private readonly IVedaVersumDataAccess _dataAccess;
@@ -48,6 +48,9 @@ namespace VedaVersum.Backend.Api
             _dataAccess = dataAccess;
         }
 
+        /* *************************************** */
+        /* *** queries without user logged in *** */
+        /* ************************************** */
         /// <summary>
         /// Returns all cards in the base
         /// </summary>
@@ -64,6 +67,17 @@ namespace VedaVersum.Backend.Api
             return await dataLoader.LoadAsync(cardId, CancellationToken.None);
         }
 
+        /* ********************************************* */
+        /* *** queries related to the user logged in *** */
+        /* ********************************************* */
+        /// <summary>
+        /// Returns all cards created by the user
+        /// </summary>
+        public Task<IEnumerable<VedaVersumCard>> GetAllCardsCreatedByUser(String userEmail)
+        {
+            return _dataAccess.GetCardsCreatedBy(userEmail);
+        }
+        
         /// <summary>
         /// Returns all cards assigned to user
         /// </summary>
@@ -78,10 +92,10 @@ namespace VedaVersum.Backend.Api
         public Task<IEnumerable<User>> ActiveUsers()
         {
             // TODO: Use https://docs.microsoft.com/en-us/aspnet/core/performance/caching/memory?view=aspnetcore-6.0
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
 
             // return mock data
-            // return Task.FromResult(dummyUserList);
+            return Task.FromResult<IEnumerable<User>>(dummyUserList);
         }
 
     }

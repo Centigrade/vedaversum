@@ -72,6 +72,14 @@ namespace VedaVersum.Backend.DataAccess
             return cards.ToList();
         }
 
+        public async Task<IEnumerable<VedaVersumCard>> GetCardsCreatedBy(string userEmail)
+        {
+            var cardsCollection = _database.GetCollection<VedaVersumCard>(VedaVersumCardsCollectionName);
+            var cards = await cardsCollection.FindAsync(Builders<VedaVersumCard>.Filter.Where(c => c.UserCreated == userEmail));
+            var filteredCards = cards.ToList();
+            return filteredCards;
+        }
+
         /// <inheritdoc />
         public async Task<VedaVersumCard> InsertNewCard(string title, string content, ICollection<string>? relatedCards, User user)
         {

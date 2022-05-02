@@ -21,11 +21,10 @@ export const ALL_CARDS_QUERY = gql`
   }
 `;
 
-// query to get all articles that are assigned to the user
-// TODO: user email must be given as props
-export const ASSIGNED_CARDS_QUERY = gql`
-  query GetAllCardsAssignedToUser {
-    allCards {
+// query to get all articles that are created by the user
+export const CREATED_CARDS_QUERY = gql`
+  query GetAllCardsCreatedByUser($userEmail: String) {
+    allCardsCreatedByUser(userEmail: $userEmail){
       id
       title
       content
@@ -43,3 +42,48 @@ export const ASSIGNED_CARDS_QUERY = gql`
     }
   }
 `;
+
+// query to get all articles that are assigned to the user
+export const ASSIGNED_CARDS_QUERY = gql`
+  query GetAllCardsAssignedToUser($user: User) {
+    allCards (assignedUsers: $user){
+      id
+      title
+      content
+      created
+      userCreated
+      assignedUsers {
+        id
+        name
+        userName
+        email
+        webProfileUrl
+        avatarUrl
+      }
+      relatedCardIds
+    }
+  }
+`;
+
+// TODO
+// query to get all articles that are bookmarked by the user
+/* export const BOOKMARKED_CARDS_QUERY = gql`
+  query GetAllCardsBookmarkedByUser($user: User) {
+    allCards (assignedUsers: $user){
+      id
+      title
+      content
+      created
+      userCreated
+      assignedUsers {
+        id
+        name
+        userName
+        email
+        webProfileUrl
+        avatarUrl
+      }
+      relatedCardIds
+    }
+  }
+`; */

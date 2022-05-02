@@ -6,8 +6,6 @@ import { readAuthContextFromLocalStorage } from "../../authentication/AutContext
 function Header() {
   const loginData = readAuthContextFromLocalStorage();
 
-  console.log(loginData);
-
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark header">
       <div className="container-fluid px-4 py-3 d-flex justify-space-between">
