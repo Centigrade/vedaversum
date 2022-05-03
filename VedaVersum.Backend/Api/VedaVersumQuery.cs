@@ -67,6 +67,15 @@ namespace VedaVersum.Backend.Api
             return await dataLoader.LoadAsync(cardId, CancellationToken.None);
         }
 
+        /// <summary>
+        /// Returns user by email
+        /// </summary>
+        public async Task<VedaVersumCard?> GetUser(string cardId, VedaVersumCardDataLoader dataLoader)
+        {
+            return await dataLoader.LoadAsync(cardId, CancellationToken.None);
+        }
+
+
         /* ********************************************* */
         /* *** queries related to the user logged in *** */
         /* ********************************************* */
@@ -77,7 +86,7 @@ namespace VedaVersum.Backend.Api
         {
             return _dataAccess.GetCardsCreatedBy(userEmail);
         }
-        
+
         /// <summary>
         /// Returns all cards assigned to user
         /// </summary>

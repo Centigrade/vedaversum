@@ -1,16 +1,18 @@
-import React from "react";
-
 export interface UsernameProps {
-  name: string;
+  email: string;
   profile: string;
 }
 
 function UserName(props: UsernameProps) {
+  const prepareName = props.email.split("@");
+  const name = prepareName[0];
+  const firstLetter = name[0].toUpperCase();
+
   return (
     <div className="user-name p-2 bg-white mx-1">
       <a href={props.profile} className="d-flex align-items-center">
-        <span className="user-name-circle px-2 py-1">{props.name[0].toUpperCase()}</span>
-        <span className="mx-2">{props.name}</span>
+        <span className="user-name-circle px-2 py-1">{firstLetter}</span>
+        <span className="mx-2">{name}</span>
       </a>
     </div>
   );

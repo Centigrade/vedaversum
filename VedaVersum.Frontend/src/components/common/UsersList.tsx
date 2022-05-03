@@ -1,11 +1,10 @@
-import React from "react";
 import { useQuery } from "@apollo/client";
 import { ACTIVE_USERS_QUERY } from "../../api/users-queries";
 import { GetActiveUsers } from "../../model/get-active-users-response";
 import UserName from "./UserName";
 
 function UsersList() {
-   const { error, data, loading } = useQuery<GetActiveUsers>(
+  const { error, data, loading } = useQuery<GetActiveUsers>(
     ACTIVE_USERS_QUERY,
     {
       errorPolicy: "all",
@@ -25,7 +24,7 @@ function UsersList() {
       <div>
         {data.activeUsers.map((user) => (
           <div className="mt-2" key={user.id}>
-            <UserName name={user.userName} profile={user.webProfileUrl} />
+            <UserName email={user.email} profile={user.webProfileUrl} />
           </div>
         ))}
       </div>

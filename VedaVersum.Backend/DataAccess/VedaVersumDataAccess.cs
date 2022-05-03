@@ -14,6 +14,7 @@ namespace VedaVersum.Backend.DataAccess
     {
         private const string DatabaseName = "VedaVersum";
         private const string VedaVersumCardsCollectionName = "Cards";
+        private const string UsersCollectionName = "Users";
         private readonly IMongoDatabase _database;
         public VedaVersumDataAccess(string mongoDbConnectionString, ILogger<VedaVersumDataAccess> logger)
         {
@@ -42,6 +43,18 @@ namespace VedaVersum.Backend.DataAccess
         }
 
         /// <inheritdoc />
+        public async Task<IEnumerable<VedaVersumCard>> GetCardsById(IEnumerable<string>? cardIds)
+        {
+            if (cardIds == null)
+            {
+                return new List<VedaVersumCard>();
+            }
+            var cards = await _database.GetCollection<VedaVersumCard>(VedaVersumCardsCollectionName)
+                    .FindAsync(Builders<VedaVersumCard>.Filter.In(c => c.Id, cardIds));
+            return cards.ToList();
+        }
+
+        /// <inheritdoc />
         public async Task<VedaVersumCard?> GetCardById(string cardId)
         {
             var cardsCollection = _database.GetCollection<VedaVersumCard>(VedaVersumCardsCollectionName);
@@ -56,18 +69,6 @@ namespace VedaVersum.Backend.DataAccess
             var cards = await cardsCollection.FindAsync(Builders<VedaVersumCard>.Filter.Where(c => c.AssignedUsers != null && c.AssignedUsers.Count > 0));
             var filteredCards = cards.ToList().Where(c => c.AssignedUsers != null && c.AssignedUsers.Any(u => u.Email == userEmail)).ToList();
             return filteredCards;
-        }
-
-        /// <inheritdoc />
-        public async Task<IEnumerable<VedaVersumCard>> GetCardsById(IEnumerable<string>? cardIds)
-        {
-            if (cardIds == null)
-            {
-                return new List<VedaVersumCard>();
-            }
-            var cards = await _database.GetCollection<VedaVersumCard>(VedaVersumCardsCollectionName)
-                    .FindAsync(Builders<VedaVersumCard>.Filter.In(c => c.Id, cardIds));
-            return cards.ToList();
         }
 
         public async Task<IEnumerable<VedaVersumCard>> GetCardsCreatedBy(string userEmail)

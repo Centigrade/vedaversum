@@ -1,7 +1,6 @@
-import React from "react";
-import UserName from "./UserName";
 import dummyIcon from "../../assets/dummy.png";
 import { readAuthContextFromLocalStorage } from "../../authentication/AutContext";
+import UserName from "./UserName";
 
 function Header() {
   const loginData = readAuthContextFromLocalStorage();
@@ -19,7 +18,7 @@ function Header() {
           {/* show logged in as + username */}
           {loginData && loginData.user && (
             <UserName
-              name={loginData.user.userName}
+              email={loginData.user.email}
               profile={loginData.user.webProfileUrl}
             />
           )}

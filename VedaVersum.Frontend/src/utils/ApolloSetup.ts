@@ -1,16 +1,16 @@
 import {
   ApolloClient,
-  InMemoryCache,
-  HttpLink,
   ApolloLink,
   concat,
   from,
-} from '@apollo/client';
-import { onError } from '@apollo/client/link/error';
-import { readAuthContextFromLocalStorage } from '../authentication/AutContext';
+  HttpLink,
+  InMemoryCache,
+} from "@apollo/client";
+import { onError } from "@apollo/client/link/error";
+import { readAuthContextFromLocalStorage } from "../authentication/AutContext";
 
 // TODO: Use environment variable
-const backendLink = new HttpLink({ uri: 'http://localhost:5000/graphql/' });
+const backendLink = new HttpLink({ uri: "http://localhost:5000/graphql/" });
 
 const authMiddleware = new ApolloLink((operation, forward) => {
   // add the authorization to the headers
@@ -19,7 +19,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
       ...headers,
       authorization: readAuthContextFromLocalStorage()?.authToken
         ? `Bearer ${readAuthContextFromLocalStorage()?.authToken}`
-        : '',
+        : "",
     },
   }));
 

@@ -1,16 +1,16 @@
-import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
+import { useState } from "react";
 import {
   ALL_CARDS_QUERY,
   ASSIGNED_CARDS_QUERY,
   CREATED_CARDS_QUERY,
 } from "../../api/cards-queries";
-import { GetAllCardsResponse } from "../../model";
-import CardListItem from "./CardListItem";
-import Menu from "../common/Menu";
 import { readAuthContextFromLocalStorage } from "../../authentication/AutContext";
-import { GetUserCreatedCardsResponse } from "../../model/get-user-created-cards-response";
+import { GetAllCardsResponse } from "../../model";
 import { GetUserAssignedCardsResponse } from "../../model/get-user-assigned-cards-response";
+import { GetUserCreatedCardsResponse } from "../../model/get-user-created-cards-response";
+import Menu from "../common/Menu";
+import CardListItem from "./CardListItem";
 
 function CardsList() {
   // set tab selection
@@ -25,7 +25,6 @@ function CardsList() {
   const loginData = readAuthContextFromLocalStorage();
   const loginUser = loginData?.user;
   const loginUserEmail = loginUser?.email!;
-
 
   // TODO: is it possible to set a switch case around so that not every time the tab changes all data must be reloaded again?
   /* get data from the database */
@@ -68,7 +67,7 @@ function CardsList() {
     variables: { loginUser },
   }); */
 
-  /* allCardsData
+  /*allCardsData
     ? console.log(allCardsData.allCards)
     : console.error(errorAllCards);
   allCreatedCardsData
@@ -76,7 +75,41 @@ function CardsList() {
     : console.error(errorCreatedData);
   allAssignedCardsData
     ? console.log(allAssignedCardsData.allCardsAssignedToUser)
-    : console.error(errorAssignedCards); */
+    : console.error(errorAssignedCards);*/
+
+  function numberOfArticles(tab: string) {
+    switch (tab) {
+      case "allArticles":
+        if (allCardsData && allCardsData.allCards) {
+          return allCardsData.allCards.length;
+        } else {
+          return "0";
+        }
+      case "myArticles":
+        if (allCreatedCardsData && allCreatedCardsData.allCardsCreatedByUser) {
+          return allCreatedCardsData.allCardsCreatedByUser.length;
+        } else {
+          return "0";
+        }
+      case "assignedArticles":
+        if (
+          allAssignedCardsData &&
+          allAssignedCardsData.allCardsAssignedToUser
+        ) {
+          return allAssignedCardsData.allCardsAssignedToUser.length;
+        } else {
+          return "0";
+        }
+      default:
+        return "0";
+      /* case "bookmarkedArticles":
+        if (allBookmarkedCardsData && allBookmarkedCardsData.allBookmarkedCards) {
+          return allBookmarkedCardsData.allBookmarkedCards.length;
+        } else {
+          return "0";
+        } */
+    }
+  }
 
   return (
     <div className="px-4 py-3 w-75">
@@ -99,7 +132,7 @@ function CardsList() {
                   : "articles-tab px-2"
               }
             >
-              {tab.name}
+              {`${tab.name} (${numberOfArticles(tab.type)})`}
             </button>
           ))}
         </div>
@@ -107,6 +140,7 @@ function CardsList() {
       <div className="p-3 veda-versum-border">
         <h5 className="mb-4">
           Sort by
+          {/* TODO https://www.javascripttutorial.net/array/javascript-sort-an-array-of-objects/ */}
           <button className="veda-versum-button mx-2">Last modified</button>
           <button className="veda-versum-button mx-2">Alphabet asc</button>
           <button className="veda-versum-button mx-2">Alphabet desc</button>
@@ -161,7 +195,7 @@ function CardsList() {
         {/* {activeTab === "bookmarkedArticles" && <div> */}
         {/* data available */}
         {/*  {allBookmarkedCardsData &&
-              allBookmarkedCardsData.allCards.map((card, index) => (
+              allBookmarkedCardsData.allBookmarkedCards.map((card, index) => (
                 <CardListItem key={index} cardData={card} />
               ))} */}
         {/* catch other states */}

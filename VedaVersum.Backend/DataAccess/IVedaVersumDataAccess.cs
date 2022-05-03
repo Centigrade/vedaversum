@@ -16,13 +16,6 @@ namespace VedaVersum.Backend.DataAccess
         Task<IEnumerable<VedaVersumCard>> GetAll();
 
         /// <summary>
-        /// Returns card with requested id
-        /// </summary>
-        /// <param name="cardId">Card identifier to filter.</param>
-        /// <returns>Veda Versum card object or null if card with requested id does not exist</returns>
-        Task<VedaVersumCard?> GetCardById(string cardId);
-
-        /// <summary>
         /// Returns all cards assigned to user
         /// </summary>
         /// <param name="userEmail">User to filter</param>
@@ -35,6 +28,13 @@ namespace VedaVersum.Backend.DataAccess
         /// <param name="userEmail">User to filter</param>
         /// <returns>List of Veda Versum cards created by the user</returns>
         Task<IEnumerable<VedaVersumCard>> GetCardsCreatedBy(string userEmail);
+
+        /// <summary>
+        /// Returns card with requested id
+        /// </summary>
+        /// <param name="cardId">Card identifier to filter.</param>
+        /// <returns>Veda Versum card object or null if card with requested id does not exist</returns>
+        Task<VedaVersumCard?> GetCardById(string cardId);
 
         /// <summary>
         /// Return a list of cards by their Ids
