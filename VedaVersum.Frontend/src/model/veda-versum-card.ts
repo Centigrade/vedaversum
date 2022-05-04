@@ -1,7 +1,7 @@
-import { User } from './user';
+import { User } from "./user";
 
 export interface VedaVersumCard {
-  __typename: 'VedaVersumCard';
+  __typename: "VedaVersumCard";
   /**
    * Card ID
    */
@@ -17,7 +17,7 @@ export interface VedaVersumCard {
   /**
    * Time when card was created
    */
-  created: any | null;
+  created: string;
   /**
    * User ID which created the card
    */

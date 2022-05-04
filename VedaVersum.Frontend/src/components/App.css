@@ -4,6 +4,12 @@
     background: none;
 }
 
+.active-button {
+    background-color: lightseagreen;
+    color: black;
+}
+
+
 .user-name {
     border-radius: 5%;
     border: 1px solid lightseagreen;

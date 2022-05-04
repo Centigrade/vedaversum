@@ -1,6 +1,4 @@
-import { Key } from "react";
 import image from "../../assets/dummy.png";
-import UserName from "../common/UserName";
 
 function CardListItem(cardData: any) {
   const card = cardData.cardData;
@@ -11,11 +9,7 @@ function CardListItem(cardData: any) {
     <div className="border border-primary my-2 p-3">
       <div className="d-flex">
         <div className="w-75">
-          <h4>
-            {card.title}{" "}
-            <button className="veda-versum-button mx-2">Bookmark</button>
-            <button className="veda-versum-button mx-2">Assign to</button>
-          </h4>
+          <h4>{card.title} </h4>
           <p>{formatDate(card.created)}</p>
           <p>{card.content}</p>
         </div>
@@ -33,28 +27,6 @@ function CardListItem(cardData: any) {
         <div className="d-flex align-items-center">
           Author: {card.userCreated.split("@")[0]}
         </div>
-        <p>
-          123 upvotes
-          <button className="veda-versum-button mx-2">Upvote</button>
-        </p>
-      </div>
-
-      {/* assigned users */}
-      <div className="d-flex align-items-center mt-3">
-        <span>Assignees:</span>
-        {card.assignedUsers &&
-          card.assignedUsers.map(
-            (user: {
-              id: Key | null | undefined;
-              email: string;
-              webProfileUrl: string;
-            }) => (
-              <div className="mt-2" key={user.id}>
-                <UserName email={user.email} profile={user.webProfileUrl} />
-              </div>
-            )
-          )}
-        {!card.assignedUsers && <span>None</span>}
       </div>
     </div>
   );
