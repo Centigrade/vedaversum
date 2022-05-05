@@ -6,7 +6,7 @@ using VedaVersum.Backend.DataAccess;
 
 namespace VedaVersum.Backend.Api
 {
-    public class VedaVersumCardObjectType: ObjectType<VedaVersumCard>
+    public class VedaVersumCardObjectType : ObjectType<VedaVersumCard>
     {
         protected override void Configure(IObjectTypeDescriptor<VedaVersumCard> descriptor)
         {
@@ -17,13 +17,13 @@ namespace VedaVersum.Backend.Api
             {
                 var parent = context.Parent<VedaVersumCard>();
 
-                if(parent.RelatedCardIds == null || parent.RelatedCardIds.Count == 0)
+                if (parent.RelatedCardIds == null || parent.RelatedCardIds.Count == 0)
                 {
                     return new List<VedaVersumCard>();
                 }
 
                 var dataAccess = context.Service<IVedaVersumDataAccess>();
-                return await dataAccess.GetCardsById(parent.RelatedCardIds);
+                return await dataAccess.GetArticlesById(parent.RelatedCardIds);
             });
         }
     }

@@ -1,13 +1,16 @@
 import { useQuery } from "@apollo/client";
 import { useState } from "react";
-import { ALL_CARDS_QUERY, CREATED_CARDS_QUERY } from "../../api/cards-queries";
+import {
+  ALL_ARTICLES_QUERY,
+  CREATED_ARTICLES_QUERY,
+} from "../../api/articles-queries";
 import { readAuthContextFromLocalStorage } from "../../authentication/AutContext";
-import { GetAllCardsResponse, VedaVersumCard } from "../../model";
-import { GetUserCreatedCardsResponse } from "../../model/get-user-created-cards-response";
-import Menu from "../common/Menu";
-import CardListItem from "./CardListItem";
+import { GetAllArticlesResponse, VedaVersumCard } from "../../model";
+import { GetUserCreatedArticlesResponse } from "../../model/get-user-created-articles-response";
+import Menu from ".//Menu";
+import ArticlesListItem from "./ArticlesListItem";
 
-function CardsList() {
+function ArticlesList() {
   // login data from user
   const loginData = readAuthContextFromLocalStorage();
   const loginUser = loginData?.user;
@@ -18,19 +21,19 @@ function CardsList() {
   /* get data from the database */
   // load all articles
   const {
-    error: errorAllCards,
-    data: allCardsData,
-    loading: loadingAllCards,
-  } = useQuery<GetAllCardsResponse>(ALL_CARDS_QUERY, {
+    error: errorAllArticles,
+    data: allArticlesData,
+    loading: loadingAllArticles,
+  } = useQuery<GetAllArticlesResponse>(ALL_ARTICLES_QUERY, {
     errorPolicy: "all",
   });
 
   // load all articles created by the user
   const {
     error: errorCreatedData,
-    data: allCreatedCardsData,
+    data: allCreatedArticlesData,
     loading: loadingCreatedData,
-  } = useQuery<GetUserCreatedCardsResponse>(CREATED_CARDS_QUERY, {
+  } = useQuery<GetUserCreatedArticlesResponse>(CREATED_ARTICLES_QUERY, {
     errorPolicy: "all",
     variables: { userEmail: loginUserEmail },
   });
@@ -48,17 +51,17 @@ function CardsList() {
   // active articles (= articles currently selected by the user)
   // TODO: add await data is loaded
   const [activeArticles, setActiveArticles] = useState(
-    allCardsData ? allCardsData.allCards : undefined
+    allArticlesData ? allArticlesData.allArticles : undefined
   );
 
   // user changes active articles
   const changeActiveArticles = (selectedTab: string) => {
     setActiveTab(selectedTab);
 
-    if (selectedTab === "allArticles" && allCardsData) {
-      setActiveArticles(allCardsData?.allCards);
-    } else if (selectedTab === "myArticles" && allCreatedCardsData) {
-      setActiveArticles(allCreatedCardsData?.allCardsCreatedByUser);
+    if (selectedTab === "allArticles" && allArticlesData) {
+      setActiveArticles(allArticlesData?.allArticles);
+    } else if (selectedTab === "myArticles" && allCreatedArticlesData) {
+      setActiveArticles(allCreatedArticlesData?.allArticlesCreatedByUser);
     } else {
       setActiveArticles(undefined);
     }
@@ -87,14 +90,17 @@ function CardsList() {
   function numberOfArticles(tab: string) {
     switch (tab) {
       case "allArticles":
-        if (allCardsData && allCardsData.allCards) {
-          return allCardsData.allCards.length;
+        if (allArticlesData && allArticlesData.allArticles) {
+          return allArticlesData.allArticles.length;
         } else {
           return "0";
         }
       case "myArticles":
-        if (allCreatedCardsData && allCreatedCardsData.allCardsCreatedByUser) {
-          return allCreatedCardsData.allCardsCreatedByUser.length;
+        if (
+          allCreatedArticlesData &&
+          allCreatedArticlesData.allArticlesCreatedByUser
+        ) {
+          return allCreatedArticlesData.allArticlesCreatedByUser.length;
         } else {
           return "0";
         }
@@ -159,14 +165,14 @@ function CardsList() {
         <div>
           {/* data available */}
           {activeArticles &&
-            activeArticles.map((card, index) => (
-              <CardListItem key={index} cardData={card} />
+            activeArticles.map((article, index) => (
+              <ArticlesListItem key={index} articleData={article} />
             ))}
           {/* data undefined */}
-          {(loadingAllCards || loadingCreatedData) && <p>Loading...</p>}
+          {(loadingAllArticles || loadingCreatedData) && <p>Loading...</p>}
           {!activeArticles && <p>Data is empty</p>}
-          {(errorAllCards || errorCreatedData) && (
-            <p>{errorAllCards?.message || errorCreatedData?.message} :(</p>
+          {(errorAllArticles || errorCreatedData) && (
+            <p>{errorAllArticles?.message || errorCreatedData?.message} :(</p>
           )}
         </div>
       </div>
@@ -174,4 +180,4 @@ function CardsList() {
   );
 }
 
-export default CardsList;
+export default ArticlesList;

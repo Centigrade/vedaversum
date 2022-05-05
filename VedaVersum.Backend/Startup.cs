@@ -22,19 +22,19 @@ namespace Centigrade.VedaVersum
     {
         const string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-		public Startup(IConfiguration configuration)
-		{
-			Configuration = configuration;
-		}
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
 
-		public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors(options =>
                 {
                     options.AddPolicy(name: MyAllowSpecificOrigins,
-                        policy  =>
+                        policy =>
                         {
                             policy.WithOrigins("http://localhost:3000/", "http://localhost:3000", "http://localhost:4200/", "http://localhost:4200")
                                 .AllowAnyHeader()
@@ -66,43 +66,43 @@ namespace Centigrade.VedaVersum
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(gitLabOauthConfig.JwtSecret))
                     };
                 });
-            
+
             services.AddAuthorization();
 
             // DataAccess
             var connectionString = Configuration.GetConnectionString("mongo");
             services.AddTransient<IVedaVersumDataAccess, VedaVersumDataAccess>((p) => new VedaVersumDataAccess(
-                connectionString, 
+                connectionString,
                 p.GetService<ILogger<VedaVersumDataAccess>>()!));
 
-        services
-            .AddGraphQLServer()
-            .AddInMemorySubscriptions()
-            .AddQueryType<VedaVersumQuery>()
-                .AddType<VedaVersumCardObjectType>()
-            .AddMutationType(d => d.Name("Mutation"))
-                .AddType<OAuthMutation>()
-                .AddType<VedaVersumMutation>()
-            .AddSubscriptionType<VedaVersumSubscription>()
-            // outcomment the following line to set up banana cake pop
-            // .AddAuthorization()
-            .AddHttpRequestInterceptor(
-                (context, executor, builder, ct) =>
-                {
-                    // Deserializing GitLab user from JWT token data
-                    if(context.User != null)
+            services
+                .AddGraphQLServer()
+                .AddInMemorySubscriptions()
+                .AddQueryType<VedaVersumQuery>()
+                    .AddType<VedaVersumCardObjectType>()
+                .AddMutationType(d => d.Name("Mutation"))
+                    .AddType<OAuthMutation>()
+                    .AddType<VedaVersumMutation>()
+                .AddSubscriptionType<VedaVersumSubscription>()
+                // outcomment the following line to set up banana cake pop
+                // .AddAuthorization()
+                .AddHttpRequestInterceptor(
+                    (context, executor, builder, ct) =>
                     {
-                        var serializedUser = context.User.Claims.Where(c => c.Type == ClaimTypes.UserData)
-                            .Select(c => c.Value).SingleOrDefault();
-                        if(!string.IsNullOrEmpty(serializedUser))
+                        // Deserializing GitLab user from JWT token data
+                        if (context.User != null)
                         {
-                            var user = JsonSerializer.Deserialize<User>(serializedUser);
-                            builder.SetProperty("GitLabUser", user);
+                            var serializedUser = context.User.Claims.Where(c => c.Type == ClaimTypes.UserData)
+                                .Select(c => c.Value).SingleOrDefault();
+                            if (!string.IsNullOrEmpty(serializedUser))
+                            {
+                                var user = JsonSerializer.Deserialize<User>(serializedUser);
+                                builder.SetProperty("GitLabUser", user);
+                            }
                         }
-                    }
-                    return ValueTask.CompletedTask;
-                })
-            .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = true);
+                        return ValueTask.CompletedTask;
+                    })
+                .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = true);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

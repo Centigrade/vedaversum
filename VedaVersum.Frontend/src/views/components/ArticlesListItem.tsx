@@ -1,7 +1,7 @@
 import image from "../../assets/dummy.png";
 
-function CardListItem(cardData: any) {
-  const card = cardData.cardData;
+function ArticlesListItem(articleData: any) {
+  const article = articleData.articleData;
 
   // TODO: add edit & delete button if the article is from the user currently logged in
   // TODO: add remove upvote button
@@ -9,14 +9,14 @@ function CardListItem(cardData: any) {
     <div className="border border-primary my-2 p-3">
       <div className="d-flex">
         <div className="w-75">
-          <h4>{card.title} </h4>
-          <p>{formatDate(card.created)}</p>
-          <p>{card.content}</p>
+          <h4>{article.title} </h4>
+          <p>{formatDate(article.created)}</p>
+          <p>{article.content}</p>
         </div>
         <div className="w-25">
           <img
             className="article-image"
-            src={card.assignedUsers[0].avatarUrl || image}
+            src={article.assignedUsers[0].avatarUrl || image}
             alt="some pic"
           />
         </div>
@@ -25,7 +25,7 @@ function CardListItem(cardData: any) {
       {/* author and upvotes */}
       <div className="d-flex justify-content-between align-items-center mt-3">
         <div className="d-flex align-items-center">
-          Author: {card.userCreated.split("@")[0]}
+          Author: {article.userCreated.split("@")[0]}
         </div>
       </div>
     </div>
@@ -44,4 +44,4 @@ function formatDate(date: string) {
   return creationDate.toLocaleDateString("en-GB", options);
 }
 
-export default CardListItem;
+export default ArticlesListItem;

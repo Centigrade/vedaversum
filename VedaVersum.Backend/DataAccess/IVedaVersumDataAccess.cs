@@ -10,38 +10,31 @@ namespace VedaVersum.Backend.DataAccess
         /* *** GET queries *** */
         /* ******************* */
         /// <summary>
-        /// Returns all existing knowledge cards
+        /// Returns all existing knowledge articles
         /// </summary>
-        /// <returns>List of Veda Versum cards</returns>
+        /// <returns>List of Veda Versum articles</returns>
         Task<IEnumerable<VedaVersumCard>> GetAll();
 
         /// <summary>
-        /// Returns all cards assigned to user
+        /// Returns all articles created by user
         /// </summary>
         /// <param name="userEmail">User to filter</param>
-        /// <returns>List of Veda Versum cards assigned to the user</returns>
-        Task<IEnumerable<VedaVersumCard>> GetCardsAssignedTo(string userEmail);
+        /// <returns>List of Veda Versum articles created by the user</returns>
+        Task<IEnumerable<VedaVersumCard>> GetArticlesCreatedBy(string userEmail);
 
         /// <summary>
-        /// Returns all cards created by user
+        /// Returns article with requested id
         /// </summary>
-        /// <param name="userEmail">User to filter</param>
-        /// <returns>List of Veda Versum cards created by the user</returns>
-        Task<IEnumerable<VedaVersumCard>> GetCardsCreatedBy(string userEmail);
+        /// <param name="articleId">Article identifier to filter.</param>
+        /// <returns>Veda Versum article object or null if article with requested id does not exist</returns>
+        Task<VedaVersumCard?> GetArticleById(string articleId);
 
         /// <summary>
-        /// Returns card with requested id
+        /// Return a list of articles by their Ids
         /// </summary>
-        /// <param name="cardId">Card identifier to filter.</param>
-        /// <returns>Veda Versum card object or null if card with requested id does not exist</returns>
-        Task<VedaVersumCard?> GetCardById(string cardId);
-
-        /// <summary>
-        /// Return a list of cards by their Ids
-        /// </summary>
-        /// <param name="cardIds">A list of card Ids to filter</param>
-        /// <returns>Cards list</returns>
-        Task<IEnumerable<VedaVersumCard>> GetCardsById(IEnumerable<string>? cardIds);
+        /// <param name="articleIds">A list of article Ids to filter</param>
+        /// <returns>Articles list</returns>
+        Task<IEnumerable<VedaVersumCard>> GetArticlesById(IEnumerable<string>? articleIds);
 
         /* ********************** */
         /* *** INSERT queries *** */

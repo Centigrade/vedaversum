@@ -52,27 +52,19 @@ namespace VedaVersum.Backend.Api
         /* *** queries without user logged in *** */
         /* ************************************** */
         /// <summary>
-        /// Returns all cards in the base
+        /// Returns all articless in the base
         /// </summary>
-        public Task<IEnumerable<VedaVersumCard>> GetAllCards()
+        public Task<IEnumerable<VedaVersumCard>> GetAllArticles()
         {
             return _dataAccess.GetAll();
         }
 
         /// <summary>
-        /// Returns card by ID
+        /// Returns article by ID
         /// </summary>
-        public async Task<VedaVersumCard?> GetCard(string cardId, VedaVersumCardDataLoader dataLoader)
+        public async Task<VedaVersumCard?> GetArticle(string articleId, VedaVersumCardDataLoader dataLoader)
         {
-            return await dataLoader.LoadAsync(cardId, CancellationToken.None);
-        }
-
-        /// <summary>
-        /// Returns user by email
-        /// </summary>
-        public async Task<VedaVersumCard?> GetUser(string cardId, VedaVersumCardDataLoader dataLoader)
-        {
-            return await dataLoader.LoadAsync(cardId, CancellationToken.None);
+            return await dataLoader.LoadAsync(articleId, CancellationToken.None);
         }
 
 
@@ -80,19 +72,11 @@ namespace VedaVersum.Backend.Api
         /* *** queries related to the user logged in *** */
         /* ********************************************* */
         /// <summary>
-        /// Returns all cards created by the user
+        /// Returns all articles created by the user
         /// </summary>
-        public Task<IEnumerable<VedaVersumCard>> GetAllCardsCreatedByUser(String userEmail)
+        public Task<IEnumerable<VedaVersumCard>> GetAllArticlesCreatedByUser(String userEmail)
         {
-            return _dataAccess.GetCardsCreatedBy(userEmail);
-        }
-
-        /// <summary>
-        /// Returns all cards assigned to user
-        /// </summary>
-        public Task<IEnumerable<VedaVersumCard>> GetAllCardsAssignedToUser(String userEmail)
-        {
-            return _dataAccess.GetCardsAssignedTo(userEmail);
+            return _dataAccess.GetArticlesCreatedBy(userEmail);
         }
 
         /// <summary>

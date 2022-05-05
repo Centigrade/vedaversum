@@ -1,11 +1,10 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { RedirectLandingPage } from "../authentication/RedirectLandingPage";
 import { RequireAuth } from "../authentication/RequreAuth";
 import "./App.css";
-import CardsList from "./cards-list/CardsList";
-import Header from "./common/Header";
-import UsersList from "./common/UsersList";
+import ArticlesList from "./components/ArticlesList";
+import Header from "./components/Header";
+import UsersList from "./components/UsersList";
 import PageNotFound from "./PageNotFound";
 
 function App() {
@@ -19,7 +18,7 @@ function App() {
             element={
               <RequireAuth>
                 <div className="d-flex">
-                  <CardsList />
+                  <ArticlesList />
                   <UsersList />
                 </div>
               </RequireAuth>

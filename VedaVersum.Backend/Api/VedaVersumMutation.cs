@@ -30,7 +30,7 @@ namespace VedaVersum.Backend.Api
         [Authorize]
         public async Task<User?> UserEnters([GlobalState("GitLabUser")] User user)
         {
-            if(user == null)
+            if (user == null)
             {
                 throw new ApplicationException("User can not be found");
             }
@@ -40,14 +40,14 @@ namespace VedaVersum.Backend.Api
                 user);
             return user;
         }
-        
+
         /// <summary>
         /// Notification about user going offline
         /// </summary>
         [Authorize]
         public async Task<User> UserLeaves([GlobalState("GitLabUser")] User user)
         {
-            if(user == null)
+            if (user == null)
             {
                 throw new ApplicationException("User can not be found");
             }
@@ -68,25 +68,25 @@ namespace VedaVersum.Backend.Api
             [GlobalState("GitLabUser")] User user)
         {
             VedaVersumCard? card = null;
-            if(action != VedaVersumCardAction.Create)
+            if (action != VedaVersumCardAction.Create)
             {
-                if(string.IsNullOrEmpty(cardId))
+                if (string.IsNullOrEmpty(cardId))
                 {
                     throw new ArgumentNullException(nameof(cardId));
                 }
-                card = await _dataAccess.GetCardById(cardId);
-                if(card == null)
+                card = await _dataAccess.GetArticleById(cardId);
+                if (card == null)
                 {
                     throw new ArgumentException($"Can not find card by id '{cardId}'");
                 }
             }
-            switch(action)
+            switch (action)
             {
                 case VedaVersumCardAction.Create:
                     card = await _dataAccess.InsertNewCard(title, content, relatedCards, user);
                     break;
                 case VedaVersumCardAction.Update:
-                    if(card != null)
+                    if (card != null)
                     {
                         card.Title = title;
                         card.Content = title;
@@ -96,7 +96,7 @@ namespace VedaVersum.Backend.Api
                     }
                     break;
                 case VedaVersumCardAction.Delete:
-                    if(! string.IsNullOrEmpty(cardId))
+                    if (!string.IsNullOrEmpty(cardId))
                     {
                         await _dataAccess.DeleteCard(cardId);
                     }
@@ -106,7 +106,7 @@ namespace VedaVersum.Backend.Api
             }
 
             await _eventSender.SendAsync(nameof(VedaVersumSubscription.CardChanged),
-                new CardActionMessage {VedaVersumCard = card, Action = action});
+                new CardActionMessage { VedaVersumCard = card, Action = action });
 
             return card!;
         }

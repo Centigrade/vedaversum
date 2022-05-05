@@ -25,7 +25,7 @@ namespace VedaVersum.Backend.Api
         protected override async Task<IReadOnlyDictionary<string, VedaVersumCard>> LoadBatchAsync(
             IReadOnlyList<string> keys, CancellationToken cancellationToken)
         {
-            var allCardsByIds = await _vedaVersumDataAccess.GetCardsById(keys);
+            var allCardsByIds = await _vedaVersumDataAccess.GetArticlesById(keys);
             return allCardsByIds.ToDictionary(c => c.Id);
         }
     }

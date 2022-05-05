@@ -43,40 +43,31 @@ namespace VedaVersum.Backend.DataAccess
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<VedaVersumCard>> GetCardsById(IEnumerable<string>? cardIds)
+        public async Task<IEnumerable<VedaVersumCard>> GetArticlesById(IEnumerable<string>? articleIds)
         {
-            if (cardIds == null)
+            if (articleIds == null)
             {
                 return new List<VedaVersumCard>();
             }
-            var cards = await _database.GetCollection<VedaVersumCard>(VedaVersumCardsCollectionName)
-                    .FindAsync(Builders<VedaVersumCard>.Filter.In(c => c.Id, cardIds));
-            return cards.ToList();
+            var articles = await _database.GetCollection<VedaVersumCard>(VedaVersumCardsCollectionName)
+                    .FindAsync(Builders<VedaVersumCard>.Filter.In(c => c.Id, articleIds));
+            return articles.ToList();
         }
 
         /// <inheritdoc />
-        public async Task<VedaVersumCard?> GetCardById(string cardId)
+        public async Task<VedaVersumCard?> GetArticleById(string articleId)
         {
-            var cardsCollection = _database.GetCollection<VedaVersumCard>(VedaVersumCardsCollectionName);
-            var card = await cardsCollection.FindAsync(Builders<VedaVersumCard>.Filter.Where(c => c.Id == cardId));
-            return card.FirstOrDefault();
+            var articlesCollection = _database.GetCollection<VedaVersumCard>(VedaVersumCardsCollectionName);
+            var article = await articlesCollection.FindAsync(Builders<VedaVersumCard>.Filter.Where(c => c.Id == articleId));
+            return article.FirstOrDefault();
         }
 
-        /// <inheritdoc />
-        public async Task<IEnumerable<VedaVersumCard>> GetCardsAssignedTo(string userEmail)
+        public async Task<IEnumerable<VedaVersumCard>> GetArticlesCreatedBy(string userEmail)
         {
-            var cardsCollection = _database.GetCollection<VedaVersumCard>(VedaVersumCardsCollectionName);
-            var cards = await cardsCollection.FindAsync(Builders<VedaVersumCard>.Filter.Where(c => c.AssignedUsers != null && c.AssignedUsers.Count > 0));
-            var filteredCards = cards.ToList().Where(c => c.AssignedUsers != null && c.AssignedUsers.Any(u => u.Email == userEmail)).ToList();
-            return filteredCards;
-        }
-
-        public async Task<IEnumerable<VedaVersumCard>> GetCardsCreatedBy(string userEmail)
-        {
-            var cardsCollection = _database.GetCollection<VedaVersumCard>(VedaVersumCardsCollectionName);
-            var cards = await cardsCollection.FindAsync(Builders<VedaVersumCard>.Filter.Where(c => c.UserCreated == userEmail));
-            var filteredCards = cards.ToList();
-            return filteredCards;
+            var articlesCollection = _database.GetCollection<VedaVersumCard>(VedaVersumCardsCollectionName);
+            var articles = await articlesCollection.FindAsync(Builders<VedaVersumCard>.Filter.Where(c => c.UserCreated == userEmail));
+            var filteredArticles = articles.ToList();
+            return filteredArticles;
         }
 
         /* ********************** */
