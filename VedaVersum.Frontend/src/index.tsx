@@ -5,21 +5,32 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import App from "./views/App";
 
-import { BrowserRouter as Router } from "react-router-dom";
-
 import { ApolloProvider } from "@apollo/client";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { apolloClient } from "./utils/ApolloSetup";
+import ArticleDetailsView from "./views/ArticleDetailsView";
+import Header from "./views/components/Header";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
-root.render(
-  <ApolloProvider client={apolloClient}>
+const Routing = () => {
+  return (
     <Router>
       <React.StrictMode>
-        <App />
+        <Header />
+        <Routes>
+          <Route path="*" element={<App />} />
+          <Route path="/:id" element={<ArticleDetailsView />} />
+        </Routes>
       </React.StrictMode>
     </Router>
+  );
+};
+
+root.render(
+  <ApolloProvider client={apolloClient}>
+    <Routing />
   </ApolloProvider>
 );
 

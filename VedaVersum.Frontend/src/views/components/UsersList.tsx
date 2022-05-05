@@ -13,10 +13,7 @@ function UsersList() {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error.message} :(</p>;
-
   if (!data) return <p>Data is empty</p>;
-
-  console.log(data);
 
   return (
     <div className="p-4 w-25">
