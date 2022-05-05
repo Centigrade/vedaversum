@@ -50,7 +50,7 @@ namespace VedaVersum.Backend.DataAccess
                 return new List<VedaVersumCard>();
             }
             var articles = await _database.GetCollection<VedaVersumCard>(VedaVersumCardsCollectionName)
-                    .FindAsync(Builders<VedaVersumCard>.Filter.In(c => c.Id, articleIds));
+                    .FindAsync(Builders<VedaVersumCard>.Filter.In(a => a.Id, articleIds));
             return articles.ToList();
         }
 
@@ -58,14 +58,14 @@ namespace VedaVersum.Backend.DataAccess
         public async Task<VedaVersumCard?> GetArticleById(string articleId)
         {
             var articlesCollection = _database.GetCollection<VedaVersumCard>(VedaVersumCardsCollectionName);
-            var article = await articlesCollection.FindAsync(Builders<VedaVersumCard>.Filter.Where(c => c.Id == articleId));
+            var article = await articlesCollection.FindAsync(Builders<VedaVersumCard>.Filter.Where(a => a.Id == articleId));
             return article.FirstOrDefault();
         }
 
         public async Task<IEnumerable<VedaVersumCard>> GetArticlesCreatedBy(string userEmail)
         {
             var articlesCollection = _database.GetCollection<VedaVersumCard>(VedaVersumCardsCollectionName);
-            var articles = await articlesCollection.FindAsync(Builders<VedaVersumCard>.Filter.Where(c => c.UserCreated == userEmail));
+            var articles = await articlesCollection.FindAsync(Builders<VedaVersumCard>.Filter.Where(a => a.UserCreated == userEmail));
             var filteredArticles = articles.ToList();
             return filteredArticles;
         }

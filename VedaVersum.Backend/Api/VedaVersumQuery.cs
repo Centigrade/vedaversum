@@ -52,7 +52,7 @@ namespace VedaVersum.Backend.Api
         /* *** queries without user logged in *** */
         /* ************************************** */
         /// <summary>
-        /// Returns all articless in the base
+        /// Returns all articles in the base
         /// </summary>
         public Task<IEnumerable<VedaVersumCard>> GetAllArticles()
         {
@@ -62,7 +62,7 @@ namespace VedaVersum.Backend.Api
         /// <summary>
         /// Returns article by ID
         /// </summary>
-        public async Task<VedaVersumCard?> GetArticle(string articleId, VedaVersumCardDataLoader dataLoader)
+        public async Task<VedaVersumCard?> GetArticleById(string articleId, VedaVersumCardDataLoader dataLoader)
         {
             return await dataLoader.LoadAsync(articleId, CancellationToken.None);
         }

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import dummyIcon from "../../assets/dummy.png";
 import { readAuthContextFromLocalStorage } from "../../authentication/AutContext";
 import UserName from "./UserName";
@@ -8,7 +9,9 @@ function Header() {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark header">
       <div className="container-fluid px-4 py-3 d-flex justify-space-between">
-        <h1 className="text-white">Veda Versum</h1>
+        <Link to="/">
+          <h1 className="text-white">Veda Versum</h1>
+        </Link>
         <input type="text" placeholder="Search.." />
         <div className="d-flex align-items-center">
           {/* notification icon for new assignments */}

@@ -1,5 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   ALL_ARTICLES_QUERY,
   CREATED_ARTICLES_QUERY,
@@ -8,7 +9,7 @@ import { readAuthContextFromLocalStorage } from "../../authentication/AutContext
 import { GetAllArticlesResponse, VedaVersumCard } from "../../model";
 import { GetUserCreatedArticlesResponse } from "../../model/get-user-created-articles-response";
 import Menu from ".//Menu";
-import ArticlesListItem from "./ArticlesListItem";
+import ArticleItem from "./ArticleItem";
 
 function ArticlesList() {
   // login data from user
@@ -37,6 +38,8 @@ function ArticlesList() {
     errorPolicy: "all",
     variables: { userEmail: loginUserEmail },
   });
+
+  console.log(allCreatedArticlesData);
 
   /* *** state *** */
   // tab selection
@@ -166,7 +169,10 @@ function ArticlesList() {
           {/* data available */}
           {activeArticles &&
             activeArticles.map((article, index) => (
-              <ArticlesListItem key={index} articleData={article} />
+              // TODO: pretty url const articleURL = article.title.replace(" ", "-");
+              <Link to={`/${article.id}`} key={index}>
+                <ArticleItem articleData={article} preview={true} />
+              </Link>
             ))}
           {/* data undefined */}
           {(loadingAllArticles || loadingCreatedData) && <p>Loading...</p>}
