@@ -1,5 +1,11 @@
+import "reactjs-popup/dist/index.css";
+
 import image from "../../assets/dummy.png";
+import { readAuthContextFromLocalStorage } from "../../authentication/AutContext";
 import { VedaVersumCard } from "../../model";
+import ConfirmDeleteArticle from "./ConfirmDeleteArticle";
+import EditArticle from "./EditArticle";
+import PopUpModal from "./PopUpModal";
 
 /* articleData = data from the article that should be displayed
  * preview = true if only a preview of the article should be shown, i.e. in a list of articles
@@ -9,13 +15,14 @@ export interface ArticleItemProps {
   preview: boolean;
 }
 
-function ArticlesItem(props: ArticleItemProps) {
+function ArticleItem(props: ArticleItemProps) {
   const article = props.articleData;
 
-  console.log("preview:");
-  console.log(props.preview);
+  // get login data for author validation
+  const loginData = readAuthContextFromLocalStorage();
+  const userEmail = loginData?.user?.email;
 
-  // TODO: if !preview add edit & delete button
+  /* *** RENDER COMPONENT *** */
   return (
     <div className="border border-primary my-2 p-3">
       <div className="d-flex">
@@ -37,6 +44,19 @@ function ArticlesItem(props: ArticleItemProps) {
           Author: {article.userCreated.split("@")[0]}
         </div>
       </div>
+      {!props.preview && (
+        <div className="d-flex justify-content-end align-items-center mt-3">
+          {/* edit article */}
+          <PopUpModal show={EditArticle} openModalText="Edit article" />
+          {/* delete article - only accessible if logged in user === author */}
+          {userEmail === article.userCreated && (
+            <PopUpModal
+              show={ConfirmDeleteArticle}
+              openModalText="Delete article"
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -59,4 +79,4 @@ function contentPreview(content: string) {
   return contentPreview.slice(0, numberOfCharacters) + "...";
 }
 
-export default ArticlesItem;
+export default ArticleItem;

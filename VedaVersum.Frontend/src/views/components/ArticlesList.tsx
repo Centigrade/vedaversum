@@ -8,7 +8,6 @@ import {
 import { readAuthContextFromLocalStorage } from "../../authentication/AutContext";
 import { GetAllArticlesResponse, VedaVersumCard } from "../../model";
 import { GetUserCreatedArticlesResponse } from "../../model/get-user-created-articles-response";
-import Menu from ".//Menu";
 import ArticleItem from "./ArticleItem";
 
 function ArticlesList() {
@@ -42,8 +41,13 @@ function ArticlesList() {
   console.log(allCreatedArticlesData);
 
   /* *** state *** */
+  interface tab {
+    name: string;
+    type: string;
+  }
+
   // tab selection
-  const tabs: any[] = [
+  const tabs: tab[] = [
     { name: "all articles", type: "allArticles" },
     { name: "my articles", type: "myArticles" },
   ];
@@ -120,9 +124,6 @@ function ArticlesList() {
   /* *** RENDER COMPONENT *** */
   return (
     <div className="px-4 py-3 w-75">
-      {/* main functionalities */}
-      <Menu />
-
       {/* articles */}
       <h2 className="my-4">Articles</h2>
 

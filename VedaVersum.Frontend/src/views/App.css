@@ -1,60 +1,61 @@
 a {
-    text-decoration: none;
+  color: lightseagreen;
+  text-decoration: none;
 }
 
 .veda-versum-button {
-    border: 1px solid lightseagreen;
-    color: lightseagreen;
-    background: none;
+  border: 1px solid lightseagreen;
+  color: lightseagreen;
+  background: white;
+}
+
+.veda-versum-button:hover {
+  background: black;
+  color: lightseagreen;
 }
 
 .active-button {
-    background-color: lightseagreen;
-    color: black;
+  background-color: black;
+  color: lightseagreen;
 }
-
 
 .user-name {
-    border-radius: 5%;
-    border: 1px solid lightseagreen;
-    color: lightseagreen;
-    background-color: white;
-}
-
-a {
-    color: lightseagreen;
+  border-radius: 5%;
+  border: 1px solid lightseagreen;
+  color: lightseagreen;
+  background-color: white;
 }
 
 .user-name-circle {
-    border-radius: 50%;
-    background-color: lightseagreen;
-    color: black;
+  border-radius: 50%;
+  background-color: lightseagreen;
+  color: black;
 }
 
 .article-image {
-    width: 150px; /* todo: change this */
+  width: 150px; /* todo: change this */
 }
 
 .notification-icon {
-    width: 40px; /* todo: change this */
+  width: 40px; /* todo: change this */
 }
 
 .header {
-    color: lightseagreen;
+  color: lightseagreen;
 }
 
 .veda-versum-border {
-    border: 1px solid lightseagreen;
+  border: 1px solid lightseagreen;
 }
 
 .articles-tab {
-    border: 1px solid lightseagreen;
-    border-bottom: none;
-    color: lightseagreen;
-    background-color: white;
+  border: 1px solid lightseagreen;
+  border-bottom: none;
+  color: lightseagreen;
+  background-color: white;
 }
 
 .active-tab {
-    background-color: lightseagreen;
-    color: black;
+  background-color: lightseagreen;
+  color: black;
 }
