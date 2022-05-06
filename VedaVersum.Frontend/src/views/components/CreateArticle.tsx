@@ -5,22 +5,29 @@ import { PopupHostedView } from "./PopUpModal";
 function CreateArticle({ closePopup }: PopupHostedView) {
   // article variables:
   const [content, setContent] = useState<string | undefined>("**Hello world**");
-  const [title, setTitle] = useState<string | undefined>("Title");
+  const [title, setTitle] = useState<string | undefined>("");
+  const [invalidInput, setInvalidInput] = useState<boolean>(false);
 
   const handleTitleInput = (event: any) => {
     setTitle(event.target.value);
   };
 
   function validateInput() {
-    if (!title) {
-      alert("Title must not be empty, please enter a title.");
-    } else if (title.length < 2) {
-      alert("Title must have at least 2 characters!");
+    if (title && title.length < 2) {
+      setInvalidInput(true);
     } else {
+      setInvalidInput(false);
       console.log("validation successful, inserting article...");
       // TODO: call insert query
       closePopup();
     }
+  }
+
+  function discardData() {
+    // resetting the entries should happen automatically on close or rather on new open
+    setTitle("");
+    setContent("");
+    closePopup();
   }
 
   /* *** RENDER COMPONENT *** */
@@ -44,7 +51,13 @@ function CreateArticle({ closePopup }: PopupHostedView) {
             onChange={handleTitleInput}
             minLength={2}
             required
+            className={invalidInput ? "border border-danger" : ""}
           />
+          {invalidInput && (
+            <span className="mx-2 text-danger">
+              Title must have at least 2 characters!
+            </span>
+          )}
         </div>
         <div className="p-2">
           <h5>Content:</h5>
@@ -61,13 +74,14 @@ function CreateArticle({ closePopup }: PopupHostedView) {
           onClick={() => {
             validateInput();
           }}
+          disabled={!title}
         >
           Create article
         </button>
         <button
           className="veda-versum-button"
           onClick={() => {
-            closePopup();
+            discardData();
           }}
         >
           Discard data
@@ -76,5 +90,4 @@ function CreateArticle({ closePopup }: PopupHostedView) {
     </div>
   );
 }
-
 export default CreateArticle;

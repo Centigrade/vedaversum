@@ -3,18 +3,18 @@ a {
   text-decoration: none;
 }
 
-.veda-versum-button {
+.veda-versum-button:enabled {
   border: 1px solid lightseagreen;
   color: lightseagreen;
   background: white;
 }
 
-.veda-versum-button:hover {
+.veda-versum-button:hover:enabled {
   background: black;
   color: lightseagreen;
 }
 
-.active-button {
+.active-button:enabled {
   background-color: black;
   color: lightseagreen;
 }

@@ -38,14 +38,11 @@ function ArticlesList() {
     variables: { userEmail: loginUserEmail },
   });
 
-  console.log(allCreatedArticlesData);
-
   /* *** state *** */
   interface tab {
     name: string;
     type: string;
   }
-
   // tab selection
   const tabs: tab[] = [
     { name: "all articles", type: "allArticles" },
@@ -170,8 +167,16 @@ function ArticlesList() {
           {/* data available */}
           {activeArticles &&
             activeArticles.map((article, index) => (
-              // TODO: pretty url const articleURL = article.title.replace(" ", "-");
+              // TODO: pretty url
+              // const articleURL = article.title.replace(" ", "-"); /${replaceSpaces(article.title)}
               <Link to={`/${article.id}`} key={index}>
+                {/* <Link
+                to={{
+                  pathname: `/${article.title}`,
+                  state: { id: article.id },
+                }}
+                key={index}
+              > */}
                 <ArticleItem articleData={article} preview={true} />
               </Link>
             ))}
