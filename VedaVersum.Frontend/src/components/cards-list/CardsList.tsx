@@ -1,11 +1,14 @@
-import { useQuery } from "@apollo/client";
-import { useState } from "react";
-import { ALL_CARDS_QUERY, CREATED_CARDS_QUERY } from "../../api/cards-queries";
-import { readAuthContextFromLocalStorage } from "../../authentication/AutContext";
-import { GetAllCardsResponse, VedaVersumCard } from "../../model";
-import { GetUserCreatedCardsResponse } from "../../model/get-user-created-cards-response";
-import Menu from "../common/Menu";
-import CardListItem from "./CardListItem";
+import { useQuery } from '@apollo/client';
+import { useState } from 'react';
+import {
+  ALL_ARTICLES_QUERY,
+  CREATED_ARTICLES_QUERY,
+} from '../../api/articles-queries';
+import { readAuthContextFromLocalStorage } from '../../authentication/AutContext';
+import { GetAllArticlesResponse, VedaVersumArticle } from '../../model';
+import { GetUserCreatedArticlesResponse } from '../../model/get-user-created-articles-response';
+import Menu from '../common/Menu';
+import CardListItem from './CardListItem';
 
 function CardsList() {
   // login data from user
@@ -21,8 +24,8 @@ function CardsList() {
     error: errorAllCards,
     data: allCardsData,
     loading: loadingAllCards,
-  } = useQuery<GetAllCardsResponse>(ALL_CARDS_QUERY, {
-    errorPolicy: "all",
+  } = useQuery<GetAllArticlesResponse>(ALL_ARTICLES_QUERY, {
+    errorPolicy: 'all',
   });
 
   // load all articles created by the user
@@ -30,52 +33,52 @@ function CardsList() {
     error: errorCreatedData,
     data: allCreatedCardsData,
     loading: loadingCreatedData,
-  } = useQuery<GetUserCreatedCardsResponse>(CREATED_CARDS_QUERY, {
-    errorPolicy: "all",
+  } = useQuery<GetUserCreatedArticlesResponse>(CREATED_ARTICLES_QUERY, {
+    errorPolicy: 'all',
     variables: { userEmail: loginUserEmail },
   });
 
   /* *** state *** */
   // tab selection
   const tabs: any[] = [
-    { name: "all articles", type: "allArticles" },
-    { name: "my articles", type: "myArticles" },
+    { name: 'all articles', type: 'allArticles' },
+    { name: 'my articles', type: 'myArticles' },
   ];
-  const [activeTab, setActiveTab] = useState("allArticles");
+  const [activeTab, setActiveTab] = useState('allArticles');
   // sort selection
-  const sortOptions: string[] = ["latest", "relevant"];
-  const [activeSort, setActiveSort] = useState("latest");
+  const sortOptions: string[] = ['latest', 'relevant'];
+  const [activeSort, setActiveSort] = useState('latest');
   // active articles (= articles currently selected by the user)
   // TODO: add await data is loaded
   const [activeArticles, setActiveArticles] = useState(
-    allCardsData ? allCardsData.allCards : undefined
+    allCardsData ? allCardsData.allArticles : undefined
   );
 
   // user changes active articles
   const changeActiveArticles = (selectedTab: string) => {
     setActiveTab(selectedTab);
 
-    if (selectedTab === "allArticles" && allCardsData) {
-      setActiveArticles(allCardsData?.allCards);
-    } else if (selectedTab === "myArticles" && allCreatedCardsData) {
-      setActiveArticles(allCreatedCardsData?.allCardsCreatedByUser);
+    if (selectedTab === 'allArticles' && allCardsData) {
+      setActiveArticles(allCardsData?.allArticles);
+    } else if (selectedTab === 'myArticles' && allCreatedCardsData) {
+      setActiveArticles(allCreatedCardsData?.allArticlesCreatedByUser);
     } else {
       setActiveArticles(undefined);
     }
   };
 
   // user changes sorting of articles
-  const sortArticlesBy = (articles: VedaVersumCard[], sortBy: string) => {
+  const sortArticlesBy = (articles: VedaVersumArticle[], sortBy: string) => {
     let sortedArticles = [...articles];
     setActiveSort(sortBy);
 
-    if (sortBy === "latest") {
-      sortedArticles.sort((a: VedaVersumCard, b: VedaVersumCard) =>
+    if (sortBy === 'latest') {
+      sortedArticles.sort((a: VedaVersumArticle, b: VedaVersumArticle) =>
         b.created.localeCompare(a.created)
       );
-    } else if (sortBy === "relevant") {
+    } else if (sortBy === 'relevant') {
       // TODO: implement REAL logic, this is only for testing
-      sortedArticles.sort((a: VedaVersumCard, b: VedaVersumCard) =>
+      sortedArticles.sort((a: VedaVersumArticle, b: VedaVersumArticle) =>
         a.created.localeCompare(b.created)
       );
     }
@@ -86,20 +89,23 @@ function CardsList() {
   // count number of articles
   function numberOfArticles(tab: string) {
     switch (tab) {
-      case "allArticles":
-        if (allCardsData && allCardsData.allCards) {
-          return allCardsData.allCards.length;
+      case 'allArticles':
+        if (allCardsData && allCardsData.allArticles) {
+          return allCardsData.allArticles.length;
         } else {
-          return "0";
+          return '0';
         }
-      case "myArticles":
-        if (allCreatedCardsData && allCreatedCardsData.allCardsCreatedByUser) {
-          return allCreatedCardsData.allCardsCreatedByUser.length;
+      case 'myArticles':
+        if (
+          allCreatedCardsData &&
+          allCreatedCardsData.allArticlesCreatedByUser
+        ) {
+          return allCreatedCardsData.allArticlesCreatedByUser.length;
         } else {
-          return "0";
+          return '0';
         }
       default:
-        return "0";
+        return '0';
     }
   }
 
@@ -126,8 +132,8 @@ function CardsList() {
               onClick={() => changeActiveArticles(tab.type)}
               className={
                 activeTab === tab.type
-                  ? "active-tab articles-tab px-2"
-                  : "articles-tab px-2"
+                  ? 'active-tab articles-tab px-2'
+                  : 'articles-tab px-2'
               }
             >
               {`${tab.name} (${numberOfArticles(tab.type)})`}
@@ -145,8 +151,8 @@ function CardsList() {
                 key={index}
                 className={
                   activeSort === sortBy
-                    ? "active-button veda-versum-button mx-2"
-                    : "veda-versum-button mx-2"
+                    ? 'active-button veda-versum-button mx-2'
+                    : 'veda-versum-button mx-2'
                 }
                 onClick={() => sortArticlesBy(activeArticles, sortBy)}
               >

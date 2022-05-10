@@ -81,7 +81,7 @@ namespace VedaVersum.Test
             string resultGitHubOauthUri = string.Empty;
             string expectedGitHubOauthUri = "/oauth/token";
             string resultGitHubOauthParameters = string.Empty;
-            string expectedGitHubOauthParameters = $"client_id={_settings!.ClientId}&client_secret={_settings!.Secret}&code={expectedOAuthCode}&grant_type=authorization_code&redirect_uri=https%3A%2F%2Flocalhost%3A5001";
+            string expectedGitHubOauthParameters = $"client_id={_settings!.ClientId}&client_secret={_settings!.Secret}&code={expectedOAuthCode}&grant_type=authorization_code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Flogin";
             var gitLabOauthTokenResponse = new OAuthTokenResponse {AccessToken = expectedGitHubOAuthToken};
             var gilLabOauthTokenHttpResponse = new HttpResponseMessage(HttpStatusCode.OK)
             {

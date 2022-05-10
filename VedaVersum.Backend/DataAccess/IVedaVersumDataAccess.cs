@@ -10,54 +10,54 @@ namespace VedaVersum.Backend.DataAccess
         /* *** GET queries *** */
         /* ******************* */
         /// <summary>
-        /// Returns all existing knowledge cards
+        /// Returns all existing knowledge articles
         /// </summary>
-        /// <returns>List of Veda Versum cards</returns>
-        Task<IEnumerable<VedaVersumCard>> GetAll();
+        /// <returns>List of Veda Versum articles</returns>
+        Task<IEnumerable<VedaVersumArticle>> GetAll();
 
         /// <summary>
-        /// Returns all cards assigned to user
+        /// Returns all articles assigned to user
         /// </summary>
         /// <param name="userEmail">User to filter</param>
-        /// <returns>List of Veda Versum cards assigned to the user</returns>
-        Task<IEnumerable<VedaVersumCard>> GetCardsAssignedTo(string userEmail);
+        /// <returns>List of Veda Versum articles assigned to the user</returns>
+        Task<IEnumerable<VedaVersumArticle>> GetArticlesAssignedTo(string userEmail);
 
         /// <summary>
-        /// Returns all cards created by user
+        /// Returns all articles created by user
         /// </summary>
         /// <param name="userEmail">User to filter</param>
-        /// <returns>List of Veda Versum cards created by the user</returns>
-        Task<IEnumerable<VedaVersumCard>> GetCardsCreatedBy(string userEmail);
+        /// <returns>List of Veda Versum articles created by the user</returns>
+        Task<IEnumerable<VedaVersumArticle>> GetArticlesCreatedBy(string userEmail);
 
         /// <summary>
-        /// Returns card with requested id
+        /// Returns article with requested id
         /// </summary>
-        /// <param name="cardId">Card identifier to filter.</param>
-        /// <returns>Veda Versum card object or null if card with requested id does not exist</returns>
-        Task<VedaVersumCard?> GetCardById(string cardId);
+        /// <param name="articleId">article identifier to filter.</param>
+        /// <returns>Veda Versum article object or null if article with requested id does not exist</returns>
+        Task<VedaVersumArticle?> GetArticleById(string articleId);
 
         /// <summary>
-        /// Return a list of cards by their Ids
+        /// Return a list of articles by their Ids
         /// </summary>
-        /// <param name="cardIds">A list of card Ids to filter</param>
-        /// <returns>Cards list</returns>
-        Task<IEnumerable<VedaVersumCard>> GetCardsById(IEnumerable<string>? cardIds);
+        /// <param name="articleIds">A list of article Ids to filter</param>
+        /// <returns>Articles list</returns>
+        Task<IEnumerable<VedaVersumArticle>> GetArticlesById(IEnumerable<string>? articleIds);
 
         /* ********************** */
         /* *** INSERT queries *** */
         /* ********************** */
         /// <summary>
-        /// Inserts new card into list
+        /// Inserts new article into list
         /// </summary>
-        /// <param name="title">Card title</param>
-        /// <param name="content">Card content</param>
-        /// <param name="relatedCards">List of related cards</param>
+        /// <param name="title">Article title</param>
+        /// <param name="content">Article content</param>
+        /// <param name="relatedArticles">List of related Articles</param>
         /// <param name="user">Assigned user</param>
-        /// <returns>Created VedaVersum card</returns>
-        Task<VedaVersumCard> InsertNewCard(
+        /// <returns>Created VedaVersum article</returns>
+        Task<VedaVersumArticle> InsertNewArticle(
             string title,
             string content,
-            ICollection<string>? relatedCards,
+            ICollection<string>? relatedArticles,
             User user
         );
 
@@ -65,18 +65,18 @@ namespace VedaVersum.Backend.DataAccess
         /* *** UPDATE queries *** */
         /* ********************** */
         /// <summary>
-        /// Updates existing card in the list
+        /// Updates existing article in the list
         /// </summary>
-        Task UpdateCard(VedaVersumCard card);
+        Task UpdateArticle(VedaVersumArticle article);
 
         /* ********************** */
         /* *** DELETE queries *** */
         /* ********************** */
         /// <summary>
-        /// Deletes card from list
+        /// Deletes article from list
         /// </summary>
-        /// <param name="cardId">Card identifier</param>
-        Task DeleteCard(string cardId);
+        /// <param name="articleId">Article identifier</param>
+        Task DeleteArticle(string articleId);
 
 
     }

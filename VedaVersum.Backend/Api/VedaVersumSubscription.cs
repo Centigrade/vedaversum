@@ -33,6 +33,6 @@ namespace VedaVersum.Backend.Api
 
         [Subscribe]
         [Topic] 
-        public CardActionMessage CardChanged ([EventMessage] CardActionMessage message) => message;
+        public ArticleActionMessage ArticleChanged ([EventMessage] ArticleActionMessage message) => message;
     }
 }

@@ -9,11 +9,11 @@ using VedaVersum.Backend.DataAccess;
 
 namespace VedaVersum.Backend.Api
 {
-    public class VedaVersumCardDataLoader : BatchDataLoader<string, VedaVersumCard>
+    public class VedaVersumArticleDataLoader : BatchDataLoader<string, VedaVersumArticle>
     {
         private readonly IVedaVersumDataAccess _vedaVersumDataAccess;
 
-        public VedaVersumCardDataLoader(
+        public VedaVersumArticleDataLoader(
             IVedaVersumDataAccess vedaVersumDataAccess,
             IBatchScheduler batchScheduler,
             DataLoaderOptions<string>? options = null) : base(batchScheduler, options)
@@ -21,12 +21,12 @@ namespace VedaVersum.Backend.Api
             _vedaVersumDataAccess = vedaVersumDataAccess;
         }
 
-        // This method collects all CardIds during the single GraphQL query and executes database query once far all CardIds
-        protected override async Task<IReadOnlyDictionary<string, VedaVersumCard>> LoadBatchAsync(
+        // This method collects all ArticleIds during the single GraphQL query and executes database query once far all ArticleIds
+        protected override async Task<IReadOnlyDictionary<string, VedaVersumArticle>> LoadBatchAsync(
             IReadOnlyList<string> keys, CancellationToken cancellationToken)
         {
-            var allCardsByIds = await _vedaVersumDataAccess.GetCardsById(keys);
-            return allCardsByIds.ToDictionary(c => c.Id);
+            var allArticlesByIds = await _vedaVersumDataAccess.GetArticlesById(keys);
+            return allArticlesByIds.ToDictionary(c => c.Id);
         }
     }
 }

@@ -1,8 +1,8 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
-export const ALL_CARDS_QUERY = gql`
-  query GetAllCards {
-    allCards {
+export const ALL_ARTICLES_QUERY = gql`
+  query GetAllArticles {
+    allArticles {
       id
       title
       content
@@ -16,15 +16,15 @@ export const ALL_CARDS_QUERY = gql`
         webProfileUrl
         avatarUrl
       }
-      relatedCardIds
+      relatedArticleIds
     }
   }
 `;
 
 // query to get all articles that are created by the user
-export const CREATED_CARDS_QUERY = gql`
-  query GetAllCardsCreatedByUser($userEmail: String!) {
-    allCardsCreatedByUser(userEmail: $userEmail) {
+export const CREATED_ARTICLES_QUERY = gql`
+  query GetAllArticlesCreatedByUser($userEmail: String!) {
+    allArticlesCreatedByUser(userEmail: $userEmail) {
       id
       title
       content
@@ -38,7 +38,7 @@ export const CREATED_CARDS_QUERY = gql`
         webProfileUrl
         avatarUrl
       }
-      relatedCardIds
+      relatedArticleIds
     }
   }
 `;

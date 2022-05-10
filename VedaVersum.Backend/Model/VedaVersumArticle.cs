@@ -4,43 +4,43 @@ using System.Collections.Generic;
 namespace Centigrade.VedaVersum.Model
 {
     /// <summary>
-    /// Represents Knowledge Base card data
+    /// Represents Knowledge Base card article data
     /// </summary>
-    public class VedaVersumCard
+    public class VedaVersumArticle
     {
         /// <summary>
-        /// Card ID
+        /// Article ID
         /// </summary>
         public string Id { get; set; } = string.Empty;
 
         /// <summary>
-        /// Card title
+        /// Article title
         /// </summary>
         public string Title { get; set; } = string.Empty;
 
         /// <summary>
-        /// Content of the card
+        /// Content of the article
         /// </summary>
         public string Content { get; set; } = string.Empty;
 
         /// <summary>
-        /// User ID which created the card
+        /// User ID which created the article
         /// </summary>
         public string UserCreated { get; set; } = string.Empty;
 
         /// <summary>
-        /// Time when card was created
+        /// Time when article was created
         /// </summary>
         public DateTimeOffset? Created { get; set; }
 
         /// <summary>
-        /// Users this card assigned
+        /// Users this article assigned
         /// </summary>
         public ICollection<User>? AssignedUsers { get; set; }
 
         /// <summary>
-        /// Related cards Ids
+        /// Related articles Ids
         /// </summary>
-        public ICollection<string>? RelatedCardIds { get; set; }
+        public ICollection<string>? RelatedArticleIds { get; set; }
     }
 }
