@@ -6,7 +6,7 @@ using HotChocolate.Types;
 
 namespace VedaVersum.Backend.Api
 {
-    [Authorize]
+    // [Authorize]
     public class VedaVersumSubscription
     {
         /// <summary>
