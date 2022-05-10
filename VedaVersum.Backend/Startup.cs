@@ -77,6 +77,7 @@ namespace Centigrade.VedaVersum
 
         services
             .AddGraphQLServer()
+            .AddAuthorization()
             .AddInMemorySubscriptions()
             .AddQueryType<VedaVersumQuery>()
                 .AddType<VedaVersumArticleObjectType>()
@@ -84,8 +85,6 @@ namespace Centigrade.VedaVersum
                 .AddType<OAuthMutation>()
                 .AddType<VedaVersumMutation>()
             .AddSubscriptionType<VedaVersumSubscription>()
-            // outcomment the following line to set up banana cake pop
-            .AddAuthorization()
             .AddHttpRequestInterceptor(
                 (context, executor, builder, ct) =>
                 {

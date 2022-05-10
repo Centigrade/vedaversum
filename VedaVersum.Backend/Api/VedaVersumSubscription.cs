@@ -1,12 +1,10 @@
-﻿using System;
-using Centigrade.VedaVersum.Model;
+﻿using Centigrade.VedaVersum.Model;
 using HotChocolate;
 using HotChocolate.AspNetCore.Authorization;
 using HotChocolate.Types;
 
 namespace VedaVersum.Backend.Api
 {
-    // [Authorize]
     public class VedaVersumSubscription
     {
         /// <summary>

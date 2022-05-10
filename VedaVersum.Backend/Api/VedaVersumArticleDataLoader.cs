@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Centigrade.VedaVersum.Model;
 using GreenDonut;
-using HotChocolate.DataLoader;
 using VedaVersum.Backend.DataAccess;
 
 namespace VedaVersum.Backend.Api
@@ -16,7 +15,7 @@ namespace VedaVersum.Backend.Api
         public VedaVersumArticleDataLoader(
             IVedaVersumDataAccess vedaVersumDataAccess,
             IBatchScheduler batchScheduler,
-            DataLoaderOptions<string>? options = null) : base(batchScheduler, options)
+            DataLoaderOptions options) : base(batchScheduler, options)
         {
             _vedaVersumDataAccess = vedaVersumDataAccess;
         }
