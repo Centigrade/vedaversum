@@ -1,31 +1,35 @@
+import dummyIcon from "assets/dummy.png";
+import logoWithName from "assets/logoWithName.svg";
 import { Link } from "react-router-dom";
-import dummyIcon from "../../assets/dummy.png";
-import { readAuthContextFromLocalStorage } from "../../authentication/AutContext";
-import UserName from "./UserName";
+// import { readAuthContextFromLocalStorage } from "../../authentication/AutContext";
+import CreateArticle from "views/components/CreateArticle";
+import PopUpModal from "views/components/PopUpModal";
 
 function Header() {
-  const loginData = readAuthContextFromLocalStorage();
+  // const loginData = readAuthContextFromLocalStorage();
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark header">
       <div className="container-fluid px-4 py-3 d-flex justify-space-between">
         <Link to="/">
-          <h1 className="text-white">Veda Versum</h1>
+          {/* <h1 className="text-white">Veda Versum</h1> */}
+          <img src={logoWithName} alt="VedaVersum Logo" />
         </Link>
-        <input type="text" placeholder="Search.." />
         <div className="d-flex align-items-center">
-          {/* notification icon for new assignments */}
+          {/* search bar */}
+          <input type="text" placeholder="Search.." />
+          {/* create new article button */}
+          <PopUpModal show={CreateArticle} openModalText="Start writing" />
+          {/* avatar image */}
           <img className="notification-icon" src={dummyIcon} alt="some pic" />
-          {/* number of new assignments */}
-          <h5 className="mr-2">2</h5>
+
           {/* show logged in as + username */}
-          {loginData && loginData.user && (
+          {/* {loginData && loginData.user && (
             <UserName
               email={loginData.user.email}
               profile={loginData.user.webProfileUrl}
             />
-          )}
-          <button className="veda-versum-button mx-2">Logout</button>
+          )} */}
         </div>
       </div>
     </nav>

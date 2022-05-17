@@ -1,4 +1,4 @@
-import { PopupHostedView } from "./PopUpModal";
+import { PopupHostedView } from "views/components/PopUpModal";
 
 function ConfirmDeleteArticle({ closePopup }: PopupHostedView) {
   //  TODO: get article id via URL

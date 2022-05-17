@@ -1,11 +1,11 @@
 import "reactjs-popup/dist/index.css";
 
-import image from "../../assets/dummy.png";
-import { readAuthContextFromLocalStorage } from "../../authentication/AutContext";
-import { VedaVersumArticle } from "../../model";
-import ConfirmDeleteArticle from "./ConfirmDeleteArticle";
-import EditArticle from "./EditArticle";
-import PopUpModal from "./PopUpModal";
+import image from "assets/dummy.png";
+import { readAuthContextFromLocalStorage } from "authentication/AutContext";
+import { VedaVersumArticle } from "model";
+import ConfirmDeleteArticle from "views/components/ConfirmDeleteArticle";
+import EditArticle from "views/components/EditArticle";
+import PopUpModal from "views/components/PopUpModal";
 
 /* articleData = data from the article that should be displayed
  * preview = true if only a preview of the article should be shown, i.e. in a list of articles

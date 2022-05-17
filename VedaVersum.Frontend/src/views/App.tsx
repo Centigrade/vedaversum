@@ -1,12 +1,12 @@
-import "./App.css";
-import ArticlesList from "./components/ArticlesList";
-import UsersList from "./components/UsersList";
+import ArticleList from "views/components/ArticleList";
+import UserList from "views/components/UserList";
+import "views/styles/App.scss";
 
 function App() {
   return (
-    <div className="d-flex">
-      <ArticlesList />
-      <UsersList />
+    <div className="app">
+      <ArticleList />
+      <UserList />
     </div>
   );
 }

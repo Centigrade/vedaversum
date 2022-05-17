@@ -1,6 +1,6 @@
 import MDEditor from "@uiw/react-md-editor";
 import { useState } from "react";
-import { PopupHostedView } from "./PopUpModal";
+import { PopupHostedView } from "views/components/PopUpModal";
 
 function EditArticle({ closePopup }: PopupHostedView) {
   //  TODO: get article id via URL

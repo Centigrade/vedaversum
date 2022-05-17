@@ -4,7 +4,7 @@ import { ARTICLE_BY_ID_QUERY } from "../api/articles-queries";
 import { RequireAuth } from "../authentication/RequreAuth";
 import { GetArticleById } from "../model/get-article-by-id-response";
 import ArticlesItem from "./components/ArticleItem";
-import UsersList from "./components/UsersList";
+import UserList from "./components/UserList";
 
 function ArticleDetailsView() {
   const { id } = useParams();
@@ -34,7 +34,7 @@ function ArticleDetailsView() {
           )}
         </div>
         {/* users list */}
-        <UsersList />
+        <UserList />
       </div>
     </RequireAuth>
   );

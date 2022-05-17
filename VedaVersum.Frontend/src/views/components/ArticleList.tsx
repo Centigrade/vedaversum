@@ -1,14 +1,15 @@
 import { useQuery } from "@apollo/client";
-import { useState } from "react";
-import { Link } from "react-router-dom";
 import {
   ALL_ARTICLES_QUERY,
   CREATED_ARTICLES_QUERY,
-} from "../../api/articles-queries";
-import { readAuthContextFromLocalStorage } from "../../authentication/AutContext";
-import { GetAllArticlesResponse, VedaVersumArticle } from "../../model";
-import { GetUserCreatedArticlesResponse } from "../../model/get-user-created-articles-response";
-import ArticleItem from "./ArticleItem";
+} from "api/articles-queries";
+import { readAuthContextFromLocalStorage } from "authentication/AutContext";
+import { GetAllArticlesResponse, VedaVersumArticle } from "model";
+import { GetUserCreatedArticlesResponse } from "model/get-user-created-articles-response";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import ArticleItem from "views/components/ArticleItem";
+import "views/styles/ArticleList.scss";
 
 function ArticlesList() {
   // login data from user
@@ -45,13 +46,12 @@ function ArticlesList() {
   }
   // tab selection
   const tabs: any[] = [
-    { name: "all articles", type: "allArticles" },
-    { name: "my articles", type: "myArticles" },
+    { name: "All", type: "allArticles" },
+    { name: "New", type: "newArticles" }, // TODO: new = articles the user missed or just sort by latest?
+    { name: "Trending", type: "trendingArticles" },
+    { name: "Yours", type: "myArticles" },
   ];
   const [activeTab, setActiveTab] = useState("allArticles");
-  // sort selection
-  const sortOptions: string[] = ["latest", "relevant"];
-  const [activeSort, setActiveSort] = useState("latest");
   // active articles (= articles currently selected by the user)
   // TODO: add await data is loaded
   const [activeArticles, setActiveArticles] = useState(
@@ -62,33 +62,53 @@ function ArticlesList() {
   const changeActiveArticles = (selectedTab: string) => {
     setActiveTab(selectedTab);
 
-    if (selectedTab === "allArticles" && allArticlesData) {
-      setActiveArticles(allArticlesData?.allArticles);
-    } else if (selectedTab === "myArticles" && allCreatedArticlesData) {
-      setActiveArticles(allCreatedArticlesData?.allArticlesCreatedByUser);
-    } else {
-      setActiveArticles(undefined);
+    switch (selectedTab) {
+      case "allArticles":
+        allArticlesData
+          ? setActiveArticles(allArticlesData.allArticles)
+          : setActiveArticles(undefined);
+        break;
+      case "newArticles":
+        activeArticles
+          ? sortArticlesBy("latest")
+          : setActiveArticles(undefined);
+        break;
+      case "trendingArticles":
+        activeArticles
+          ? sortArticlesBy("relevant")
+          : setActiveArticles(undefined);
+        break;
+      case "myArticles":
+        allArticlesData
+          ? setActiveArticles(allCreatedArticlesData?.allArticlesCreatedByUser)
+          : setActiveArticles(undefined);
+        break;
+      default:
+        setActiveArticles(undefined);
+        break;
     }
   };
 
   // user changes sorting of articles
-  const sortArticlesBy = (articles: VedaVersumArticle[], sortBy: string) => {
-    let sortedArticles = [...articles];
-    setActiveSort(sortBy);
+  function sortArticlesBy(sortBy: string) {
+    if (allArticlesData?.allArticles) {
+      let sortedArticles = [...allArticlesData.allArticles];
 
-    if (sortBy === "latest") {
-      sortedArticles.sort((a: VedaVersumArticle, b: VedaVersumArticle) =>
-        b.created.localeCompare(a.created)
-      );
-    } else if (sortBy === "relevant") {
-      // TODO: implement REAL logic, this is only for testing
-      sortedArticles.sort((a: VedaVersumArticle, b: VedaVersumArticle) =>
-        a.created.localeCompare(b.created)
-      );
+      if (sortBy === "latest") {
+        sortedArticles.sort((a: VedaVersumArticle, b: VedaVersumArticle) =>
+          b.created.localeCompare(a.created)
+        );
+      } else if (sortBy === "relevant") {
+        // TODO: implement REAL logic, this is only for testing
+        sortedArticles.sort((a: VedaVersumArticle, b: VedaVersumArticle) =>
+          a.created.localeCompare(b.created)
+        );
+      }
+      setActiveArticles(sortedArticles);
+    } else {
+      setActiveArticles(undefined);
     }
-
-    setActiveArticles(sortedArticles);
-  };
+  }
 
   // count number of articles
   function numberOfArticles(tab: string) {
@@ -109,59 +129,36 @@ function ArticlesList() {
           return "0";
         }
       default:
-        return "0";
+        if (allArticlesData && allArticlesData.allArticles) {
+          return allArticlesData.allArticles.length;
+        } else {
+          return "0";
+        }
     }
-  }
-
-  // capitalize first letter of a given string
-  function capitalizeFirstLetter(word: string) {
-    return word.charAt(0).toUpperCase() + word.slice(1);
   }
 
   /* *** RENDER COMPONENT *** */
   return (
-    <div className="px-4 py-3 w-75">
-      {/* articles */}
-      <h2 className="my-4">Articles</h2>
-
+    <div className="article-list">
+      <h1>Start reading</h1>
       {/* Tabs */}
       <div className="d-flex align-items-center p-0">
-        <div className="">
+        <div className="d-flex">
           {tabs.map((tab, index) => (
-            <button
+            <div
               key={index}
               onClick={() => changeActiveArticles(tab.type)}
               className={
-                activeTab === tab.type
-                  ? "active-tab articles-tab px-2"
-                  : "articles-tab px-2"
+                activeTab === tab.type ? "tab selected-tab px-2" : "tab px-2"
               }
             >
+              {/* TODO: number only for debugging */}
               {`${tab.name} (${numberOfArticles(tab.type)})`}
-            </button>
+            </div>
           ))}
         </div>
       </div>
-      <div className="p-3 veda-versum-border">
-        {activeArticles && (
-          // sort options
-          <h5 className="mb-4">
-            Sort by
-            {sortOptions.map((sortBy, index) => (
-              <button
-                key={index}
-                className={
-                  activeSort === sortBy
-                    ? "active-button veda-versum-button mx-2"
-                    : "veda-versum-button mx-2"
-                }
-                onClick={() => sortArticlesBy(activeArticles, sortBy)}
-              >
-                {capitalizeFirstLetter(sortBy)}
-              </button>
-            ))}
-          </h5>
-        )}
+      <div className="p-3">
         {/* show articles */}
         <div>
           {/* data available */}

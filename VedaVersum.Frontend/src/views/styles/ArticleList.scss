@@ -1,0 +1,21 @@
+@import "App.scss";
+
+.article-list {
+  width: 75%;
+}
+
+.tab {
+  font-size: 20px;
+  border-bottom: 1px solid $gray-600;
+  color: $gray-600;
+
+  &:hover,
+  &:active {
+    color: $primary;
+    cursor: pointer;
+  }
+}
+.selected-tab {
+  border-bottom: 4px solid $primary;
+  color: $primary;
+}

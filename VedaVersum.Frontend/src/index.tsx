@@ -11,9 +11,7 @@ import { RedirectLandingPage } from "./authentication/RedirectLandingPage";
 import { RequireAuth } from "./authentication/RequreAuth";
 import { apolloClient } from "./utils/ApolloSetup";
 import ArticleDetailsView from "./views/ArticleDetailsView";
-import CreateArticle from "./views/components/CreateArticle";
 import Header from "./views/components/Header";
-import PopUpModal from "./views/components/PopUpModal";
 import PageNotFound from "./views/PageNotFound";
 
 const root = ReactDOM.createRoot(
@@ -24,9 +22,6 @@ const Routing = () => {
     <Router>
       <React.StrictMode>
         <Header />
-        <div className="px-3 py-4">
-          <PopUpModal show={CreateArticle} openModalText="Create new article" />
-        </div>
         <Routes>
           <Route
             path="*"

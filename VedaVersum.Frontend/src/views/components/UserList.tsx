@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
-import { ACTIVE_USERS_QUERY } from "../../api/users-queries";
-import { GetActiveUsers } from "../../model/get-active-users-response";
-import UserName from "./UserName";
+import { ACTIVE_USERS_QUERY } from "api/users-queries";
+import { GetActiveUsers } from "model/get-active-users-response";
+import UserName from "views/components/UserName";
 
 function UsersList() {
   const { error, data, loading } = useQuery<GetActiveUsers>(
@@ -16,8 +16,8 @@ function UsersList() {
   if (!data) return <p>Data is empty</p>;
 
   return (
-    <div className="p-4 w-25">
-      <h6 className="mb-3">Users currently online:</h6>
+    <div className="user-list">
+      <h2 className="mb-3">People online</h2>
       <div>
         {data.activeUsers.map((user) => (
           <div className="mt-2" key={user.id}>
