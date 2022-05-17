@@ -9,7 +9,6 @@ using VedaVersum.Backend.DataAccess;
 
 namespace VedaVersum.Backend.Api
 {
-    [Authorize]
     public class VedaVersumQuery
     {
         // list of users with dummy data
@@ -54,7 +53,8 @@ namespace VedaVersum.Backend.Api
         /// <summary>
         /// Returns all articles in the base
         /// </summary>
-        public Task<IEnumerable<VedaVersumCard>> GetAllArticles()
+        [Authorize]
+        public Task<IEnumerable<VedaVersumArticle>> GetAllArticles()
         {
             return _dataAccess.GetAll();
         }
@@ -62,7 +62,17 @@ namespace VedaVersum.Backend.Api
         /// <summary>
         /// Returns article by ID
         /// </summary>
-        public async Task<VedaVersumCard?> GetArticleById(string articleId, VedaVersumCardDataLoader dataLoader)
+        [Authorize]
+        public async Task<VedaVersumArticle?> GetArticle(string articleId, VedaVersumArticleDataLoader dataLoader)
+        {
+            return await dataLoader.LoadAsync(articleId, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Returns user by email
+        /// </summary>
+        [Authorize]
+        public async Task<VedaVersumArticle?> GetUser(string articleId, VedaVersumArticleDataLoader dataLoader)
         {
             return await dataLoader.LoadAsync(articleId, CancellationToken.None);
         }
@@ -74,14 +84,25 @@ namespace VedaVersum.Backend.Api
         /// <summary>
         /// Returns all articles created by the user
         /// </summary>
-        public Task<IEnumerable<VedaVersumCard>> GetAllArticlesCreatedByUser(String userEmail)
+        [Authorize]
+        public Task<IEnumerable<VedaVersumArticle>> GetAllArticlesCreatedByUser(String userEmail)
         {
             return _dataAccess.GetArticlesCreatedBy(userEmail);
         }
 
         /// <summary>
+        /// Returns all articles assigned to user
+        /// </summary>
+        [Authorize]
+        public Task<IEnumerable<VedaVersumArticle>> GetAllArticlesAssignedToUser(String userEmail)
+        {
+            return _dataAccess.GetArticlesAssignedTo(userEmail);
+        }
+
+        /// <summary>
         /// Returns a list of users which are online
         /// </summary>
+        [Authorize]
         public Task<IEnumerable<User>> ActiveUsers()
         {
             // TODO: Use https://docs.microsoft.com/en-us/aspnet/core/performance/caching/memory?view=aspnetcore-6.0

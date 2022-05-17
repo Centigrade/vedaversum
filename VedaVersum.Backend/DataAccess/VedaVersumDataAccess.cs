@@ -13,7 +13,7 @@ namespace VedaVersum.Backend.DataAccess
     public class VedaVersumDataAccess : IVedaVersumDataAccess
     {
         private const string DatabaseName = "VedaVersum";
-        private const string VedaVersumCardsCollectionName = "Cards";
+        private const string VedaVersumArticlesCollectionName = "Articles";
         private const string UsersCollectionName = "Users";
         private readonly IMongoDatabase _database;
         public VedaVersumDataAccess(string mongoDbConnectionString, ILogger<VedaVersumDataAccess> logger)
@@ -35,37 +35,46 @@ namespace VedaVersum.Backend.DataAccess
         /* *** GET queries *** */
         /* ******************* */
         /// <inheritdoc />
-        public async Task<IEnumerable<VedaVersumCard>> GetAll()
+        public async Task<IEnumerable<VedaVersumArticle>> GetAll()
         {
-            var cardsCollection = _database.GetCollection<VedaVersumCard>(VedaVersumCardsCollectionName);
-            var allCards = await cardsCollection.FindAsync(Builders<VedaVersumCard>.Filter.Empty);
-            return allCards.ToList();
+            var articlesCollection = _database.GetCollection<VedaVersumArticle>(VedaVersumArticlesCollectionName);
+            var allArticles = await articlesCollection.FindAsync(Builders<VedaVersumArticle>.Filter.Empty);
+            return allArticles.ToList();
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<VedaVersumCard>> GetArticlesById(IEnumerable<string>? articleIds)
+        public async Task<IEnumerable<VedaVersumArticle>> GetArticlesById(IEnumerable<string>? articleIds)
         {
             if (articleIds == null)
             {
-                return new List<VedaVersumCard>();
+                return new List<VedaVersumArticle>();
             }
-            var articles = await _database.GetCollection<VedaVersumCard>(VedaVersumCardsCollectionName)
-                    .FindAsync(Builders<VedaVersumCard>.Filter.In(a => a.Id, articleIds));
+            var articles = await _database.GetCollection<VedaVersumArticle>(VedaVersumArticlesCollectionName)
+                    .FindAsync(Builders<VedaVersumArticle>.Filter.In(c => c.Id, articleIds));
             return articles.ToList();
         }
 
         /// <inheritdoc />
-        public async Task<VedaVersumCard?> GetArticleById(string articleId)
+        public async Task<VedaVersumArticle?> GetArticleById(string articleId)
         {
-            var articlesCollection = _database.GetCollection<VedaVersumCard>(VedaVersumCardsCollectionName);
-            var article = await articlesCollection.FindAsync(Builders<VedaVersumCard>.Filter.Where(a => a.Id == articleId));
+            var articlesCollection = _database.GetCollection<VedaVersumArticle>(VedaVersumArticlesCollectionName);
+            var article = await articlesCollection.FindAsync(Builders<VedaVersumArticle>.Filter.Where(c => c.Id == articleId));
             return article.FirstOrDefault();
         }
 
-        public async Task<IEnumerable<VedaVersumCard>> GetArticlesCreatedBy(string userEmail)
+        /// <inheritdoc />
+        public async Task<IEnumerable<VedaVersumArticle>> GetArticlesAssignedTo(string userEmail)
         {
-            var articlesCollection = _database.GetCollection<VedaVersumCard>(VedaVersumCardsCollectionName);
-            var articles = await articlesCollection.FindAsync(Builders<VedaVersumCard>.Filter.Where(a => a.UserCreated == userEmail));
+            var articlesCollection = _database.GetCollection<VedaVersumArticle>(VedaVersumArticlesCollectionName);
+            var articles = await articlesCollection.FindAsync(Builders<VedaVersumArticle>.Filter.Where(c => c.AssignedUsers != null && c.AssignedUsers.Count > 0));
+            var filteredArticles = articles.ToList().Where(c => c.AssignedUsers != null && c.AssignedUsers.Any(u => u.Email == userEmail)).ToList();
+            return filteredArticles;
+        }
+
+        public async Task<IEnumerable<VedaVersumArticle>> GetArticlesCreatedBy(string userEmail)
+        {
+            var articlesCollection = _database.GetCollection<VedaVersumArticle>(VedaVersumArticlesCollectionName);
+            var articles = await articlesCollection.FindAsync(Builders<VedaVersumArticle>.Filter.Where(c => c.UserCreated == userEmail));
             var filteredArticles = articles.ToList();
             return filteredArticles;
         }
@@ -74,34 +83,34 @@ namespace VedaVersum.Backend.DataAccess
         /* *** INSERT queries *** */
         /* ********************** */
         /// <inheritdoc />
-        public async Task<VedaVersumCard> InsertNewCard(string title, string content, ICollection<string>? relatedCards, User user)
+        public async Task<VedaVersumArticle> InsertNewArticle(string title, string content, ICollection<string>? relatedArticles, User user)
         {
-            var card = new VedaVersumCard
+            var article = new VedaVersumArticle
             {
                 Id = Guid.NewGuid().ToString(),
                 Title = title,
                 Content = content,
-                RelatedCardIds = relatedCards,
+                RelatedArticleIds = relatedArticles,
                 Created = DateTime.Now,
                 AssignedUsers = new[] { user },
                 UserCreated = user.Email
             };
 
-            await _database.GetCollection<VedaVersumCard>(VedaVersumCardsCollectionName)
-                .InsertOneAsync(card);
-            return card;
+            await _database.GetCollection<VedaVersumArticle>(VedaVersumArticlesCollectionName)
+                .InsertOneAsync(article);
+            return article;
         }
 
         /* ********************** */
         /* *** UPDATE queries *** */
         /* ********************** */
         /// <inheritdoc />
-        public Task UpdateCard(VedaVersumCard card)
+        public Task UpdateArticle(VedaVersumArticle article)
         {
-            return _database.GetCollection<VedaVersumCard>(VedaVersumCardsCollectionName)
+            return _database.GetCollection<VedaVersumArticle>(VedaVersumArticlesCollectionName)
                 .ReplaceOneAsync(
-                    Builders<VedaVersumCard>.Filter.Where(c => c.Id == card.Id),
-                    card,
+                    Builders<VedaVersumArticle>.Filter.Where(c => c.Id == article.Id),
+                    article,
                     new ReplaceOptions { IsUpsert = true }
                 );
         }
@@ -110,10 +119,10 @@ namespace VedaVersum.Backend.DataAccess
         /* *** DELETE queries *** */
         /* ********************** */
         /// <inheritdoc />
-        public async Task DeleteCard(string cardId)
+        public async Task DeleteArticle(string articleId)
         {
-            var cardsCollection = _database.GetCollection<VedaVersumCard>(VedaVersumCardsCollectionName);
-            await cardsCollection.DeleteOneAsync(Builders<VedaVersumCard>.Filter.Where(c => c.Id == cardId));
+            var articlesCollection = _database.GetCollection<VedaVersumArticle>(VedaVersumArticlesCollectionName);
+            await articlesCollection.DeleteOneAsync(Builders<VedaVersumArticle>.Filter.Where(c => c.Id == articleId));
         }
     }
 }

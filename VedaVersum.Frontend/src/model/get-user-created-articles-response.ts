@@ -1,8 +1,8 @@
-import { VedaVersumCard } from "./veda-versum-card";
+import { VedaVersumArticle } from "./veda-versum-article";
 
 export interface GetUserCreatedArticlesResponse {
   /**
-   * Returns all articles in the base
+   * Returns all articles created by user
    */
-  allArticlesCreatedByUser: VedaVersumCard[];
+  allArticlesCreatedByUser: VedaVersumArticle[];
 }

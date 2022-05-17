@@ -2,7 +2,7 @@ import "reactjs-popup/dist/index.css";
 
 import image from "../../assets/dummy.png";
 import { readAuthContextFromLocalStorage } from "../../authentication/AutContext";
-import { VedaVersumCard } from "../../model";
+import { VedaVersumArticle } from "../../model";
 import ConfirmDeleteArticle from "./ConfirmDeleteArticle";
 import EditArticle from "./EditArticle";
 import PopUpModal from "./PopUpModal";
@@ -11,7 +11,7 @@ import PopUpModal from "./PopUpModal";
  * preview = true if only a preview of the article should be shown, i.e. in a list of articles
  */
 export interface ArticleItemProps {
-  articleData: VedaVersumCard;
+  articleData: VedaVersumArticle;
   preview: boolean;
 }
 

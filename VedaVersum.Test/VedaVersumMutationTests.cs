@@ -23,7 +23,7 @@ namespace VedaVersum.Test
         private Mock<IVedaVersumDataAccess> _dataAccessMock = new Mock<IVedaVersumDataAccess>();
         private VedaVersumMutation MutationClassToTest;
 
-        private VedaVersumCard ExpectedCardData = new VedaVersumCard 
+        private VedaVersumArticle ExpectedCardData = new VedaVersumArticle 
         {
             Id = Guid.NewGuid().ToString(),
             Title = "Test title",
@@ -46,16 +46,16 @@ namespace VedaVersum.Test
         public async Task ShouldCallInsertNewCardDataAccessMethodOnCardCreate()
         {
             // Arrange. Mocking dataAccess behavior
-            _dataAccessMock.Setup(d=> d.InsertNewCard(It.IsAny<string>(), It.IsAny<string>(), null, It.IsAny<User>()))
+            _dataAccessMock.Setup(d=> d.InsertNewArticle(It.IsAny<string>(), It.IsAny<string>(), null, It.IsAny<User>()))
                 .ReturnsAsync(ExpectedCardData);
 
             // Action
-            var resultCard = await MutationClassToTest.CardAction(
-                VedaVersumCardAction.Create, 
+            var resultCard = await MutationClassToTest.ArticleAction(
+                VedaVersumArticleAction.Create, 
                 ExpectedCardData.Title,
                 ExpectedCardData.Content,
-                relatedCards: null,
-                cardId: null,
+                relatedArticles: null,
+                articleId: null,
                 TestUser);
 
             // Assert
@@ -63,30 +63,30 @@ namespace VedaVersum.Test
             Assert.IsNotEmpty(resultCard.Id);
             Assert.AreEqual(ExpectedCardData.Title, resultCard.Title);
             // Check if data accessor's InsertNewCard method has been called only once and with appropriate parameters
-            _dataAccessMock.Verify(d => d.InsertNewCard(
+            _dataAccessMock.Verify(d => d.InsertNewArticle(
                 ExpectedCardData.Title, 
                 ExpectedCardData.Content,
                 null,
                 It.IsAny<User>()
                 ), Times.Once);
             // Check if EventSender's method SendAsync has been called only once
-            _eventsSenderMock.Verify(s => s.SendAsync<string, CardActionMessage>(
-                nameof(VedaVersumSubscription.CardChanged), 
-                It.Is<CardActionMessage>(m => m.Action == VedaVersumCardAction.Create),
+            _eventsSenderMock.Verify(s => s.SendAsync<string, ArticleActionMessage>(
+                nameof(VedaVersumSubscription.ArticleChanged), 
+                It.Is<ArticleActionMessage>(m => m.Action == VedaVersumArticleAction.Create),
                 It.IsAny<CancellationToken>()),
                 Times.Once);
         }
 
-        [TestCase(VedaVersumCardAction.Update)]
-        [TestCase(VedaVersumCardAction.Delete)]
-        public void ShouldThrowExceptionIfActionIsNotCreateAndCardIdIsNull(VedaVersumCardAction action)
+        [TestCase(VedaVersumArticleAction.Update)]
+        [TestCase(VedaVersumArticleAction.Delete)]
+        public void ShouldThrowExceptionIfActionIsNotCreateAndCardIdIsNull(VedaVersumArticleAction action)
         {
-            Assert.ThrowsAsync<ArgumentNullException>(() => MutationClassToTest.CardAction(
+            Assert.ThrowsAsync<ArgumentNullException>(() => MutationClassToTest.ArticleAction(
                 action, 
                 ExpectedCardData.Title,
                 ExpectedCardData.Content,
-                relatedCards: null,
-                cardId: null,
+                relatedArticles: null,
+                articleId: null,
                 TestUser));
         }
 

@@ -75,20 +75,20 @@ namespace Centigrade.VedaVersum
                 connectionString,
                 p.GetService<ILogger<VedaVersumDataAccess>>()!));
 
-            services
-                .AddGraphQLServer()
-                .AddInMemorySubscriptions()
-                .AddQueryType<VedaVersumQuery>()
-                    .AddType<VedaVersumCardObjectType>()
-                .AddMutationType(d => d.Name("Mutation"))
-                    .AddType<OAuthMutation>()
-                    .AddType<VedaVersumMutation>()
-                .AddSubscriptionType<VedaVersumSubscription>()
-                // outcomment the following line to set up banana cake pop
-                // .AddAuthorization()
-                .AddHttpRequestInterceptor(
-                    (context, executor, builder, ct) =>
-                    {
+        services
+            .AddGraphQLServer()
+            .AddAuthorization()
+            .AddInMemorySubscriptions()
+            .AddQueryType<VedaVersumQuery>()
+                .AddType<VedaVersumArticleObjectType>()
+            .AddMutationType(d => d.Name("Mutation"))
+                .AddType<OAuthMutation>()
+                .AddType<VedaVersumMutation>()
+            .AddSubscriptionType<VedaVersumSubscription>()
+            .AddHttpRequestInterceptor(
+                (context, executor, builder, ct) =>
+                {
+                    
                         // Deserializing GitLab user from JWT token data
                         if (context.User != null)
                         {

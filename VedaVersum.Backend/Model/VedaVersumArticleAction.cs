@@ -1,9 +1,9 @@
 ﻿namespace Centigrade.VedaVersum.Model
 {
     /// <summary>
-    /// Represents the Card action types 
+    /// Represents the Article action types 
     /// </summary>
-    public enum VedaVersumCardAction
+    public enum VedaVersumArticleAction
     {
         Create,
         Update,

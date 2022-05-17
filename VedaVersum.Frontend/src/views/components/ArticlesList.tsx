@@ -6,7 +6,7 @@ import {
   CREATED_ARTICLES_QUERY,
 } from "../../api/articles-queries";
 import { readAuthContextFromLocalStorage } from "../../authentication/AutContext";
-import { GetAllArticlesResponse, VedaVersumCard } from "../../model";
+import { GetAllArticlesResponse, VedaVersumArticle } from "../../model";
 import { GetUserCreatedArticlesResponse } from "../../model/get-user-created-articles-response";
 import ArticleItem from "./ArticleItem";
 
@@ -44,7 +44,7 @@ function ArticlesList() {
     type: string;
   }
   // tab selection
-  const tabs: tab[] = [
+  const tabs: any[] = [
     { name: "all articles", type: "allArticles" },
     { name: "my articles", type: "myArticles" },
   ];
@@ -72,17 +72,17 @@ function ArticlesList() {
   };
 
   // user changes sorting of articles
-  const sortArticlesBy = (articles: VedaVersumCard[], sortBy: string) => {
+  const sortArticlesBy = (articles: VedaVersumArticle[], sortBy: string) => {
     let sortedArticles = [...articles];
     setActiveSort(sortBy);
 
     if (sortBy === "latest") {
-      sortedArticles.sort((a: VedaVersumCard, b: VedaVersumCard) =>
+      sortedArticles.sort((a: VedaVersumArticle, b: VedaVersumArticle) =>
         b.created.localeCompare(a.created)
       );
     } else if (sortBy === "relevant") {
       // TODO: implement REAL logic, this is only for testing
-      sortedArticles.sort((a: VedaVersumCard, b: VedaVersumCard) =>
+      sortedArticles.sort((a: VedaVersumArticle, b: VedaVersumArticle) =>
         a.created.localeCompare(b.created)
       );
     }

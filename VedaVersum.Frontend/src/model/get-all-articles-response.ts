@@ -1,8 +1,8 @@
-import { VedaVersumCard } from "./veda-versum-card";
+import { VedaVersumArticle } from "./veda-versum-article";
 
 export interface GetAllArticlesResponse {
   /**
    * Returns all articles in the base
    */
-  allArticles: VedaVersumCard[];
+  allArticles: VedaVersumArticle[];
 }

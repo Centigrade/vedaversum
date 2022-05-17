@@ -59,56 +59,56 @@ namespace VedaVersum.Backend.Api
         }
 
         [Authorize]
-        public async Task<VedaVersumCard> CardAction(
-            VedaVersumCardAction action,
+        public async Task<VedaVersumArticle> ArticleAction(
+            VedaVersumArticleAction action,
             string title,
             string content,
-            ICollection<string>? relatedCards,
-            string? cardId,
+            ICollection<string>? relatedArticles,
+            string? articleId,
             [GlobalState("GitLabUser")] User user)
         {
-            VedaVersumCard? card = null;
-            if (action != VedaVersumCardAction.Create)
+            VedaVersumArticle? article = null;
+            if(action != VedaVersumArticleAction.Create)
             {
-                if (string.IsNullOrEmpty(cardId))
+                if(string.IsNullOrEmpty(articleId))
                 {
-                    throw new ArgumentNullException(nameof(cardId));
+                    throw new ArgumentNullException(nameof(articleId));
                 }
-                card = await _dataAccess.GetArticleById(cardId);
-                if (card == null)
+                article = await _dataAccess.GetArticleById(articleId);
+                if(article == null)
                 {
-                    throw new ArgumentException($"Can not find card by id '{cardId}'");
+                    throw new ArgumentException($"Can not find article by id '{articleId}'");
                 }
             }
             switch (action)
             {
-                case VedaVersumCardAction.Create:
-                    card = await _dataAccess.InsertNewCard(title, content, relatedCards, user);
+                case VedaVersumArticleAction.Create:
+                    article = await _dataAccess.InsertNewArticle(title, content, relatedArticles, user);
                     break;
-                case VedaVersumCardAction.Update:
-                    if (card != null)
+                case VedaVersumArticleAction.Update:
+                    if(article != null)
                     {
-                        card.Title = title;
-                        card.Content = title;
-                        card.RelatedCardIds = relatedCards;
+                        article.Title = title;
+                        article.Content = title;
+                        article.RelatedArticleIds = relatedArticles;
                         // TODO: Assigned users logic will be implemented later
-                        await _dataAccess.UpdateCard(card);
+                        await _dataAccess.UpdateArticle(article);
                     }
                     break;
-                case VedaVersumCardAction.Delete:
-                    if (!string.IsNullOrEmpty(cardId))
+                case VedaVersumArticleAction.Delete:
+                    if(! string.IsNullOrEmpty(articleId))
                     {
-                        await _dataAccess.DeleteCard(cardId);
+                        await _dataAccess.DeleteArticle(articleId);
                     }
                     break;
                 default:
                     throw new ArgumentException($"Unknown action: {action}");
             }
 
-            await _eventSender.SendAsync(nameof(VedaVersumSubscription.CardChanged),
-                new CardActionMessage { VedaVersumCard = card, Action = action });
+            await _eventSender.SendAsync(nameof(VedaVersumSubscription.ArticleChanged),
+                new ArticleActionMessage {VedaVersumArticle = article, Action = action});
 
-            return card!;
+            return article!;
         }
     }
 }
