@@ -1,6 +1,7 @@
 import "reactjs-popup/dist/index.css";
 
-import image from "assets/dummy.png";
+import placeholderAvatarImage from "assets/dummy.png";
+import placeholderArticleImage from "assets/PlaceholderArticleImage.png";
 import { readAuthContextFromLocalStorage } from "authentication/AutContext";
 import { VedaVersumArticle } from "model";
 import ConfirmDeleteArticle from "views/components/ConfirmDeleteArticle";
@@ -24,21 +25,21 @@ function ArticleItem(props: ArticleItemProps) {
 
   /* *** RENDER COMPONENT *** */
   return (
-    <div className="my-2 p-3 text-gray-800">
-      <div className="flex">
+    <div className="mb-5 text-gray-800 ">
+      <div className="flex items-center text-article-info">
+        {/* avatar image */}
+        <img
+          className="w-6 rounded-full mr-2"
+          src={placeholderAvatarImage}
+          alt="some pic"
+        />
+        <span className="text-primary mr-2">
+          {formatAuthor(article.userCreated)}
+        </span>{" "}
+        <span>{formatDate(article.created)}</span>
+      </div>
+      <div className="flex items-between">
         <div className="w-3/4">
-          <div className="flex items-center text-article-info">
-            {/* avatar image */}
-            <img
-              className="w-1/12 rounded-full mr-2"
-              src={image}
-              alt="some pic"
-            />
-            <span className="text-primary mr-2">
-              {article.userCreated.split("@")[0]}
-            </span>{" "}
-            <span>{formatDate(article.created)}</span>
-          </div>
           <h4 className="text-article-heading mb-3 font-medium">
             {article.title}{" "}
           </h4>
@@ -47,11 +48,7 @@ function ArticleItem(props: ArticleItemProps) {
           </p>
         </div>
         <div className="w-1/4 ml-8">
-          <img
-            className="border border-solid border-primary"
-            src={image}
-            alt="some pic"
-          />
+          <img src={placeholderArticleImage} alt="some pic" />
         </div>
       </div>
 
@@ -72,8 +69,13 @@ function ArticleItem(props: ArticleItemProps) {
   );
 }
 
-function formatDate(date: string) {
-  console.log(date);
+function contentPreview(content: string): string {
+  const numberOfCharacters = 220;
+  let contentPreview = content;
+  return contentPreview.slice(0, numberOfCharacters) + "...";
+}
+
+function formatDate(date: string): string {
   // format date of creation so it gets readable
   const creationDate = new Date(date);
   const options: object = {
@@ -84,13 +86,12 @@ function formatDate(date: string) {
     hour: "2-digit",
     minute: "2-digit",
   };
-  return creationDate.toLocaleDateString("en-GB", options);
+  const dateString = creationDate.toLocaleDateString("en-GB", options);
+  return " – " + dateString;
 }
 
-function contentPreview(content: string) {
-  const numberOfCharacters = 100;
-  let contentPreview = content;
-  return contentPreview.slice(0, numberOfCharacters) + "...";
+function formatAuthor(authorEmail: string): string {
+  return authorEmail.split("@")[0];
 }
 
 export default ArticleItem;

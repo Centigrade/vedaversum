@@ -137,9 +137,9 @@ function ArticlesList() {
   }
 
   return (
-    <div className="w-3/4">
+    <div>
       {/* Tabs */}
-      <div className="flex items-center p-0">
+      <div className="flex items-center p-0 mb-8">
         <div className="flex">
           {tabs.map((tab, index) => (
             <div
@@ -157,7 +157,7 @@ function ArticlesList() {
           ))}
         </div>
       </div>
-      <div className="p-3">
+      <div>
         {/* show articles */}
         <div>
           {/* data available */}

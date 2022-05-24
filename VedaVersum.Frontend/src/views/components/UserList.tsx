@@ -16,7 +16,7 @@ function UsersList() {
   if (!data) return <p>Data is empty</p>;
 
   return (
-    <div className="w-1/4 pl-8">
+    <div className="pl-8">
       <div>
         {data.activeUsers.map((user) => (
           <div className="mt-2" key={user.id}>
