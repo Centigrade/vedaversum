@@ -15,27 +15,35 @@ namespace VedaVersum.Backend.Api
         IEnumerable<User> dummyUserList = new List<User> {
             new User() {
                 Id= 0,
-                Name="Gandalf",
-                UserName="Gandalf",
-                Email="gandalf@middle-earth.de",
-                AvatarUrl="https://en.wikipedia.org/wiki/File:Gandalf600ppx.jpg",
-                WebProfileUrl="https://en.wikipedia.org/wiki/Gandalf"
+                Name="Alexander Keller",
+                UserName="alexander.keller",
+                Email="alexander.keller@centigrade.de",
+                AvatarUrl="",
+                WebProfileUrl=""
             },
             new User() {
                 Id= 1,
-                Name="Aragorn",
-                UserName="Aragorn",
-                Email="aragorn@middle-earth.de",
-                AvatarUrl="https://en.wikipedia.org/wiki/File:Aragorn300ppx.png",
-                WebProfileUrl="https://en.wikipedia.org/wiki/Aragorn"
+                Name="Julian Lang",
+                UserName="julian.lang",
+                Email="julian.lang@centigrade.de",
+                AvatarUrl="",
+                WebProfileUrl=""
             },
             new User() {
                 Id= 2,
-                Name="Legolas",
-                UserName="Legolas",
-                Email="legolas@middle-earth.de",
-                AvatarUrl="https://en.wikipedia.org/wiki/File:Legolas600ppx.jpg",
-                WebProfileUrl="https://en.wikipedia.org/wiki/Legolas"
+                Name="Matthias Frauer",
+                UserName="matthias.frauer",
+                Email="matthias.frauer@centigrade.de",
+                AvatarUrl="",
+                WebProfileUrl=""
+            },
+            new User() {
+                Id= 3,
+                Name="Mikhail Shabanov",
+                UserName="mikhail.shabanov",
+                Email="mikhail.shabanov@centigrade.de",
+                AvatarUrl="",
+                WebProfileUrl=""
             },
         };
 

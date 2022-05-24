@@ -12,15 +12,15 @@ function UsersList() {
   );
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error.message} :(</p>;
+  if (error) return <p>{error.message} :</p>;
   if (!data) return <p>Data is empty</p>;
 
   return (
-    <div className="pl-8">
+    <div>
       <div>
         {data.activeUsers.map((user) => (
           <div className="mt-2" key={user.id}>
-            <UserName email={user.email} profile={user.webProfileUrl} />
+            <UserName email={user.email} />
           </div>
         ))}
       </div>

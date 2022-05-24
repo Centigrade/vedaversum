@@ -1,21 +1,30 @@
+import placeholderAvatarImage from "assets/dummy.png";
+
 export interface UsernameProps {
   email: string;
-  profile: string;
 }
 
 function UserName(props: UsernameProps) {
-  const prepareName = props.email.split("@");
-  const name = prepareName[0];
-  const firstLetter = name[0].toUpperCase();
+  const preparedName = props.email.split("@")[0];
 
   return (
-    <div className="user-name p-2 bg-white mx-1">
-      <a href={props.profile} className="d-flex align-items-center">
-        <span className="user-name-circle px-2 py-1">{firstLetter}</span>
-        <span className="mx-2">{name}</span>
-      </a>
+    <div className="flex items-center">
+      <img
+        className="w-6 rounded-full mr-2"
+        src={getAvatarUrl(preparedName)}
+        alt="some pic"
+      />
+      <span className="text-primary mr-2">{preparedName}</span>
     </div>
   );
+}
+
+function getAvatarUrl(userName: string) {
+  if (userName) {
+    return `https://www.centigrade.de/basic/resources/images/team/pixel-avatar-portraits/${userName}.png`;
+  } else {
+    return placeholderAvatarImage;
+  }
 }
 
 export default UserName;

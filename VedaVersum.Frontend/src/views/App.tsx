@@ -9,8 +9,8 @@ function App() {
         <h1 className="mb-3 text-head font-semibold">Start reading</h1>
         <ArticleList />
       </div>
-      <div className="w-1/4">
-        <h2 className="mb-3 text-subhead font-semibold pl-8">People online</h2>
+      <div className="w-1/4 pl-12">
+        <h2 className="text-subhead font-semibold">People online</h2>
         <UserList />
       </div>
     </div>

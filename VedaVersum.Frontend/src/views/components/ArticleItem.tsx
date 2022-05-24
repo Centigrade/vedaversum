@@ -1,12 +1,12 @@
 import "reactjs-popup/dist/index.css";
 
-import placeholderAvatarImage from "assets/dummy.png";
 import placeholderArticleImage from "assets/PlaceholderArticleImage.png";
 import { readAuthContextFromLocalStorage } from "authentication/AutContext";
 import { VedaVersumArticle } from "model";
 import ConfirmDeleteArticle from "views/components/ConfirmDeleteArticle";
 import EditArticle from "views/components/EditArticle";
 import PopUpModal from "views/components/PopUpModal";
+import UserName from "./UserName";
 
 /* articleData = data from the article that should be displayed
  * preview = true if only a preview of the article should be shown, i.e. in a list of articles
@@ -21,21 +21,13 @@ function ArticleItem(props: ArticleItemProps) {
 
   // get login data for author validation
   const loginData = readAuthContextFromLocalStorage();
-  const userEmail = loginData?.user?.email;
+  const userEmail = loginData?.user?.email || "";
 
   /* *** RENDER COMPONENT *** */
   return (
     <div className="mb-5 text-gray-800 ">
       <div className="flex items-center text-article-info">
-        {/* avatar image */}
-        <img
-          className="w-6 rounded-full mr-2"
-          src={placeholderAvatarImage}
-          alt="some pic"
-        />
-        <span className="text-primary mr-2">
-          {formatAuthor(article.userCreated)}
-        </span>{" "}
+        <UserName email={article.userCreated} />
         <span>{formatDate(article.created)}</span>
       </div>
       <div className="flex items-between">
