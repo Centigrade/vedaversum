@@ -1,6 +1,6 @@
-import ArticleList from "views/components/ArticleList";
-import UserList from "views/components/UserList";
-import "views/styles/App.scss";
+import ArticleList from 'views/components/ArticleList';
+import UserList from 'views/components/UserList';
+import 'views/styles/App.scss';
 
 function App() {
   return (

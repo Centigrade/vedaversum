@@ -16,9 +16,14 @@ interface tab {
   type: ActiveTab;
 }
 /**
- * type for active tab -> these are the only valid options
+ * type for active tab -> these are the only valid options:
  */
 type ActiveTab = 'allArticles' | 'newArticles' | 'trendingArticles' | 'myArticles'; // TODO: clarify if new = articles the user missed or just sort by latest?
+
+/**
+ * type for sorting the articles -> these are the only valid options:
+ */
+type SortingOption = 'latest' | 'trending';
 //#endregion
 
 function ArticlesList() {
@@ -84,8 +89,11 @@ function ArticlesList() {
   //#endregion
 
   //#region helper functions
-  // user changes active articles
-  const changeActiveArticles = (selectedTab: ActiveTab) => {
+  /**
+   * sets active tab and active articles according to the given active tab controlled by the user
+   * @param selectedTab current active tab
+   */
+  const changeActiveArticles = (selectedTab: ActiveTab): void => {
     setActiveTab(selectedTab);
     switch (selectedTab) {
       case 'allArticles':
@@ -95,7 +103,7 @@ function ArticlesList() {
         activeArticles ? sortArticlesBy('latest') : setActiveArticles(undefined);
         break;
       case 'trendingArticles':
-        activeArticles ? sortArticlesBy('relevant') : setActiveArticles(undefined);
+        activeArticles ? sortArticlesBy('trending') : setActiveArticles(undefined);
         break;
       case 'myArticles':
         allCreatedArticles ? setActiveArticles(allCreatedArticles) : setActiveArticles(undefined);
@@ -106,13 +114,16 @@ function ArticlesList() {
     }
   };
 
-  // user changes sorting of articles
-  function sortArticlesBy(sortBy: string) {
+  /**
+   * sorts all articles by a given sorting option and sets the active articles to the sorted articles
+   * @param sortBy a sorting option selected by the user
+   */
+  function sortArticlesBy(sortBy: SortingOption) {
     if (allArticles) {
       let sortedArticles = [...allArticles];
       if (sortBy === 'latest') {
         sortedArticles.sort((a: VedaVersumArticle, b: VedaVersumArticle) => b.created.localeCompare(a.created));
-      } else if (sortBy === 'relevant') {
+      } else if (sortBy === 'trending') {
         // TODO: implement REAL logic, this is only for testing
         sortedArticles.sort((a: VedaVersumArticle, b: VedaVersumArticle) => a.created.localeCompare(b.created));
       }
@@ -122,8 +133,13 @@ function ArticlesList() {
     }
   }
 
-  // count number of articles
-  function numberOfArticles(tab: string) {
+  /**
+   * !!! only for developing / debugging !!!
+   * counts the number of articles
+   * @param tab according to the given tab different articles lists are analyzed
+   * @returns the number of articles
+   */
+  function numberOfArticles(tab: ActiveTab) {
     switch (tab) {
       case 'allArticles':
         if (allArticles) {

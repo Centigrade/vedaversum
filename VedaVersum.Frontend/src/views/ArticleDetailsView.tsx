@@ -1,24 +1,25 @@
-import { useQuery } from "@apollo/client";
-import { useParams } from "react-router-dom";
-import { ARTICLE_BY_ID_QUERY } from "../api/articles-queries";
-import { RequireAuth } from "../authentication/RequreAuth";
-import { GetArticleById } from "../model/get-article-by-id-response";
-import ArticlesItem from "./components/ArticleItem";
-import UserList from "./components/UserList";
+import { useQuery } from '@apollo/client';
+import { useParams } from 'react-router-dom';
+import { ARTICLE_BY_ID_QUERY } from '../api/articles-queries';
+import { RequireAuth } from '../authentication/RequreAuth';
+import { GetArticleById } from '../model/get-article-by-id-response';
+import ArticlesItem from './components/ArticleItem';
+import UserList from './components/UserList';
 
 function ArticleDetailsView() {
+  //#region get article data
+  // article id from the properties
   const { id } = useParams();
 
-  /* get article data from the database */
-  const { error, data, loading } = useQuery<GetArticleById>(
-    ARTICLE_BY_ID_QUERY,
-    {
-      errorPolicy: "all",
-      variables: { articleId: id },
-    }
-  );
+  // get article data from the database
+  const { error, data, loading } = useQuery<GetArticleById>(ARTICLE_BY_ID_QUERY, {
+    errorPolicy: 'all',
+    variables: { articleId: id },
+  });
   const currentArticle = data?.articleById;
+  //#endregion
 
+  //#region render view
   return (
     <RequireAuth>
       <div className="d-flex">
@@ -38,6 +39,7 @@ function ArticleDetailsView() {
       </div>
     </RequireAuth>
   );
+  //#endregion
 }
 
 export default ArticleDetailsView;
