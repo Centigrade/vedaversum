@@ -1,3 +1,4 @@
+import searchIcon from 'assets/icons/searchIcon.svg';
 import placeholderAvatarImage from 'assets/images/placeholderUserAvatar.png';
 import logoWithName from 'assets/logoWithName.svg';
 import { Link } from 'react-router-dom';
@@ -27,7 +28,14 @@ function Header() {
         </Link>
         <div className="flex items-center justify-end">
           {/* search bar */}
-          <input type="text" placeholder="Search.." className="rounded py-2 px-2 mr-3" />
+          <label className="relative block">
+            <img
+              src={searchIcon}
+              alt="magnifying glass"
+              className="pointer-events-none w-6 h-6 absolute top-1/2 transform -translate-y-1/2 right-3 mr-2"
+            />
+            <input type="text" placeholder="Search" className="rounded py-2 px-2 mr-3" />
+          </label>
           {/* create new article button */}
           <PopUpModal show={CreateArticle} openModalText="Start writing" />
           {/* avatar image */}
