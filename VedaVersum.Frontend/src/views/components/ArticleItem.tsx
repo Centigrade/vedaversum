@@ -24,28 +24,39 @@ function ArticleItem(props: ArticleItemProps) {
 
   /* *** RENDER COMPONENT *** */
   return (
-    <div className="border border-primary my-2 p-3">
-      <div className="d-flex">
-        <div className="w-75">
-          <h4>{article.title} </h4>
-          <p>{formatDate(article.created)}</p>
-          <p>
+    <div className="my-2 p-3 text-gray-800">
+      <div className="flex">
+        <div className="w-3/4">
+          <div className="flex items-center text-article-info">
+            {/* avatar image */}
+            <img
+              className="w-1/12 rounded-full mr-2"
+              src={image}
+              alt="some pic"
+            />
+            <span className="text-primary mr-2">
+              {article.userCreated.split("@")[0]}
+            </span>{" "}
+            <span>{formatDate(article.created)}</span>
+          </div>
+          <h4 className="text-article-heading mb-3 font-medium">
+            {article.title}{" "}
+          </h4>
+          <p className="text-article-text">
             {props.preview ? contentPreview(article.content) : article.content}
           </p>
         </div>
-        <div className="w-25">
-          <img className="article-image" src={image} alt="some pic" />
+        <div className="w-1/4 ml-8">
+          <img
+            className="border border-solid border-primary"
+            src={image}
+            alt="some pic"
+          />
         </div>
       </div>
 
-      {/* author */}
-      <div className="d-flex justify-content-between align-items-center mt-3">
-        <div className="d-flex align-items-center">
-          Author: {article.userCreated.split("@")[0]}
-        </div>
-      </div>
       {!props.preview && (
-        <div className="d-flex justify-content-end align-items-center mt-3">
+        <div className="flex justify-end items-center mt-3">
           {/* edit article */}
           <PopUpModal show={EditArticle} openModalText="Edit article" />
           {/* delete article - only accessible if logged in user === author */}
@@ -62,13 +73,16 @@ function ArticleItem(props: ArticleItemProps) {
 }
 
 function formatDate(date: string) {
+  console.log(date);
   // format date of creation so it gets readable
   const creationDate = new Date(date);
   const options: object = {
-    weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
+    hour12: true,
+    hour: "2-digit",
+    minute: "2-digit",
   };
   return creationDate.toLocaleDateString("en-GB", options);
 }

@@ -12,7 +12,7 @@ function PopUpModal(props: PopUpProps) {
   return (
     <Popup
       trigger={
-        <button className="veda-versum-button mx-2">
+        <button className="outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-primary py-2 px-4 mx-2 hover:outline-primary-hover active:bg-primary-dark">
           {" "}
           {props.openModalText}{" "}
         </button>

@@ -9,19 +9,27 @@ function Header() {
   // const loginData = readAuthContextFromLocalStorage();
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark header">
-      <div className="container-fluid px-4 py-3 d-flex justify-space-between">
+    <nav className="bg-gray-800 header flex">
+      <div className="w-full px-4 py-4 flex justify-between items-center">
         <Link to="/">
           {/* <h1 className="text-white">Veda Versum</h1> */}
           <img src={logoWithName} alt="VedaVersum Logo" />
         </Link>
-        <div className="d-flex align-items-center">
+        <div className="flex items-center justify-end">
           {/* search bar */}
-          <input type="text" placeholder="Search.." />
+          <input
+            type="text"
+            placeholder="Search.."
+            className="rounded py-2 px-2 mr-3"
+          />
           {/* create new article button */}
           <PopUpModal show={CreateArticle} openModalText="Start writing" />
           {/* avatar image */}
-          <img className="notification-icon" src={dummyIcon} alt="some pic" />
+          <img
+            className="ml-3 w-1/12 rounded-full"
+            src={dummyIcon}
+            alt="some pic"
+          />
 
           {/* show logged in as + username */}
           {/* {loginData && loginData.user && (

@@ -9,7 +9,6 @@ import { GetUserCreatedArticlesResponse } from "model/get-user-created-articles-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import ArticleItem from "views/components/ArticleItem";
-import "views/styles/ArticleList.scss";
 
 function ArticlesList() {
   // login data from user
@@ -45,7 +44,7 @@ function ArticlesList() {
     type: string;
   }
   // tab selection
-  const tabs: any[] = [
+  const tabs: tab[] = [
     { name: "All", type: "allArticles" },
     { name: "New", type: "newArticles" }, // TODO: new = articles the user missed or just sort by latest?
     { name: "Trending", type: "trendingArticles" },
@@ -137,19 +136,19 @@ function ArticlesList() {
     }
   }
 
-  /* *** RENDER COMPONENT *** */
   return (
-    <div className="article-list">
-      <h1>Start reading</h1>
+    <div className="w-3/4">
       {/* Tabs */}
-      <div className="d-flex align-items-center p-0">
-        <div className="d-flex">
+      <div className="flex items-center p-0">
+        <div className="flex">
           {tabs.map((tab, index) => (
             <div
               key={index}
               onClick={() => changeActiveArticles(tab.type)}
               className={
-                activeTab === tab.type ? "tab selected-tab px-2" : "tab px-2"
+                activeTab === tab.type
+                  ? "font-medium text-xl px-3 hover:cursor-pointer text-primary border-b-4 border-primary p-4"
+                  : "font-medium text-xl px-3 hover:cursor-pointer text-gray-600 border-b border-gray-600 p-4"
               }
             >
               {/* TODO: number only for debugging */}
