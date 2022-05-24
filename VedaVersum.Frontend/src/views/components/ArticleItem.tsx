@@ -1,8 +1,7 @@
-import "reactjs-popup/dist/index.css";
-
 import placeholderArticleImage from "assets/PlaceholderArticleImage.png";
 import { readAuthContextFromLocalStorage } from "authentication/AutContext";
 import { VedaVersumArticle } from "model";
+import "reactjs-popup/dist/index.css";
 import ConfirmDeleteArticle from "views/components/ConfirmDeleteArticle";
 import EditArticle from "views/components/EditArticle";
 import PopUpModal from "views/components/PopUpModal";
