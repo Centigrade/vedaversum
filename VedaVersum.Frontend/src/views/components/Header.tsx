@@ -1,6 +1,6 @@
-import searchIcon from 'assets/icons/searchIcon.svg';
+import searchIcon from 'assets/icons/search-icon.svg';
 import placeholderAvatarImage from 'assets/images/placeholderUserAvatar.png';
-import logoWithName from 'assets/logoWithName.svg';
+import logoWithName from 'assets/logo-with-name.svg';
 import { Link } from 'react-router-dom';
 import CreateArticle from 'views/components/CreateArticle';
 import PopUpModal from 'views/components/PopUpModal';
@@ -41,7 +41,9 @@ function Header() {
           {/* create new article button */}
           <PopUpModal show={CreateArticle} openModalText="Start writing" />
           {/* avatar image */}
-          <img className="ml-3 w-8 rounded-full" src={avatarUrl} alt="some pic" />
+          <button>
+            <img className="ml-3 w-8 rounded-full hover:cursor-pointer" src={avatarUrl} alt="some pic" />
+          </button>
         </div>
       </div>
     </nav>
