@@ -1,24 +1,11 @@
 import searchIcon from 'assets/icons/search-icon.svg';
-import placeholderAvatarImage from 'assets/images/placeholderUserAvatar.png';
 import logoWithName from 'assets/logo-with-name.svg';
 import { Link } from 'react-router-dom';
 import CreateArticle from 'views/components/CreateArticle';
 import PopUpModal from 'views/components/PopUpModal';
-import { readAuthContextFromLocalStorage } from '../../authentication/AutContext';
+import UserFlyoutMenu from './UserFlyoutMenu';
 
 function Header() {
-  //#region get user data from user logged in
-  const loginData = readAuthContextFromLocalStorage();
-  const loginUser = loginData?.user;
-  const loginUserEmail = loginUser?.email!;
-  const loginUserName = loginUserEmail.split('@')[0];
-
-  // prepare avatar image path
-  const avatarUrl = loginUserName
-    ? `https://www.centigrade.de/basic/resources/images/team/pixel-avatar-portraits/${loginUserName}.png`
-    : placeholderAvatarImage;
-  //#endregion
-
   //#region render component
   return (
     <nav className="bg-gray-800 header flex">
@@ -41,9 +28,7 @@ function Header() {
           {/* create new article button */}
           <PopUpModal show={CreateArticle} openModalText="Start writing" />
           {/* avatar image */}
-          <button>
-            <img className="ml-3 w-8 rounded-full hover:cursor-pointer" src={avatarUrl} alt="some pic" />
-          </button>
+          <UserFlyoutMenu></UserFlyoutMenu>
         </div>
       </div>
     </nav>
