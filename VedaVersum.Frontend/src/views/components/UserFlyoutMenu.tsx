@@ -1,5 +1,7 @@
+import logOutIcon from 'assets/icons/log-out-icon.svg';
+import notificationIcon from 'assets/icons/notification-icon.svg';
 import placeholderAvatarImage from 'assets/images/placeholderUserAvatar.png';
-import 'views/styles/UserFlyoutMenu.scss';
+import { useState } from 'react';
 import { readAuthContextFromLocalStorage } from '../../authentication/AutContext';
 
 function PopUpModal() {
@@ -7,8 +9,11 @@ function PopUpModal() {
   const loginData = readAuthContextFromLocalStorage();
   const loginUser = loginData?.user;
   const loginUserEmail = loginUser?.email!;
-  const loginUserName = loginUserEmail.split('.')[0];
-  const menuOpen = true;
+  const loginUserName = loginUserEmail.split('@')[0];
+  const preparedLoginUserName = loginUserName.split('.')[0];
+
+  const [menuOpen, setMenuOpen] = useState(false);
+  const numberOfNotifications = 178;
 
   // prepare avatar image path
   const avatarUrl = loginUserName
@@ -19,11 +24,33 @@ function PopUpModal() {
   //#region render component
   return (
     <div>
-      <button>
-        <img className="ml-3 w-8 rounded-full hover:cursor-pointer" src={avatarUrl} alt="some pic" />
+      <button
+        onClick={() => {
+          setMenuOpen(!menuOpen);
+        }}
+      >
+        <img
+          className="ml-3 w-8 rounded-full hover:cursor-pointer border border-primary"
+          src={avatarUrl}
+          alt="some pic"
+        />
       </button>
       {menuOpen && (
-        <div className="z-10 rounded-lg absolute top-14 right-2 w-64 h-72 bg-white p-6 border border-primary">test</div>
+        <div className="z-10 rounded-lg fixed top-14 right-5 w-60 h-72 shadow-lg bg-white p-6 text-center">
+          <div className="flex justify-center">
+            <img className="w-24 rounded-full border border-primary" src={avatarUrl} alt="some pic" />
+          </div>
+          <p className="text-primary mt-3">{preparedLoginUserName}</p>
+          <div className="mt-8 flex align-center hover:cursor-pointer">
+            <img src={notificationIcon} alt="a bell" className="mr-5" />
+            <span>Notifications</span>
+            <span className="text-primary ml-4">{numberOfNotifications}</span>
+          </div>
+          <div className="mt-4 flex align-center hover:cursor-pointer">
+            <img src={logOutIcon} alt="a bell" className="mr-5" />
+            <span>Log out</span>
+          </div>
+        </div>
       )}
     </div>
   );

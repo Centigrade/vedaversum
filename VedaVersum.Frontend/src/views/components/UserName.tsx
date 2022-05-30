@@ -27,7 +27,7 @@ function UserName(props: UsernameProps) {
   //#region render component
   return (
     <div className="flex items-center">
-      <img className="w-6 rounded-full mr-2" src={getAvatarUrl(userName)} alt="some pic" />
+      <img className="w-6 rounded-full mr-2 border border-primary" src={getAvatarUrl(userName)} alt="some pic" />
       <span className="text-primary mr-2">{preparedName}</span>
     </div>
   );
