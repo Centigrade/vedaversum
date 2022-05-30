@@ -11,11 +11,12 @@ module.exports = {
     colors: {
       primary: '#16a34a',
       'primary-dark': '#166534',
-      'primary-hover': '#BBF7D0',
+      'primary-light': '#BBF7D0',
       'gray-600': '#52525b',
       'gray-800': '#27272a',
       white: '#ffffff',
       transparent: 'rgba(0,0,0,0)',
+      red: '#F87171',
     },
     fontSize: {
       head: ['64px', '96px'],

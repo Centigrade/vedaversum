@@ -20,7 +20,7 @@ function PopUpModal(props: PopUpProps) {
   return (
     <Popup
       trigger={
-        <button className="outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-primary py-2 px-5 mx-2 hover:outline-primary-hover active:bg-primary-dark">
+        <button className="outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-primary py-2 px-5 mx-2 hover:outline-primary-light active:bg-primary-dark">
           {' '}
           {props.openModalText}{' '}
         </button>

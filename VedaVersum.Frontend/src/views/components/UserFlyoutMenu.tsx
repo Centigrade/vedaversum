@@ -23,14 +23,25 @@ function PopUpModal() {
 
   //#region render component
   return (
-    <div>
+    <div className="flex items-center">
       <button
         onClick={() => {
           setMenuOpen(!menuOpen);
         }}
+        className="ml-2 rounded-full"
       >
+        {/* notification dot TODO: fix hover outline*/}
+        <div
+          className={
+            'z-10 fixed w-3 h-3 rounded-full bg-red outline outline-2 top-6 right-6 hover:outline-primary-light hover:cursor-pointer active:outline-primary-light' +
+            (menuOpen ? 'outline outline-2 outline-primary-light' : 'outline outline-2 outline-transparent')
+          }
+        ></div>
         <img
-          className="ml-3 w-8 rounded-full hover:cursor-pointer border border-primary"
+          className={
+            'w-10 rounded-full border border-primary outline outline-4 hover:outline-primary-light active:outline-primary-light' +
+            (menuOpen ? 'outline outline-4 outline-primary-light' : 'outline outline-4 outline-transparent')
+          }
           src={avatarUrl}
           alt="some pic"
         />

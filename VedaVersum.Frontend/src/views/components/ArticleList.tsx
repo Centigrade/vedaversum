@@ -174,9 +174,8 @@ function ArticlesList() {
               key={index}
               onClick={() => changeActiveArticles(tab.type)}
               className={
-                activeTab === tab.type
-                  ? 'font-medium text-xl px-3 hover:cursor-pointer text-primary border-b-4 border-primary p-4'
-                  : 'font-medium text-xl px-3 hover:cursor-pointer text-gray-600 p-4'
+                'font-medium text-xl px-3 hover:cursor-pointer p-4 ' +
+                (activeTab === tab.type ? 'text-primary border-b-4 border-primary' : 'text-gray-600')
               }
             >
               {/* number only for developing/debugging */}
