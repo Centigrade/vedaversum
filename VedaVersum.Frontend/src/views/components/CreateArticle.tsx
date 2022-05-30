@@ -33,9 +33,12 @@ function CreateArticle({ closePopup }: PopupHostedView) {
   //#region render component
   return (
     <div className="p-2">
-      <h4 className="d-flex justify-content-between">
+      <h4 className="flex justify-between">
         <span>Create new article</span>
-        <button className="veda-versum-button" onClick={closePopup}>
+        <button
+          className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-primary py-0 px-2 mx-2 hover:outline-primary-light active:bg-primary-dark"
+          onClick={closePopup}
+        >
           x
         </button>
       </h4>
@@ -60,9 +63,9 @@ function CreateArticle({ closePopup }: PopupHostedView) {
           <MDEditor data-color-mode="light" value={content} onChange={setContent} />
         </div>
       </div>
-      <div className="d-flex justify-content-end">
+      <div className="flex justify-end">
         <button
-          className="veda-versum-button mx-2"
+          className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-primary py-2 px-3 mx-2 hover:outline-primary-light active:bg-primary-dark"
           onClick={() => {
             validateInput();
           }}
@@ -71,7 +74,7 @@ function CreateArticle({ closePopup }: PopupHostedView) {
           Create article
         </button>
         <button
-          className="veda-versum-button"
+          className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-primary py-2 px-3 mx-2 hover:outline-primary-light active:bg-primary-dark"
           onClick={() => {
             discardData();
           }}
