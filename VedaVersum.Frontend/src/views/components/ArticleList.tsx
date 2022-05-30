@@ -168,7 +168,7 @@ function ArticlesList() {
     <div>
       {/* Tabs */}
       <div className="flex items-center p-0 mb-8">
-        <div className="flex">
+        <div className="w-full flex border-b border-gray-600">
           {tabs.map((tab, index) => (
             <div
               key={index}
@@ -176,7 +176,7 @@ function ArticlesList() {
               className={
                 activeTab === tab.type
                   ? 'font-medium text-xl px-3 hover:cursor-pointer text-primary border-b-4 border-primary p-4'
-                  : 'font-medium text-xl px-3 hover:cursor-pointer text-gray-600 border-b border-gray-600 p-4'
+                  : 'font-medium text-xl px-3 hover:cursor-pointer text-gray-600 p-4'
               }
             >
               {/* number only for developing/debugging */}
