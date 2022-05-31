@@ -22,9 +22,9 @@ function ArticleDetailsView() {
   return (
     <div className="md:p-6 sm:p-4 xl:mx-40 lg:mx-32 md:mx-10 text-gray-600 flex items-start">
       <div className="w-3/4">
-        {loading && <p>Loading...</p>}
-        {error && <p>{error.message} :(</p>}
-        {!data && <p>No data available</p>}
+        {loading && <p className="text-head">Loading...</p>}
+        {error && <p className="text-head">{error.message} :(</p>}
+        {!data && !loading && !error && <p className="text-head">No data available</p>}
         {currentArticle && (
           <div className="py-16">
             <ArticleItem articleData={currentArticle} preview={false} />
