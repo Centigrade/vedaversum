@@ -17,7 +17,7 @@ function Header() {
         </div>
         <div className="w-1/2 flex items-center justify-end">
           {/* search bar */}
-          <label className="relative block mr-2">
+          <label className="relative block mr-4">
             <img
               src={searchIcon}
               alt="magnifying glass"
@@ -30,7 +30,7 @@ function Header() {
             />
           </label>
           {/* create new article button */}
-          <PopUpModal show={ArticleEditor} openModalText="Start writing" type="create" />
+          <PopUpModal show={ArticleEditor} openModalText="Start writing" type="create" articleId="" />
           {/* avatar image */}
           <UserFlyoutMenu></UserFlyoutMenu>
         </div>

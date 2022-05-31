@@ -1,7 +1,7 @@
 import MDEditor from '@uiw/react-md-editor';
 import { useState } from 'react';
 import { PopupHostedView } from 'views/components/PopUpModal';
-import 'views/styles/articleEditor.scss';
+import 'views/components/styles/articleEditor.scss';
 
 interface EditorSettings {
   popupTitle: string;

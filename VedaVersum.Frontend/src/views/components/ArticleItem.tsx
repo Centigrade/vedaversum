@@ -34,7 +34,7 @@ function ArticleItem(props: ArticleItemProps) {
 
   //#region render component
   return (
-    <div className="mb-5 text-gray-800 ">
+    <div>
       <div className="flex items-center text-article-info">
         <UserName email={article.userCreated} />
         <span>{formatDate(article.created)}</span>
@@ -42,7 +42,7 @@ function ArticleItem(props: ArticleItemProps) {
       <div className="flex items-between">
         <div className="w-3/4">
           <h4 className="text-article-heading mb-3 font-medium">{article.title} </h4>
-          <p className="text-article-text">
+          <p className="text-article-text text-gray-800">
             {props.preview ? truncateText(article.content, numberOfCharacters) : article.content}
           </p>
         </div>
@@ -52,12 +52,14 @@ function ArticleItem(props: ArticleItemProps) {
       </div>
 
       {!props.preview && (
-        <div className="flex justify-end items-center mt-3">
+        <div className="flex justify-end items-center mt-6">
           {/* edit article */}
-          <PopUpModal show={ArticleEditor} openModalText="Edit article" type="edit" />
+          <PopUpModal show={ArticleEditor} openModalText="Edit" type="edit" articleId={article.id} />
           {/* delete article - only accessible if logged in user === author */}
           {loginUserData.userEmail === article.userCreated && (
-            <PopUpModal show={ConfirmDeleteArticle} openModalText="Delete article" type="delete" />
+            <div className="ml-2">
+              <PopUpModal show={ConfirmDeleteArticle} openModalText="Delete" type="delete" articleId={article.id} />
+            </div>
           )}
         </div>
       )}

@@ -10,6 +10,7 @@ export interface PopUpProps {
    */
   openModalText: string;
   type: string;
+  articleId: string;
   show: (props: PopupHostedView) => any;
 }
 
@@ -19,6 +20,7 @@ export interface PopUpProps {
 export interface PopupHostedView {
   closePopup: () => void;
   type: string;
+  articleId: string;
 }
 //#endregion
 
@@ -27,7 +29,7 @@ function PopUpModal(props: PopUpProps) {
   return (
     <Popup
       trigger={
-        <button className="outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-primary py-2 px-5 mx-2 hover:outline-primary-light active:bg-primary-dark">
+        <button className="outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-primary py-2 px-3 hover:outline-primary-light active:bg-primary-dark">
           {' '}
           {props.openModalText}{' '}
         </button>
@@ -36,7 +38,7 @@ function PopUpModal(props: PopUpProps) {
     >
       {
         function (close: () => void) {
-          return <props.show closePopup={close} type={props.type} />;
+          return <props.show closePopup={close} type={props.type} articleId={props.articleId} />;
         } as any
       }
     </Popup>

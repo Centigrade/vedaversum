@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 import { ARTICLE_BY_ID_QUERY } from '../api/articles-queries';
 import { GetArticle } from '../model/get-article-by-id-response';
-import ArticlesItem from './components/ArticleItem';
+import ArticleItem from './components/ArticleItem';
 import UserList from './components/UserList';
 
 function ArticleDetailsView() {
@@ -20,20 +20,21 @@ function ArticleDetailsView() {
 
   //#region render view
   return (
-    <div className="d-flex">
-      {/* article details */}
-      <div className="px-4 py-3 w-75">
+    <div className="md:p-6 sm:p-4 xl:mx-40 lg:mx-32 md:mx-10 text-gray-600 flex items-start">
+      <div className="w-3/4">
         {loading && <p>Loading...</p>}
         {error && <p>{error.message} :(</p>}
         {!data && <p>No data available</p>}
         {currentArticle && (
-          <div className="">
-            <ArticlesItem articleData={currentArticle} preview={false} />
+          <div className="py-16">
+            <ArticleItem articleData={currentArticle} preview={false} />
           </div>
         )}
       </div>
-      {/* users list */}
-      <UserList />
+      <div className="w-1/4 pl-12">
+        <h2 className="mt-8 text-subhead font-semibold">People online</h2>
+        <UserList />
+      </div>
     </div>
   );
   //#endregion

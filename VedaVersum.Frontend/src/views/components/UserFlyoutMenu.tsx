@@ -3,7 +3,7 @@ import notificationIcon from 'assets/icons/notification-icon.svg';
 import placeholderAvatarImage from 'assets/images/placeholderUserAvatar.png';
 import { useState } from 'react';
 import { getLoggedInUserData, LoggedInUserData } from 'utils/main';
-import 'views/styles/flyoutMenu.scss';
+import 'views/components//styles/flyoutMenu.scss';
 
 function PopUpModal() {
   //#region get user data from user logged in
@@ -20,12 +20,12 @@ function PopUpModal() {
 
   //#region render component
   return (
-    <div className="flex items-center">
+    <div className="flex items-center ml-4">
       <button
         onClick={() => {
           setMenuOpen(!menuOpen);
         }}
-        className="ml-2 fly-out-menu hover:cursor-pointer"
+        className="fly-out-menu hover:cursor-pointer"
       >
         {numberOfNotifications > 0 && (
           <div
