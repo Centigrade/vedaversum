@@ -14,6 +14,7 @@ export interface PopUpProps {
 export interface PopupHostedView {
   closePopup: () => void;
 }
+//#endregion
 
 //#region render component
 function PopUpModal(props: PopUpProps) {

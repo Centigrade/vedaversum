@@ -23,7 +23,11 @@ function Header() {
               alt="magnifying glass"
               className="pointer-events-none w-6 h-6 absolute top-1/2 transform -translate-y-1/2 right-1 mr-2"
             />
-            <input type="text" placeholder="Search" className="w-full rounded py-2 px-2 mr-28" />
+            <input
+              type="text"
+              placeholder="Search"
+              className="w-full rounded py-2 px-2 mr-28 outline-4 focus-visible:outline-primary"
+            />
           </label>
           {/* create new article button */}
           <PopUpModal show={CreateArticle} openModalText="Start writing" />

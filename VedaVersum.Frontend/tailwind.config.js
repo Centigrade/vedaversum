@@ -20,7 +20,7 @@ module.exports = {
     },
     fontSize: {
       head: ['64px', '96px'],
-      subhead: ['36px', '96px'],
+      subhead: ['36px', '54px'],
       'article-heading': ['30px', '45px'],
       'article-text': ['20px', '30px'],
       'article-info': ['16px', '24px'],

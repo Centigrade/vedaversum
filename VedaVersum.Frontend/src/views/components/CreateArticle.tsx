@@ -36,7 +36,7 @@ function CreateArticle({ closePopup }: PopupHostedView) {
       <h4 className="flex justify-between">
         <span>Create new article</span>
         <button
-          className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-primary py-0 px-2 mx-2 hover:outline-primary-light active:bg-primary-dark"
+          className="hover:cursor-pointer outline outline-4 outline-transparent text-primary text-base text-center py-0 px-2 mx-2 active:text-primary-light hover:text-primary-dark"
           onClick={closePopup}
         >
           x
@@ -74,7 +74,7 @@ function CreateArticle({ closePopup }: PopupHostedView) {
           Create article
         </button>
         <button
-          className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-primary py-2 px-3 mx-2 hover:outline-primary-light active:bg-primary-dark"
+          className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-gray-800 py-2 px-3 mx-2 hover:outline-primary-light active:bg-gray-600"
           onClick={() => {
             discardData();
           }}
