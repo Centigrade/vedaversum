@@ -1,4 +1,4 @@
-import placeholderAvatarImage from 'assets/images/placeholderUserAvatar.png';
+import { getAvatarUrl } from 'utils/main';
 
 //#region user name properties
 export interface UsernameProps {
@@ -10,19 +10,6 @@ function UserName(props: UsernameProps) {
   // get user name from the user e-mail
   const userName = props.email.split('@')[0];
   const preparedName = userName.split('.')[0];
-
-  /**
-   * gets the URL of the pixel avatar of the user currently logged in
-   * @param userName the user's name according to whom the URL is searched for
-   * @returns the URL of the pixel avatar of the user currently logged in
-   */
-  function getAvatarUrl(userName: string): string {
-    if (userName) {
-      return `https://www.centigrade.de/basic/resources/images/team/pixel-avatar-portraits/${userName}.png`;
-    } else {
-      return placeholderAvatarImage;
-    }
-  }
 
   //#region render component
   return (

@@ -1,3 +1,4 @@
+import placeholderAvatarImage from 'assets/images/placeholderUserAvatar.png';
 import { readAuthContextFromLocalStorage } from 'authentication/AutContext';
 
 export interface LoggedInUserData {
@@ -5,6 +6,11 @@ export interface LoggedInUserData {
   userEmail: string;
   visualUserName: string;
 }
+
+/**
+ * TODO:
+ * @returns
+ */
 export function getLoggedInUserData(): LoggedInUserData {
   const loginData = readAuthContextFromLocalStorage();
   return {
@@ -12,4 +18,17 @@ export function getLoggedInUserData(): LoggedInUserData {
     userEmail: loginData?.user?.email || '',
     visualUserName: loginData?.user?.name.split('.')[0] || '',
   };
+}
+
+/**
+ * gets the URL of the pixel avatar of the user currently logged in
+ * @param userName the user's name according to whom the URL is searched for
+ * @returns the URL of the pixel avatar of the user currently logged in
+ */
+export function getAvatarUrl(userName: string): string {
+  if (userName) {
+    return `https://www.centigrade.de/basic/resources/images/team/pixel-avatar-portraits/${userName}.png`;
+  } else {
+    return placeholderAvatarImage;
+  }
 }

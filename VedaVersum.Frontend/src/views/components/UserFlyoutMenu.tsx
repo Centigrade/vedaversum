@@ -1,17 +1,14 @@
 import logOutIcon from 'assets/icons/log-out-icon.svg';
 import notificationIcon from 'assets/icons/notification-icon.svg';
-import placeholderAvatarImage from 'assets/images/placeholderUserAvatar.png';
 import { useState } from 'react';
-import { getLoggedInUserData, LoggedInUserData } from 'utils/main';
+import { getAvatarUrl, getLoggedInUserData, LoggedInUserData } from 'utils/main';
 import 'views/components//styles/flyoutMenu.scss';
 
 function PopUpModal() {
   //#region get user data from user logged in
   const loginUserData: LoggedInUserData = getLoggedInUserData();
   // prepare avatar image path
-  const avatarUrl = loginUserData.userName
-    ? `https://www.centigrade.de/basic/resources/images/team/pixel-avatar-portraits/${loginUserData.userName}.png`
-    : placeholderAvatarImage;
+  const avatarUrl = getAvatarUrl(loginUserData.userName);
 
   // store
   const [menuOpen, setMenuOpen] = useState(false);
