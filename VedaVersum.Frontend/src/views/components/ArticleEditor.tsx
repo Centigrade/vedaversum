@@ -14,7 +14,7 @@ interface EditorSettings {
 }
 
 function ArticleEditor(props: PopupHostedView) {
-  // if edit-mode get article data from the database
+  // for edit-mode get article data from the database
   const { error, data, loading } = useQuery<GetArticle>(ARTICLE_BY_ID_QUERY, {
     errorPolicy: 'all',
     variables: { articleId: props.articleId },
@@ -115,7 +115,7 @@ function ArticleEditor(props: PopupHostedView) {
         )}
       </div>
       <div className="m-4 px-2 flex justify-end">
-        {/* save changes */}
+        {/* actions */}
         <button
           className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-primary py-2 px-3 mr-4 hover:outline-primary-light active:bg-primary-dark disabled:bg-primary-dark disabled:outline-transparent disabled:cursor-auto"
           onClick={() => {
