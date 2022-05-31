@@ -2,7 +2,7 @@ import { PopupHostedView } from 'views/components/PopUpModal';
 import 'views/components/styles/confirmDelete.scss';
 
 import { useQuery } from '@apollo/client';
-import { ARTICLE_BY_ID_QUERY } from '../../api/articles-queries';
+import { ARTICLE_BY_ID_QUERY } from '../../api/article-queries';
 import { GetArticle } from '../../model/get-article-by-id-response';
 
 function ConfirmDeleteArticle(props: PopupHostedView) {

@@ -1,5 +1,5 @@
 import { useApolloClient } from '@apollo/client';
-import { ALL_ARTICLES_QUERY, CREATED_ARTICLES_QUERY } from 'api/articles-queries';
+import { ALL_ARTICLES_QUERY, CREATED_ARTICLES_QUERY } from 'api/article-queries';
 import { GetAllArticlesResponse, VedaVersumArticle } from 'model';
 import { GetUserCreatedArticlesResponse } from 'model/get-user-created-articles-response';
 import { useEffect, useState } from 'react';

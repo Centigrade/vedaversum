@@ -3,7 +3,7 @@ import MDEditor from '@uiw/react-md-editor';
 import { useState } from 'react';
 import { PopupHostedView } from 'views/components/PopUpModal';
 import 'views/components/styles/articleEditor.scss';
-import { ARTICLE_BY_ID_QUERY } from '../../api/articles-queries';
+import { ARTICLE_BY_ID_QUERY } from '../../api/article-queries';
 import { GetArticle } from '../../model/get-article-by-id-response';
 
 interface EditorSettings {

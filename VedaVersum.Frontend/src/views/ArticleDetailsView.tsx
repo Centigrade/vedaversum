@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
-import { ARTICLE_BY_ID_QUERY } from '../api/articles-queries';
+import { ARTICLE_BY_ID_QUERY } from '../api/article-queries';
 import { GetArticle } from '../model/get-article-by-id-response';
 import ArticleItem from './components/ArticleItem';
 import UserList from './components/UserList';
