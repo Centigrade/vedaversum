@@ -3,6 +3,7 @@ import notificationIcon from 'assets/icons/notification-icon.svg';
 import placeholderAvatarImage from 'assets/images/placeholderUserAvatar.png';
 import { useState } from 'react';
 import { getLoggedInUserData, LoggedInUserData } from 'utils/main';
+import 'views/styles/flyoutMenu.scss';
 
 function PopUpModal() {
   //#region get user data from user logged in
