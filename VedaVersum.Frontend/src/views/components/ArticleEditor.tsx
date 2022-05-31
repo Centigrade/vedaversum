@@ -1,6 +1,7 @@
 import MDEditor from '@uiw/react-md-editor';
 import { useState } from 'react';
 import { PopupHostedView } from 'views/components/PopUpModal';
+import 'views/styles/articleEditor.scss';
 
 interface EditorSettings {
   popupTitle: string;
@@ -9,6 +10,16 @@ interface EditorSettings {
 }
 
 function ArticleEditor(props: PopupHostedView) {
+  //#region state - article variables
+  const [content, setContent] = useState<string | undefined>('Content');
+  const [title, setTitle] = useState<string | undefined>('Title');
+  const [invalidInput, setInvalidInput] = useState<boolean>(false);
+
+  const handleTitleInput = (event: any) => {
+    setTitle(event.target.value);
+  };
+  //#endregion
+
   //#region editor variables
   const editorSettings: EditorSettings = {
     popupTitle: '',
@@ -26,25 +37,16 @@ function ArticleEditor(props: PopupHostedView) {
       editorSettings.popupTitle = 'Edit article';
       editorSettings.popupConfirmText = 'Save data';
       editorSettings.popupCancelText = 'Discard changes';
+      // TODO: call getArticleById
       break;
     default:
       break;
   }
   //#endregion
 
-  //#region state - article variables
-  const [content, setContent] = useState<string | undefined>('**Hello world**');
-  const [title, setTitle] = useState<string | undefined>('');
-  const [invalidInput, setInvalidInput] = useState<boolean>(false);
-
-  const handleTitleInput = (event: any) => {
-    setTitle(event.target.value);
-  };
-  //#endregion
-
   //#region helper functions
 
-  //  TODO: get article id via URL
+  //  TODO: getArticleById via URL
   /* get article data from the database */
   /* const { error, data, loading } = useQuery<GetArticleById>(
     ARTICLE_BY_ID_QUERY,
@@ -64,58 +66,47 @@ function ArticleEditor(props: PopupHostedView) {
     } else {
       setInvalidInput(false);
       console.log('validation successful, inserting article...');
-      // TODO: call insert query
+      // TODO: call create/update query
       props.closePopup();
     }
   }
 
-  /**
-   * TODO:
-   */
-  function discardData(): void {
-    // resetting the entries should happen automatically on close or rather on new open
-    setTitle('');
-    setContent('');
-    props.closePopup();
-  }
   //#endregion
 
   //#region render component
   return (
-    <div className="p-2">
-      <h4 className="flex justify-between">
-        <span>{editorSettings.popupTitle}</span>
+    <div data-color-mode="light">
+      <div className="w-full flex justify-between bg-primary text-white p-3 rounded-t-lg">
+        <h1>{editorSettings.popupTitle}</h1>
         <button
-          className="hover:cursor-pointer outline outline-4 outline-transparent text-primary text-base text-center py-0 px-2 mx-2 active:text-primary-light hover:text-primary-dark"
+          className="hover:cursor-pointer outline outline-4 outline-transparent text-base font-bold text-center py-0 px-1 active:text-primary-dark hover:text-primary-dark"
           onClick={props.closePopup}
         >
           x
         </button>
-      </h4>
-      <div className="my-4">
-        <div className="my-3">
-          <label htmlFor={'title'} className="mx-2">
-            <h5>Title:</h5>
-          </label>
+      </div>
+      <div className="m-4 py-4 px-2">
+        <div className="mb-7">
           <input
-            id={'title'}
-            type={'text'}
+            type="text"
             value={title}
             onChange={handleTitleInput}
             minLength={2}
             required
-            className={invalidInput ? 'border border-danger' : ''}
+            className={
+              'text-subhead text-gray-400 border-b border-gray-400 focus-visible:outline-0' +
+              (invalidInput ? 'border-b-2 border-red' : '')
+            }
           />
-          {invalidInput && <span className="mx-2 text-danger">Title must have at least 2 characters!</span>}
+          {invalidInput && <span className="mx-2 text-red">The title must have at least 2 characters!</span>}
         </div>
-        <div className="p-2">
-          <h5>Content:</h5>
-          <MDEditor data-color-mode="light" value={content} onChange={setContent} />
-        </div>
+        {/* text editor */}
+        <MDEditor value={content} onChange={setContent} preview="edit" height={280} />
       </div>
-      <div className="flex justify-end">
+      <div className="m-4 px-2 flex justify-end">
+        {/* save changes */}
         <button
-          className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-primary py-2 px-3 mx-2 hover:outline-primary-light active:bg-primary-dark"
+          className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-primary py-2 px-3 mr-4 hover:outline-primary-light active:bg-primary-dark disabled:bg-primary-dark disabled:outline-transparent disabled:cursor-auto"
           onClick={() => {
             validateInput();
           }}
@@ -123,10 +114,11 @@ function ArticleEditor(props: PopupHostedView) {
         >
           {editorSettings.popupConfirmText}
         </button>
+        {/* discard changes */}
         <button
-          className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-gray-800 py-2 px-3 mx-2 hover:outline-primary-light active:bg-gray-600"
+          className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-gray-800 py-2 px-3 hover:outline-gray-400 active:bg-gray-600"
           onClick={() => {
-            discardData();
+            props.closePopup();
           }}
         >
           {editorSettings.popupCancelText}
