@@ -25,7 +25,6 @@ export interface ArticleItemProps {
 
 function ArticleItem(props: ArticleItemProps) {
   const article = props.articleData;
-  console.log(article);
 
   // get login data for author validation
   const loginUserData: LoggedInUserData = getLoggedInUserData();

@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 export const ALL_ARTICLES_QUERY = gql`
   query GetAllArticles {
@@ -47,7 +47,7 @@ export const CREATED_ARTICLES_QUERY = gql`
 // TODO why can't "articleById" be replaced with "articleData"? -> error "not defined on VedaVersumQuery"
 export const ARTICLE_BY_ID_QUERY = gql`
   query GetArticle($articleId: String!) {
-    articleById(articleId: $articleId) {
+    article(articleId: $articleId) {
       id
       title
       content

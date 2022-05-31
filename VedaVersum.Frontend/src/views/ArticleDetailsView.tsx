@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 import { ARTICLE_BY_ID_QUERY } from '../api/articles-queries';
 import { RequireAuth } from '../authentication/RequreAuth';
-import { GetArticleById } from '../model/get-article-by-id-response';
+import { GetArticle } from '../model/get-article-by-id-response';
 import ArticlesItem from './components/ArticleItem';
 import UserList from './components/UserList';
 
@@ -12,11 +12,11 @@ function ArticleDetailsView() {
   const { id } = useParams();
 
   // get article data from the database
-  const { error, data, loading } = useQuery<GetArticleById>(ARTICLE_BY_ID_QUERY, {
+  const { error, data, loading } = useQuery<GetArticle>(ARTICLE_BY_ID_QUERY, {
     errorPolicy: 'all',
     variables: { articleId: id },
   });
-  const currentArticle = data?.articleById;
+  const currentArticle = data?.article;
   //#endregion
 
   //#region render view

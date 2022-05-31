@@ -1,8 +1,8 @@
-import { VedaVersumArticle } from "./veda-versum-article";
+import { VedaVersumArticle } from './veda-versum-article';
 
-export interface GetArticleById {
+export interface GetArticle {
   /**
    * Returns specific article from the database
    */
-  articleById: VedaVersumArticle;
+  article: VedaVersumArticle;
 }
