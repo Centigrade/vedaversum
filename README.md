@@ -34,4 +34,4 @@ Example project of a Blog series about graphql, .NET 6 and React. The goal of th
 - go to tab "operations"
 - at the bottom of the tab switch tab to "HTTP-Headers"
 - enter "Authorization" as key and as value "Bearer [authentication-token]"
-- the personal (!) authentication token can be found in the local storage of he vedaversum page ("localhost:3000") when logged in to gitlab
+- the personal (!) authentication token can be found in the local storage of the vedaversum page ("localhost:3000") when logged in to gitlab
