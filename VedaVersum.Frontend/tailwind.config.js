@@ -12,6 +12,7 @@ module.exports = {
       primary: 'var(--primary)',
       'primary-dark': 'var(--primary-dark)',
       'primary-light': 'var(--primary-light)',
+      'gray-400': 'var(--gray-400)',
       'gray-600': 'var(--gray-600)',
       'gray-800': 'var(--gray-800)',
       white: 'var(--white)',
