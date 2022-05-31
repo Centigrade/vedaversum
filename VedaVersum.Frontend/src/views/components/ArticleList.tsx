@@ -1,10 +1,10 @@
 import { useApolloClient } from '@apollo/client';
 import { ALL_ARTICLES_QUERY, CREATED_ARTICLES_QUERY } from 'api/articles-queries';
-import { readAuthContextFromLocalStorage } from 'authentication/AutContext';
 import { GetAllArticlesResponse, VedaVersumArticle } from 'model';
 import { GetUserCreatedArticlesResponse } from 'model/get-user-created-articles-response';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getLoggedInUserData, LoggedInUserData } from 'utils/main';
 import ArticleItem from 'views/components/ArticleItem';
 
 //#region type definitions
@@ -29,9 +29,7 @@ type SortingOption = 'latest' | 'trending';
 function ArticlesList() {
   //#region declare and initialize component data
   // login data from user need for "my articles" filter
-  const loginData = readAuthContextFromLocalStorage();
-  const loginUser = loginData?.user;
-  const loginUserEmail = loginUser?.email!;
+  const loginUserData: LoggedInUserData = getLoggedInUserData();
 
   const client = useApolloClient();
 
@@ -67,7 +65,7 @@ function ArticlesList() {
       await client.query<GetUserCreatedArticlesResponse>({
         query: CREATED_ARTICLES_QUERY,
         errorPolicy: 'all',
-        variables: { userEmail: loginUserEmail },
+        variables: { userEmail: loginUserData.userEmail },
       });
 
     setAllArticles(allArticlesData.allArticles);
@@ -106,12 +104,15 @@ function ArticlesList() {
         activeArticles ? sortArticlesBy('trending') : setActiveArticles(undefined);
         break;
       case 'myArticles':
+        console.log('case MY');
+        console.log(allCreatedArticles);
         allCreatedArticles ? setActiveArticles(allCreatedArticles) : setActiveArticles(undefined);
         break;
       default:
         setActiveArticles(undefined);
         break;
     }
+    console.log(activeArticles);
   };
 
   /**

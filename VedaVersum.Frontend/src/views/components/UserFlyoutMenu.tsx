@@ -2,23 +2,19 @@ import logOutIcon from 'assets/icons/log-out-icon.svg';
 import notificationIcon from 'assets/icons/notification-icon.svg';
 import placeholderAvatarImage from 'assets/images/placeholderUserAvatar.png';
 import { useState } from 'react';
-import { readAuthContextFromLocalStorage } from '../../authentication/AutContext';
+import { getLoggedInUserData, LoggedInUserData } from 'utils/main';
 
 function PopUpModal() {
   //#region get user data from user logged in
-  const loginData = readAuthContextFromLocalStorage();
-  const loginUser = loginData?.user;
-  const loginUserEmail = loginUser?.email!;
-  const loginUserName = loginUserEmail.split('@')[0];
-  const preparedLoginUserName = loginUserName.split('.')[0];
+  const loginUserData: LoggedInUserData = getLoggedInUserData();
+  // prepare avatar image path
+  const avatarUrl = loginUserData.userName
+    ? `https://www.centigrade.de/basic/resources/images/team/pixel-avatar-portraits/${loginUserData.userName}.png`
+    : placeholderAvatarImage;
 
+  // store
   const [menuOpen, setMenuOpen] = useState(false);
   const numberOfNotifications = 178;
-
-  // prepare avatar image path
-  const avatarUrl = loginUserName
-    ? `https://www.centigrade.de/basic/resources/images/team/pixel-avatar-portraits/${loginUserName}.png`
-    : placeholderAvatarImage;
   //#endregion
 
   //#region render component
@@ -52,7 +48,7 @@ function PopUpModal() {
           <div className="flex justify-center">
             <img className="w-24 rounded-full border border-primary" src={avatarUrl} alt="some pic" />
           </div>
-          <p className="text-primary mt-3">{preparedLoginUserName}</p>
+          <p className="text-primary mt-3">{loginUserData.visualUserName}</p>
           <div className="mt-8 flex align-center hover:cursor-pointer">
             <img src={notificationIcon} alt="a bell" className="mr-5" />
             <span>Notifications</span>

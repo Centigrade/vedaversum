@@ -1,7 +1,7 @@
 import placeholderArticleImage from 'assets/PlaceholderArticleImage.png';
-import { readAuthContextFromLocalStorage } from 'authentication/AutContext';
 import { VedaVersumArticle } from 'model';
 import 'reactjs-popup/dist/index.css';
+import { getLoggedInUserData, LoggedInUserData } from 'utils/main';
 import ConfirmDeleteArticle from 'views/components/ConfirmDeleteArticle';
 import EditArticle from 'views/components/EditArticle';
 import PopUpModal from 'views/components/PopUpModal';
@@ -23,8 +23,7 @@ function ArticleItem(props: ArticleItemProps) {
   const article = props.articleData;
 
   // get login data for author validation
-  const loginData = readAuthContextFromLocalStorage();
-  const userEmail = loginData?.user?.email || '';
+  const loginUserData: LoggedInUserData = getLoggedInUserData();
 
   // number of characters after which the article content is truncated
   const numberOfCharacters = 220;
@@ -53,7 +52,7 @@ function ArticleItem(props: ArticleItemProps) {
           {/* edit article */}
           <PopUpModal show={EditArticle} openModalText="Edit article" />
           {/* delete article - only accessible if logged in user === author */}
-          {userEmail === article.userCreated && (
+          {loginUserData.userEmail === article.userCreated && (
             <PopUpModal show={ConfirmDeleteArticle} openModalText="Delete article" />
           )}
         </div>
