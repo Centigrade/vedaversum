@@ -104,15 +104,12 @@ function ArticlesList() {
         activeArticles ? sortArticlesBy('trending') : setActiveArticles(undefined);
         break;
       case 'myArticles':
-        console.log('case MY');
-        console.log(allCreatedArticles);
         allCreatedArticles ? setActiveArticles(allCreatedArticles) : setActiveArticles(undefined);
         break;
       default:
         setActiveArticles(undefined);
         break;
     }
-    console.log(activeArticles);
   };
 
   /**

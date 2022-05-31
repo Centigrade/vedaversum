@@ -10,7 +10,7 @@ function App() {
         <ArticleList />
       </div>
       <div className="w-1/4 pl-12">
-        <h2 className="text-subhead font-semibold">People online</h2>
+        <h2 className="mt-8 text-subhead font-semibold">People online</h2>
         <UserList />
       </div>
     </div>
