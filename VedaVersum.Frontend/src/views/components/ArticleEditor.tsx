@@ -2,8 +2,37 @@ import MDEditor from '@uiw/react-md-editor';
 import { useState } from 'react';
 import { PopupHostedView } from 'views/components/PopUpModal';
 
-function CreateArticle({ closePopup }: PopupHostedView) {
-  // article variables:
+interface EditorSettings {
+  popupTitle: string;
+  popupConfirmText: string;
+  popupCancelText: string;
+}
+
+function ArticleEditor(props: PopupHostedView) {
+  //#region editor variables
+  const editorSettings: EditorSettings = {
+    popupTitle: '',
+    popupConfirmText: '',
+    popupCancelText: '',
+  };
+
+  switch (props.type) {
+    case 'create':
+      editorSettings.popupTitle = 'Create new article';
+      editorSettings.popupConfirmText = 'Create article';
+      editorSettings.popupCancelText = 'Discard data';
+      break;
+    case 'edit':
+      editorSettings.popupTitle = 'Edit article';
+      editorSettings.popupConfirmText = 'Save data';
+      editorSettings.popupCancelText = 'Discard changes';
+      break;
+    default:
+      break;
+  }
+  //#endregion
+
+  //#region state - article variables
   const [content, setContent] = useState<string | undefined>('**Hello world**');
   const [title, setTitle] = useState<string | undefined>('');
   const [invalidInput, setInvalidInput] = useState<boolean>(false);
@@ -11,33 +40,54 @@ function CreateArticle({ closePopup }: PopupHostedView) {
   const handleTitleInput = (event: any) => {
     setTitle(event.target.value);
   };
+  //#endregion
 
-  function validateInput() {
+  //#region helper functions
+
+  //  TODO: get article id via URL
+  /* get article data from the database */
+  /* const { error, data, loading } = useQuery<GetArticleById>(
+    ARTICLE_BY_ID_QUERY,
+    {
+      errorPolicy: "all",
+      variables: { articleId: id },
+    }
+  );
+  const currentArticle = data?.articleById; */
+
+  /**
+   * TODO:
+   */
+  function validateInput(): void {
     if (title && title.length < 2) {
       setInvalidInput(true);
     } else {
       setInvalidInput(false);
       console.log('validation successful, inserting article...');
       // TODO: call insert query
-      closePopup();
+      props.closePopup();
     }
   }
 
-  function discardData() {
+  /**
+   * TODO:
+   */
+  function discardData(): void {
     // resetting the entries should happen automatically on close or rather on new open
     setTitle('');
     setContent('');
-    closePopup();
+    props.closePopup();
   }
+  //#endregion
 
   //#region render component
   return (
     <div className="p-2">
       <h4 className="flex justify-between">
-        <span>Create new article</span>
+        <span>{editorSettings.popupTitle}</span>
         <button
           className="hover:cursor-pointer outline outline-4 outline-transparent text-primary text-base text-center py-0 px-2 mx-2 active:text-primary-light hover:text-primary-dark"
-          onClick={closePopup}
+          onClick={props.closePopup}
         >
           x
         </button>
@@ -71,7 +121,7 @@ function CreateArticle({ closePopup }: PopupHostedView) {
           }}
           disabled={!title}
         >
-          Create article
+          {editorSettings.popupConfirmText}
         </button>
         <button
           className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-gray-800 py-2 px-3 mx-2 hover:outline-primary-light active:bg-gray-600"
@@ -79,11 +129,11 @@ function CreateArticle({ closePopup }: PopupHostedView) {
             discardData();
           }}
         >
-          Discard data
+          {editorSettings.popupCancelText}
         </button>
       </div>
     </div>
   );
 }
 //#endregion
-export default CreateArticle;
+export default ArticleEditor;

@@ -6,6 +6,7 @@ import Popup from 'reactjs-popup';
  */
 export interface PopUpProps {
   openModalText: string;
+  type: string;
   show: (props: PopupHostedView) => any;
 }
 /**
@@ -13,6 +14,7 @@ export interface PopUpProps {
  */
 export interface PopupHostedView {
   closePopup: () => void;
+  type: string;
 }
 //#endregion
 
@@ -30,7 +32,7 @@ function PopUpModal(props: PopUpProps) {
     >
       {
         function (close: () => void) {
-          return <props.show closePopup={close} />;
+          return <props.show closePopup={close} type={props.type} />;
         } as any
       }
     </Popup>

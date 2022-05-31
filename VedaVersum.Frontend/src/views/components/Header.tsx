@@ -1,7 +1,7 @@
 import searchIcon from 'assets/icons/search-icon.svg';
 import logoWithName from 'assets/logo-with-name.svg';
 import { Link } from 'react-router-dom';
-import CreateArticle from 'views/components/CreateArticle';
+import ArticleEditor from 'views/components/ArticleEditor';
 import PopUpModal from 'views/components/PopUpModal';
 import UserFlyoutMenu from './UserFlyoutMenu';
 
@@ -30,7 +30,7 @@ function Header() {
             />
           </label>
           {/* create new article button */}
-          <PopUpModal show={CreateArticle} openModalText="Start writing" />
+          <PopUpModal show={ArticleEditor} openModalText="Start writing" type="create" />
           {/* avatar image */}
           <UserFlyoutMenu></UserFlyoutMenu>
         </div>

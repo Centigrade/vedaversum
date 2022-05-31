@@ -2,8 +2,8 @@ import placeholderArticleImage from 'assets/PlaceholderArticleImage.png';
 import { VedaVersumArticle } from 'model';
 import 'reactjs-popup/dist/index.css';
 import { getLoggedInUserData, LoggedInUserData } from 'utils/main';
+import ArticleEditor from 'views/components/ArticleEditor';
 import ConfirmDeleteArticle from 'views/components/ConfirmDeleteArticle';
-import EditArticle from 'views/components/EditArticle';
 import PopUpModal from 'views/components/PopUpModal';
 import UserName from './UserName';
 
@@ -50,10 +50,10 @@ function ArticleItem(props: ArticleItemProps) {
       {!props.preview && (
         <div className="flex justify-end items-center mt-3">
           {/* edit article */}
-          <PopUpModal show={EditArticle} openModalText="Edit article" />
+          <PopUpModal show={ArticleEditor} openModalText="Edit article" type="edit" />
           {/* delete article - only accessible if logged in user === author */}
           {loginUserData.userEmail === article.userCreated && (
-            <PopUpModal show={ConfirmDeleteArticle} openModalText="Delete article" />
+            <PopUpModal show={ConfirmDeleteArticle} openModalText="Delete article" type="delete" />
           )}
         </div>
       )}
