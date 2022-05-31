@@ -5,10 +5,14 @@ import Popup from 'reactjs-popup';
  * type for the props the pop up needs to work properly
  */
 export interface PopUpProps {
+  /**
+   * text that is shown on the button that opens the pop up
+   */
   openModalText: string;
   type: string;
   show: (props: PopupHostedView) => any;
 }
+
 /**
  * type for the view that is rendered inside the pop up
  */

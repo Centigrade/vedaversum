@@ -132,7 +132,7 @@ function ArticlesList() {
   }
 
   /**
-   * !!! only for developing / debugging !!!
+   * !!! only for developing / debugging !!! TODO: remove before "release"
    * counts the number of articles
    * @param tab according to the given tab different articles lists are analyzed
    * @returns the number of articles

@@ -12,15 +12,20 @@ import UserName from './UserName';
  * property type for an article item
  */
 export interface ArticleItemProps {
-  // data from the article that should be displayed
+  /**
+   * data from the article that should be displayed
+   * */
   articleData: VedaVersumArticle;
-  // boolean to distinguish if only a preview of the article should be shown, i.e. in a list of articles
+  /**
+   * boolean to distinguish if only a preview of the article should be shown, i.e. in a list of articles, or the entire article
+   * */
   preview: boolean;
 }
 //#endregion
 
 function ArticleItem(props: ArticleItemProps) {
   const article = props.articleData;
+  console.log(article);
 
   // get login data for author validation
   const loginUserData: LoggedInUserData = getLoggedInUserData();
