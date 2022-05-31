@@ -28,19 +28,20 @@ function PopUpModal() {
         onClick={() => {
           setMenuOpen(!menuOpen);
         }}
-        className="ml-2 rounded-full"
+        className="ml-2 fly-out-menu hover:cursor-pointer"
       >
-        {/* notification dot TODO: fix hover outline*/}
-        <div
-          className={
-            'z-10 fixed w-3 h-3 rounded-full bg-red outline outline-2 top-6 right-6 hover:outline-primary-light hover:cursor-pointer active:outline-primary-light' +
-            (menuOpen ? 'outline outline-2 outline-primary-light' : 'outline outline-2 outline-transparent')
-          }
-        ></div>
+        {numberOfNotifications > 0 && (
+          <div
+            className={
+              'z-10 fixed w-3 h-3 rounded-full bg-red outline outline-2 top-6 right-6 ' +
+              (menuOpen ? 'outline-primary-light' : 'outline-transparent')
+            }
+          ></div>
+        )}
         <img
           className={
-            'w-10 rounded-full border border-primary outline outline-4 hover:outline-primary-light active:outline-primary-light' +
-            (menuOpen ? 'outline outline-4 outline-primary-light' : 'outline outline-4 outline-transparent')
+            'w-10 rounded-full outline outline-4 ' +
+            (menuOpen ? 'outline-primary-light border-0' : 'border border-primary outline-transparent')
           }
           src={avatarUrl}
           alt="some pic"
@@ -55,7 +56,7 @@ function PopUpModal() {
           <div className="mt-8 flex align-center hover:cursor-pointer">
             <img src={notificationIcon} alt="a bell" className="mr-5" />
             <span>Notifications</span>
-            <span className="text-primary ml-4">{numberOfNotifications}</span>
+            {numberOfNotifications > 0 && <span className="text-primary ml-4">{numberOfNotifications}</span>}
           </div>
           <div className="mt-4 flex align-center hover:cursor-pointer">
             <img src={logOutIcon} alt="a bell" className="mr-5" />

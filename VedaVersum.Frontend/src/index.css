@@ -7,6 +7,18 @@
   src: url(./assets/fonts/Raleway-VariableFont_wght.ttf);
 }
 
+/* custom colors */
+:root {
+  --primary: #16a34a;
+  --primary-dark: #166534;
+  --primary-light: #bbf7d0;
+  --gray-600: #52525b;
+  --gray-800: #27272a;
+  --white: #ffffff;
+  --transparent: rgba(0, 0, 0, 0);
+  --red: #f87171;
+}
+
 body {
   margin: 0;
   font-family: Raleway;
@@ -19,6 +31,5 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
