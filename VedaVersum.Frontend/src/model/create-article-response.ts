@@ -1,6 +1,6 @@
 import { VedaVersumArticle } from './veda-versum-article';
 
-export interface createArticleResponse {
+export interface CreateArticle {
   /**
    * Returns created article
    */

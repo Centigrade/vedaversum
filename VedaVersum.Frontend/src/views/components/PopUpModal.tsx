@@ -1,4 +1,5 @@
 import Popup from 'reactjs-popup';
+import { EditorType } from './ArticleEditor';
 
 //#region types for the pop up
 /**
@@ -9,7 +10,7 @@ export interface PopUpProps {
    * text that is shown on the button that opens the pop up
    */
   openModalText: string;
-  type: string;
+  type: EditorType;
   articleId: string;
   show: (props: PopupHostedView) => any;
 }
@@ -19,7 +20,7 @@ export interface PopUpProps {
  */
 export interface PopupHostedView {
   closePopup: () => void;
-  type: string;
+  type: EditorType;
   articleId: string;
 }
 //#endregion

@@ -1,6 +1,6 @@
 import { VedaVersumArticle } from './veda-versum-article';
 
-export interface deleteArticleResponse {
+export interface DeleteArticle {
   /**
    * Returns deleted article
    */

@@ -6,14 +6,25 @@ import 'views/components/styles/articleEditor.scss';
 import { ARTICLE_BY_ID_QUERY } from '../../api/article-queries';
 import { GetArticle } from '../../model/get-article-by-id-response';
 
+//#region component types
+/**
+ * type for different editor types
+ */
+export type EditorType = 'create' | 'edit' | 'delete'; // TODO: let delete stay or empty string?
+
+/**
+ * type for visual editor settings (e.g. button text)
+ */
 interface EditorSettings {
   popupTitle: string;
   popupConfirmText: string;
   popupCancelText: string;
-  type: string;
+  type: EditorType;
 }
+//#endregion
 
 function ArticleEditor(props: PopupHostedView) {
+  // TODO: move the api call in the parent component, just as the article list
   // for edit-mode get article data from the database
   const { error, data, loading } = useQuery<GetArticle>(ARTICLE_BY_ID_QUERY, {
     errorPolicy: 'all',
@@ -65,8 +76,13 @@ function ArticleEditor(props: PopupHostedView) {
       setInvalidInput(true);
     } else {
       setInvalidInput(false);
-      console.log('validation successful, inserting article...');
-      // TODO: call create/update query
+      if (editorSettings.type === 'create') {
+        /* const { error, data, loading } = useMutation<CreateArticle>(CREATE_ARTICLE_MUTATION, {
+          errorPolicy: 'all',
+          variables: { articleId: props.articleId },
+        }); */
+      } else if (editorSettings.type === 'edit') {
+      }
       props.closePopup();
     }
   }

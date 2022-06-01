@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
-// TODO: see VedaVersumMutation.cs
+
 export const CREATE_ARTICLE_MUTATION = gql`
-  mutation createArticle(
+  mutation CreateArticle(
     $articleTitle: String,
     $articleContent: String,
     $relatedArticles: VedaVersumArticle[],
@@ -34,7 +34,7 @@ export const CREATE_ARTICLE_MUTATION = gql`
 `;
 
 export const UPDATE_ARTICLE_MUTATION = gql`
-  mutation updateArticle(
+  mutation UpdateArticle(
     $articleTitle: String,
     $articleContent: String,
     $relatedArticles: VedaVersumArticle[],
@@ -65,7 +65,7 @@ export const UPDATE_ARTICLE_MUTATION = gql`
 `;
 
 export const DELETE_ARTICLE_MUTATION = gql`
-  mutation deleteArticle(
+  mutation DeleteArticle(
     $articleTitle: String,
     $articleContent: String,
     $relatedArticles: VedaVersumArticle[],
