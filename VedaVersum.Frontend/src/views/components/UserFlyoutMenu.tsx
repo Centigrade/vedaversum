@@ -22,12 +22,12 @@ function PopUpModal() {
         onClick={() => {
           setMenuOpen(!menuOpen);
         }}
-        className="fly-out-menu hover:cursor-pointer"
+        className="fly-out-menu hover:cursor-pointer relative"
       >
         {numberOfNotifications > 0 && (
           <div
             className={
-              'z-10 fixed w-3 h-3 rounded-full bg-red outline outline-2 top-6 right-6 ' +
+              'z-10 absolute w-3 h-3 rounded-full bg-red outline outline-2 bottom-7 left-7 ' +
               (menuOpen ? 'outline-primary-light' : 'outline-transparent')
             }
           ></div>
