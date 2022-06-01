@@ -1,5 +1,8 @@
 import { gql } from '@apollo/client';
 
+/**
+ * query to get all articles in the database
+ */
 export const ALL_ARTICLES_QUERY = gql`
   query GetAllArticles {
     allArticles {
@@ -16,7 +19,9 @@ export const ALL_ARTICLES_QUERY = gql`
   }
 `;
 
-// query to get all articles that are created by the user
+/**
+ * query to get all articles that are created by the user
+ */
 export const CREATED_ARTICLES_QUERY = gql`
   query GetAllArticlesCreatedByUser($userEmail: String!) {
     allArticlesCreatedByUser(userEmail: $userEmail) {
@@ -33,7 +38,9 @@ export const CREATED_ARTICLES_QUERY = gql`
   }
 `;
 
-// query to get articles by id
+/**
+ * query to get articles by id
+ */
 export const ARTICLE_BY_ID_QUERY = gql`
   query GetArticle($articleId: String!) {
     article(articleId: $articleId) {
@@ -53,7 +60,7 @@ export const ARTICLE_BY_ID_QUERY = gql`
 /**
  * query to get articles related to a given search term
  *  */
-export const SEARCH_ARTICLES = gql`
+export const SEARCH_ARTICLES_QUERY = gql`
   query SearchArticles($searchTerm: String!) {
     SearchArticles(searchTerm: $searchTerm) {
       id
