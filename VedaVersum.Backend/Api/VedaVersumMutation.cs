@@ -89,9 +89,8 @@ namespace VedaVersum.Backend.Api
                     if(article != null)
                     {
                         article.Title = title;
-                        article.Content = title;
+                        article.Content = content;
                         article.RelatedArticleIds = relatedArticles;
-                        // TODO: Assigned users logic will be implemented later
                         await _dataAccess.UpdateArticle(article);
                     }
                     break;
