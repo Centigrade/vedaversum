@@ -1,17 +1,20 @@
-import { useQuery } from '@apollo/client';
-import { ALL_ARTICLES_QUERY, CREATED_ARTICLES_QUERY } from 'api/article-queries';
-import { GetAllArticlesResponse, VedaVersumArticle } from 'model';
-import { GetUserCreatedArticlesResponse } from 'model/get-user-created-articles-response';
+import { VedaVersumArticle } from 'model';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getLoggedInUserData, LoggedInUserData } from 'utils/main';
 import ArticleItem from 'views/components/ArticleItem';
 
 //#region type definitions
 /**
+ * type for the component props
+ */
+interface ArticleListProps {
+  allArticles: VedaVersumArticle[];
+  articlesCreatedByUser: VedaVersumArticle[];
+}
+/**
  * type for the tabs for the article filter/sort
  */
-interface tab {
+interface Tab {
   name: string;
   type: ActiveTab;
 }
@@ -26,49 +29,20 @@ type ActiveTab = 'allArticles' | 'newArticles' | 'trendingArticles' | 'myArticle
 type SortingOption = 'latest' | 'trending';
 //#endregion
 
-function ArticlesList() {
-  //#region declare and initialize component data
-  // login data from user need for "my articles" filter
-  const loginUserData: LoggedInUserData = getLoggedInUserData();
-
-  //#region get data from the database
-  // load all articles
-  const {
-    error: errorAllArticles,
-    data: allArticlesData,
-    loading,
-  } = useQuery<GetAllArticlesResponse>(ALL_ARTICLES_QUERY, {
-    errorPolicy: 'all',
-  });
-
-  // load all articles created by the user
-  const { error: errorCreatedData, data: allCreatedArticlesData } = useQuery<GetUserCreatedArticlesResponse>(
-    CREATED_ARTICLES_QUERY,
-    {
-      errorPolicy: 'all',
-      variables: { userEmail: loginUserData.userEmail },
-    },
-  );
-  //#endregion
-
+function ArticlesList(props: ArticleListProps) {
   //#region state
-  const [loadingDataError] = useState<any>(errorAllArticles ? errorAllArticles : undefined); // type is ApolloError
-  // buffer data from the database
-  const [allArticles] = useState<VedaVersumArticle[] | undefined>(allArticlesData ? allArticlesData.allArticles : []);
-  const [allCreatedArticles, setAllCreatedArticles] = useState<VedaVersumArticle[] | undefined>(
-    allCreatedArticlesData ? allCreatedArticlesData?.allArticlesCreatedByUser : [],
-  );
+  const [allArticles] = useState<VedaVersumArticle[]>(props.allArticles);
+  const [articlesCreatedByUser] = useState<VedaVersumArticle[]>(props.articlesCreatedByUser);
   // active articles = articles currently selected by the user
-  const [activeArticles, setActiveArticles] = useState<VedaVersumArticle[] | undefined>(allArticles ? allArticles : []);
+  const [activeArticles, setActiveArticles] = useState<VedaVersumArticle[]>(allArticles);
   // tab selection to filter/sort articles
-  const tabs: tab[] = [
+  const tabs: Tab[] = [
     { name: 'All', type: 'allArticles' },
     { name: 'New', type: 'newArticles' },
     { name: 'Trending', type: 'trendingArticles' },
     { name: 'Yours', type: 'myArticles' },
   ];
   const [activeTab, setActiveTab] = useState<ActiveTab>('allArticles');
-  //#endregion
   //#endregion
 
   //#region helper functions
@@ -80,19 +54,19 @@ function ArticlesList() {
     setActiveTab(selectedTab);
     switch (selectedTab) {
       case 'allArticles':
-        allArticles ? setActiveArticles(allArticles) : setActiveArticles(undefined);
+        setActiveArticles(allArticles);
         break;
       case 'newArticles':
-        activeArticles ? sortArticlesBy('latest') : setActiveArticles(undefined);
+        activeArticles ? sortArticlesBy('latest') : setActiveArticles([]);
         break;
       case 'trendingArticles':
-        activeArticles ? sortArticlesBy('trending') : setActiveArticles(undefined);
+        activeArticles ? sortArticlesBy('trending') : setActiveArticles([]);
         break;
       case 'myArticles':
-        allCreatedArticles ? setActiveArticles(allCreatedArticles) : setActiveArticles(undefined);
+        articlesCreatedByUser ? setActiveArticles(articlesCreatedByUser) : setActiveArticles([]);
         break;
       default:
-        setActiveArticles(undefined);
+        setActiveArticles(allArticles);
         break;
     }
   };
@@ -112,7 +86,7 @@ function ArticlesList() {
       }
       setActiveArticles(sortedArticles);
     } else {
-      setActiveArticles(undefined);
+      setActiveArticles([]);
     }
   }
 
@@ -131,8 +105,8 @@ function ArticlesList() {
           return '0';
         }
       case 'myArticles':
-        if (allCreatedArticles) {
-          return allCreatedArticles.length;
+        if (articlesCreatedByUser) {
+          return articlesCreatedByUser.length;
         } else {
           return '0';
         }
@@ -186,10 +160,6 @@ function ArticlesList() {
                 <ArticleItem articleData={article} preview={true} />
               </Link>
             ))}
-          {/* data undefined */}
-          {loading && <p>Loading...</p>}
-          {!activeArticles && <p>Data is empty</p>}
-          {loadingDataError && <p>{loadingDataError.message}</p>}
         </div>
       </div>
     </div>
