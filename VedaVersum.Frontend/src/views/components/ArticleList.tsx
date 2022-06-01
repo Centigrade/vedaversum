@@ -1,8 +1,8 @@
-import { useApolloClient } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { ALL_ARTICLES_QUERY, CREATED_ARTICLES_QUERY } from 'api/article-queries';
 import { GetAllArticlesResponse, VedaVersumArticle } from 'model';
 import { GetUserCreatedArticlesResponse } from 'model/get-user-created-articles-response';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getLoggedInUserData, LoggedInUserData } from 'utils/main';
 import ArticleItem from 'views/components/ArticleItem';
@@ -31,16 +31,35 @@ function ArticlesList() {
   // login data from user need for "my articles" filter
   const loginUserData: LoggedInUserData = getLoggedInUserData();
 
-  const client = useApolloClient();
+  //#region get data from the database
+  // load all articles
+  const {
+    error: errorAllArticles,
+    data: allArticlesData,
+    loading,
+  } = useQuery<GetAllArticlesResponse>(ALL_ARTICLES_QUERY, {
+    errorPolicy: 'all',
+  });
+
+  // load all articles created by the user
+  const { error: errorCreatedData, data: allCreatedArticlesData } = useQuery<GetUserCreatedArticlesResponse>(
+    CREATED_ARTICLES_QUERY,
+    {
+      errorPolicy: 'all',
+      variables: { userEmail: loginUserData.userEmail },
+    },
+  );
+  //#endregion
 
   //#region state
-  const [loading, setLoading] = useState(false);
-  const [loadingDataError, setLoadingDataError] = useState<any>(undefined); // type is ApolloError
+  const [loadingDataError] = useState<any>(errorAllArticles ? errorAllArticles : undefined); // type is ApolloError
   // buffer data from the database
-  const [allArticles, setAllArticles] = useState<VedaVersumArticle[] | undefined>([]);
-  const [allCreatedArticles, setAllCreatedArticles] = useState<VedaVersumArticle[] | undefined>([]);
+  const [allArticles] = useState<VedaVersumArticle[] | undefined>(allArticlesData ? allArticlesData.allArticles : []);
+  const [allCreatedArticles, setAllCreatedArticles] = useState<VedaVersumArticle[] | undefined>(
+    allCreatedArticlesData ? allCreatedArticlesData?.allArticlesCreatedByUser : [],
+  );
   // active articles = articles currently selected by the user
-  const [activeArticles, setActiveArticles] = useState<VedaVersumArticle[] | undefined>([]);
+  const [activeArticles, setActiveArticles] = useState<VedaVersumArticle[] | undefined>(allArticles ? allArticles : []);
   // tab selection to filter/sort articles
   const tabs: tab[] = [
     { name: 'All', type: 'allArticles' },
@@ -49,40 +68,6 @@ function ArticlesList() {
     { name: 'Yours', type: 'myArticles' },
   ];
   const [activeTab, setActiveTab] = useState<ActiveTab>('allArticles');
-  //#endregion
-
-  //#region get data from the database
-  async function getDataFromDatabase() {
-    setLoading(true);
-    // load all articles
-    const { error: errorAllArticles, data: allArticlesData } = await client.query<GetAllArticlesResponse>({
-      query: ALL_ARTICLES_QUERY,
-      errorPolicy: 'all',
-    });
-
-    // load all articles created by the user
-    const { error: errorCreatedData, data: allCreatedArticlesData } =
-      await client.query<GetUserCreatedArticlesResponse>({
-        query: CREATED_ARTICLES_QUERY,
-        errorPolicy: 'all',
-        variables: { userEmail: loginUserData.userEmail },
-      });
-
-    setAllArticles(allArticlesData.allArticles);
-    setAllCreatedArticles(allCreatedArticlesData.allArticlesCreatedByUser);
-    setActiveArticles(allArticles);
-    setLoading(false);
-    if (errorAllArticles) {
-      setLoadingDataError(errorAllArticles);
-    } else if (errorCreatedData) {
-      setLoadingDataError(errorCreatedData);
-    }
-  }
-
-  // get data updates from the database
-  useEffect(() => {
-    getDataFromDatabase();
-  });
   //#endregion
   //#endregion
 
@@ -204,7 +189,7 @@ function ArticlesList() {
           {/* data undefined */}
           {loading && <p>Loading...</p>}
           {!activeArticles && <p>Data is empty</p>}
-          {loadingDataError && <p>{loadingDataError}</p>}
+          {loadingDataError && <p>{loadingDataError.message}</p>}
         </div>
       </div>
     </div>
