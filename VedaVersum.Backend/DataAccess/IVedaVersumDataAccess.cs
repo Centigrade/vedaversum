@@ -16,13 +16,6 @@ namespace VedaVersum.Backend.DataAccess
         Task<IEnumerable<VedaVersumArticle>> GetAll();
 
         /// <summary>
-        /// Returns all articles assigned to user
-        /// </summary>
-        /// <param name="userEmail">User to filter</param>
-        /// <returns>List of Veda Versum articles assigned to the user</returns>
-        Task<IEnumerable<VedaVersumArticle>> GetArticlesAssignedTo(string userEmail);
-
-        /// <summary>
         /// Returns all articles created by user
         /// </summary>
         /// <param name="userEmail">User to filter</param>

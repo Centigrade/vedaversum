@@ -34,13 +34,24 @@ namespace Centigrade.VedaVersum.Model
         public DateTimeOffset? Created { get; set; }
 
         /// <summary>
-        /// Users this article assigned
-        /// </summary>
-        public ICollection<User>? AssignedUsers { get; set; }
-
-        /// <summary>
         /// Related articles Ids
         /// </summary>
         public ICollection<string>? RelatedArticleIds { get; set; }
+
+        /// <summary>
+        /// User ID which updated the article
+        /// </summary>
+        public string? UserUpdated { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Time when article was updated
+        /// </summary>
+        public DateTimeOffset? UpdatedAt { get; set; }
+
+        /// <summary>
+        /// Article access counter
+        /// </summary>
+        public int? AccessCounter { get; set; }
+
     }
 }

@@ -62,15 +62,6 @@ namespace VedaVersum.Backend.DataAccess
             return article.FirstOrDefault();
         }
 
-        /// <inheritdoc />
-        public async Task<IEnumerable<VedaVersumArticle>> GetArticlesAssignedTo(string userEmail)
-        {
-            var articlesCollection = _database.GetCollection<VedaVersumArticle>(VedaVersumArticlesCollectionName);
-            var articles = await articlesCollection.FindAsync(Builders<VedaVersumArticle>.Filter.Where(c => c.AssignedUsers != null && c.AssignedUsers.Count > 0));
-            var filteredArticles = articles.ToList().Where(c => c.AssignedUsers != null && c.AssignedUsers.Any(u => u.Email == userEmail)).ToList();
-            return filteredArticles;
-        }
-
         public async Task<IEnumerable<VedaVersumArticle>> GetArticlesCreatedBy(string userEmail)
         {
             var articlesCollection = _database.GetCollection<VedaVersumArticle>(VedaVersumArticlesCollectionName);
@@ -92,7 +83,6 @@ namespace VedaVersum.Backend.DataAccess
                 Content = content,
                 RelatedArticleIds = relatedArticles,
                 Created = DateTime.Now,
-                AssignedUsers = new[] { user },
                 UserCreated = user.Email
             };
 
@@ -107,6 +97,7 @@ namespace VedaVersum.Backend.DataAccess
         /// <inheritdoc />
         public Task UpdateArticle(VedaVersumArticle article)
         {
+            article.UpdatedAt = DateTime.Now;
             return _database.GetCollection<VedaVersumArticle>(VedaVersumArticlesCollectionName)
                 .ReplaceOneAsync(
                     Builders<VedaVersumArticle>.Filter.Where(c => c.Id == article.Id),

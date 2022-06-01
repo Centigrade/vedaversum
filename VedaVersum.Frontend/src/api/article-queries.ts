@@ -8,15 +8,10 @@ export const ALL_ARTICLES_QUERY = gql`
       content
       created
       userCreated
-      assignedUsers {
-        id
-        name
-        userName
-        email
-        webProfileUrl
-        avatarUrl
-      }
       relatedArticleIds
+      userUpdated
+      updatedAt
+      accessCounter
     }
   }
 `;
@@ -30,21 +25,15 @@ export const CREATED_ARTICLES_QUERY = gql`
       content
       created
       userCreated
-      assignedUsers {
-        id
-        name
-        userName
-        email
-        webProfileUrl
-        avatarUrl
-      }
       relatedArticleIds
+      userUpdated
+      updatedAt
+      accessCounter
     }
   }
 `;
 
 // query to get articles by id
-// TODO why can't "articleById" be replaced with "articleData"? -> error "not defined on VedaVersumQuery"
 export const ARTICLE_BY_ID_QUERY = gql`
   query GetArticle($articleId: String!) {
     article(articleId: $articleId) {
@@ -53,15 +42,29 @@ export const ARTICLE_BY_ID_QUERY = gql`
       content
       created
       userCreated
-      assignedUsers {
-        id
-        name
-        userName
-        email
-        webProfileUrl
-        avatarUrl
-      }
       relatedArticleIds
+      userUpdated
+      updatedAt
+      accessCounter
+    }
+  }
+`;
+
+/**
+ * query to get articles related to a given search term
+ *  */
+export const SEARCH_ARTICLES = gql`
+  query SearchArticles($searchTerm: String!) {
+    SearchArticles(searchTerm: $searchTerm) {
+      id
+      title
+      content
+      created
+      userCreated
+      relatedArticleIds
+      userUpdated
+      updatedAt
+      accessCounter
     }
   }
 `;

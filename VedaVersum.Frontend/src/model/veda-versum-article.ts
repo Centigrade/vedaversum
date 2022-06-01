@@ -1,5 +1,3 @@
-import { User } from './user';
-
 export interface VedaVersumArticle {
   __typename: 'VedaVersumArticle';
   /**
@@ -22,12 +20,24 @@ export interface VedaVersumArticle {
    * User ID which created the article
    */
   userCreated: string;
-  /**
-   * Users this article assigned
-   */
-  assignedUsers: User[] | null;
+
   /**
    * Related articles Ids
    */
   relatedArticleIds: string[] | null;
+
+  /**
+   * User ID which updated the article
+   */
+  userUpdated?: string;
+
+  /**
+   * Time when article was updated
+   */
+  updatedAt?: string;
+
+  /**
+   * Article access counter
+   */
+  accessCounter?: number;
 }
