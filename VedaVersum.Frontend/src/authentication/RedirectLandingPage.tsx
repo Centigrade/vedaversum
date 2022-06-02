@@ -1,13 +1,13 @@
+import { useMutation } from '@apollo/client';
+import queryString from 'query-string';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import queryString from 'query-string';
-import { useMutation } from '@apollo/client';
 import { AUTHENTICATE_MUTATION } from '../api/authentication';
 import {
   AuthenticateMutation,
   AuthenticationMutationResponse,
   AuthenticationMutationVariables,
-} from '../model';
+} from '../model/response-types';
 import { AuthContextType, setAuthContextToLocalStorage } from './AutContext';
 import { AuthContext } from './RequreAuth';
 
@@ -27,14 +27,10 @@ export function RedirectLandingPage() {
   //   const state = parsed.state;
   const authContext = React.useContext(AuthContext);
 
-  const [authenticate] = useMutation<AuthenticateMutation>(
-    AUTHENTICATE_MUTATION,
-    {
-      errorPolicy: 'all',
-      onCompleted: (data) =>
-        authMutationCompleted(data.gitLabAuthenticate, authContext),
-    }
-  );
+  const [authenticate] = useMutation<AuthenticateMutation>(AUTHENTICATE_MUTATION, {
+    errorPolicy: 'all',
+    onCompleted: data => authMutationCompleted(data.gitLabAuthenticate, authContext),
+  });
 
   // Getting the mutation execution status
   const callStatus = React.useContext(mutationStatus);
@@ -52,10 +48,7 @@ export function RedirectLandingPage() {
   return <p>Authenticating...</p>;
 }
 
-function authMutationCompleted(
-  response: AuthenticationMutationResponse,
-  authContext: AuthContextType
-) {
+function authMutationCompleted(response: AuthenticationMutationResponse, authContext: AuthContextType) {
   console.log('onCompleted', response);
   authContext.authToken = response.authenticationToken;
   authContext.user = response.authenticatedUser ?? undefined;

@@ -1,7 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { ALL_ARTICLES_QUERY, CREATED_ARTICLES_QUERY } from 'api/article-queries';
-import { GetAllArticlesResponse } from 'model/get-all-articles-response';
-import { GetUserCreatedArticlesResponse } from 'model/get-user-created-articles-response';
+import { GetAllArticlesResponse, GetUserCreatedArticlesResponse } from 'model/response-types';
 import { getLoggedInUserData, LoggedInUserData } from 'utils/main';
 import ArticleList from 'views/components/ArticleList';
 import UserList from 'views/components/UserList';

@@ -1,5 +1,5 @@
 import placeholderArticleImage from 'assets/PlaceholderArticleImage.png';
-import { VedaVersumArticle } from 'model';
+import { VedaVersumArticle } from 'model/veda-versum-article';
 import 'reactjs-popup/dist/index.css';
 import { getLoggedInUserData, LoggedInUserData } from 'utils/main';
 import ArticleEditor from 'views/components/ArticleEditor';

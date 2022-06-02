@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { ACTIVE_USERS_QUERY } from 'api/user-queries';
-import { GetActiveUsers } from 'model/get-active-users-response';
+import { GetActiveUsers } from 'model/response-types';
 import UserName from 'views/components/UserName';
 
 function UsersList() {

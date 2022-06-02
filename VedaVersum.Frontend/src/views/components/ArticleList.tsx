@@ -1,4 +1,4 @@
-import { VedaVersumArticle } from 'model';
+import { VedaVersumArticle } from 'model/veda-versum-article';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ArticleItem from 'views/components/ArticleItem';

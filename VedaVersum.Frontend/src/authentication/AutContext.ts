@@ -1,4 +1,4 @@
-import { User } from '../model';
+import { User } from '../model/user';
 
 const AUTH_CONTEXT_KEY = 'veda-versum-auth';
 
