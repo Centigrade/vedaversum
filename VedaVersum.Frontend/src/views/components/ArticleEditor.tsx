@@ -1,6 +1,9 @@
+import { useApolloClient } from '@apollo/client';
 import MDEditor from '@uiw/react-md-editor';
+import { CREATE_ARTICLE_MUTATION } from 'api/article-mutations';
 import { VedaVersumArticle } from 'model/veda-versum-article';
 import { useState } from 'react';
+import { getLoggedInUserData } from 'utils/main';
 import 'views/components/styles/articleEditor.scss';
 
 //#region component types
@@ -29,10 +32,13 @@ interface EditorProps {
 //#endregion
 
 function ArticleEditor(props: EditorProps) {
+  // needed to pass the article to the api
+  const client = useApolloClient();
+
   //#region state - article variables
   const articleData: VedaVersumArticle | undefined = props.dataContext ? props.dataContext : undefined;
   const [title, setTitle] = useState<string>(articleData ? articleData.title : 'Title');
-  const [content, setContent] = useState<string | undefined>(articleData ? articleData.content : 'Content');
+  const [content, setContent] = useState<string | undefined>(articleData ? articleData.content : 'Content'); // undefined because of the md editor
   const [invalidInput, setInvalidInput] = useState<boolean>(false);
 
   // event handler for the title input
@@ -73,15 +79,29 @@ function ArticleEditor(props: EditorProps) {
     } else {
       setInvalidInput(false);
       if (editorSettings.type === 'create') {
-        /* const { error, data, loading } = useMutation<CreateArticle>(CREATE_ARTICLE_MUTATION, {
-          errorPolicy: 'all',
-          variables: { articleId: props.articleId },
-        }); */
+        insertNewArticle();
       } else if (editorSettings.type === 'edit') {
+        updateCurrentArticle();
       }
       props.closePopup();
     }
   }
+
+  /**
+   * calls database mutation to insert the new article into the database
+   */
+  async function insertNewArticle() {
+    const insertArticleResponse = await client.mutate({
+      mutation: CREATE_ARTICLE_MUTATION,
+      variables: { articleTitle: title, articleContent: content, user: getLoggedInUserData() },
+    });
+    console.log(insertArticleResponse);
+  }
+
+  /**
+   * calls database mutation to update an existing article in the database
+   */
+  function updateCurrentArticle() {}
   //#endregion
 
   //#region render component
@@ -98,28 +118,24 @@ function ArticleEditor(props: EditorProps) {
         </button>
       </div>
       <div className="m-4 py-4 px-2">
-        {editorSettings.type === 'create' ||
-          (editorSettings.type === 'edit' && articleData && (
-            <div>
-              {/* article title */}
-              <div className="mb-7">
-                <input
-                  type="text"
-                  value={title}
-                  onChange={handleTitleInput}
-                  minLength={2}
-                  required
-                  className={
-                    'text-subhead text-gray-400 border-b border-gray-400 focus-visible:outline-0' +
-                    (invalidInput ? 'border-b-2 border-red' : '')
-                  }
-                />
-                {invalidInput && <span className="mx-2 text-red">The title must have at least 2 characters!</span>}
-              </div>
-              {/* text editor */}
-              <MDEditor value={content} onChange={setContent} preview="edit" height={280} />
-            </div>
-          ))}
+        {/* article title */}
+        test
+        <div className="mb-7">
+          <input
+            type="text"
+            value={title}
+            onChange={handleTitleInput}
+            minLength={2}
+            required
+            className={
+              'text-subhead text-gray-400 border-b border-gray-400 focus-visible:outline-0' +
+              (invalidInput ? 'border-b-2 border-red' : '')
+            }
+          />
+          {invalidInput && <span className="mx-2 text-red">The title must have at least 2 characters!</span>}
+          {/* text editor */}
+          <MDEditor value={content} onChange={setContent} preview="edit" height={280} />
+        </div>
       </div>
       <div className="m-4 px-2 flex justify-end">
         {/* actions */}

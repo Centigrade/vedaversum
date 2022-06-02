@@ -8,7 +8,7 @@ import { VedaVersumArticle } from './veda-versum-article';
 /**
  * "ArticleAction" method returns created, updated or deleted article
  */
-export interface ArticleActionArticle {
+export interface ArticleActionResponse {
   articleAction: VedaVersumArticle;
 }
 //#endregion
