@@ -54,11 +54,11 @@ function ArticleItem(props: ArticleItemProps) {
       {!props.preview && (
         <div className="flex justify-end items-center mt-6">
           {/* edit article */}
-          <PopUpModal show={ArticleEditor} openModalText="Edit" type="edit" articleId={article.id} />
+          <PopUpModal show={ArticleEditor} openModalText="Edit" dataContext={article} />
           {/* delete article - only accessible if logged in user === author */}
           {loginUserData.userEmail === article.userCreated && (
             <div className="ml-2">
-              <PopUpModal show={ConfirmDeleteArticle} openModalText="Delete" type="delete" articleId={article.id} />
+              <PopUpModal show={ConfirmDeleteArticle} openModalText="Delete" dataContext={article} />
             </div>
           )}
         </div>

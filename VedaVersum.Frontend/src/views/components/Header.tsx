@@ -30,7 +30,7 @@ function Header() {
             />
           </label>
           {/* create new article button */}
-          <PopUpModal show={ArticleEditor} openModalText="Start writing" type="create" articleId="" />
+          <PopUpModal show={ArticleEditor} openModalText="Start writing" dataContext="" />
           {/* avatar image */}
           <UserFlyoutMenu></UserFlyoutMenu>
         </div>

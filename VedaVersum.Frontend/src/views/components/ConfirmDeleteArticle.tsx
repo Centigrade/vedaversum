@@ -1,26 +1,19 @@
-import { PopupHostedView } from 'views/components/PopUpModal';
 import 'views/components/styles/confirmDelete.scss';
 
-import { useQuery } from '@apollo/client';
-import { ARTICLE_BY_ID_QUERY } from '../../api/article-queries';
-import { GetArticle } from '../../model/get-article-by-id-response';
+import { VedaVersumArticle } from 'model/veda-versum-article';
 
-function ConfirmDeleteArticle(props: PopupHostedView) {
-  /* get article data from the database */
-  const { error, data, loading } = useQuery<GetArticle>(ARTICLE_BY_ID_QUERY, {
-    errorPolicy: 'all',
-    variables: { articleId: props.articleId },
-  });
+/**
+ * type for editor props
+ */
+interface DeleteArticleProps {
+  closePopup: () => void;
+  dataContext: VedaVersumArticle;
+}
 
+function ConfirmDeleteArticle(props: DeleteArticleProps) {
   //#region state - article variables
-  const title = data ? data.article.title : 'Title';
-  const confirmText = data
-    ? `Are you sure you want to delete the article "${title}"?`
-    : loading
-    ? 'Loading...'
-    : error
-    ? error.message
-    : 'Something went wrong, please try again.';
+  const title = props.dataContext.title;
+  const confirmText = `Are you sure you want to delete the article "${title}"?`;
 
   function deleteArticle() {
     // TODO: call delete query

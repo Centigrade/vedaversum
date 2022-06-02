@@ -1,39 +1,38 @@
-import { useQuery } from '@apollo/client';
 import MDEditor from '@uiw/react-md-editor';
+import { VedaVersumArticle } from 'model/veda-versum-article';
 import { useState } from 'react';
-import { PopupHostedView } from 'views/components/PopUpModal';
 import 'views/components/styles/articleEditor.scss';
-import { ARTICLE_BY_ID_QUERY } from '../../api/article-queries';
-import { GetArticle } from '../../model/get-article-by-id-response';
 
 //#region component types
 /**
  * type for different editor types
  */
-export type EditorType = 'create' | 'edit' | 'delete'; // TODO: let delete stay or empty string?
+export type EditorType = 'create' | 'edit';
 
 /**
  * type for visual editor settings (e.g. button text)
  */
-interface EditorSettings {
+interface VisualEditorSettings {
   popupTitle: string;
   popupConfirmText: string;
   popupCancelText: string;
-  type: EditorType;
+  type?: EditorType;
+}
+
+/**
+ * type for editor props
+ */
+interface EditorProps {
+  closePopup: () => void;
+  dataContext?: VedaVersumArticle;
 }
 //#endregion
 
-function ArticleEditor(props: PopupHostedView) {
-  // TODO: move the api call in the parent component, just as the article list
-  // for edit-mode get article data from the database
-  const { error, data, loading } = useQuery<GetArticle>(ARTICLE_BY_ID_QUERY, {
-    errorPolicy: 'all',
-    variables: { articleId: props.articleId },
-  });
-
+function ArticleEditor(props: EditorProps) {
   //#region state - article variables
-  const [content, setContent] = useState<string | undefined>(data ? data.article.content : 'Content');
-  const [title, setTitle] = useState<string | undefined>(data ? data.article.title : 'Title');
+  const articleData: VedaVersumArticle | undefined = props.dataContext ? props.dataContext : undefined;
+  const [title, setTitle] = useState<string>(articleData ? articleData.title : 'Title');
+  const [content, setContent] = useState<string | undefined>(articleData ? articleData.content : 'Content');
   const [invalidInput, setInvalidInput] = useState<boolean>(false);
 
   // event handler for the title input
@@ -43,35 +42,32 @@ function ArticleEditor(props: PopupHostedView) {
   //#endregion
 
   //#region editor variables
-  const editorSettings: EditorSettings = {
+  const editorSettings: VisualEditorSettings = {
     popupTitle: '',
     popupConfirmText: '',
     popupCancelText: '',
-    type: props.type,
+    type: 'create',
   };
 
-  switch (props.type) {
-    case 'create':
-      editorSettings.popupTitle = 'Create new article';
-      editorSettings.popupConfirmText = 'Create article';
-      editorSettings.popupCancelText = 'Discard data';
-      break;
-    case 'edit':
-      editorSettings.popupTitle = 'Edit article';
-      editorSettings.popupConfirmText = 'Save data';
-      editorSettings.popupCancelText = 'Discard changes';
-      break;
-    default:
-      break;
+  if (articleData) {
+    editorSettings.popupTitle = 'Edit article';
+    editorSettings.popupConfirmText = 'Save data';
+    editorSettings.popupCancelText = 'Discard changes';
+    editorSettings.type = 'edit';
+  } else {
+    editorSettings.popupTitle = 'Create new article';
+    editorSettings.popupConfirmText = 'Create article';
+    editorSettings.popupCancelText = 'Discard data';
   }
   //#endregion
 
   //#region helper functions
 
   /**
-   * TODO:
+   * validates user input and shows error or confirms changes and closes popup
    */
   function validateInput(): void {
+    // validation rule: title must have at least 2 characters
     if (title && title.length < 2) {
       setInvalidInput(true);
     } else {
@@ -103,7 +99,7 @@ function ArticleEditor(props: PopupHostedView) {
       </div>
       <div className="m-4 py-4 px-2">
         {editorSettings.type === 'create' ||
-          (editorSettings.type === 'edit' && data && (
+          (editorSettings.type === 'edit' && articleData && (
             <div>
               {/* article title */}
               <div className="mb-7">
@@ -124,11 +120,6 @@ function ArticleEditor(props: PopupHostedView) {
               <MDEditor value={content} onChange={setContent} preview="edit" height={280} />
             </div>
           ))}
-        {editorSettings.type === 'edit' && loading && <div className="text-head">Loading...</div>}
-        {editorSettings.type === 'edit' && error && <div className="text-head">{error.message}</div>}
-        {editorSettings.type === 'edit' && !error && !loading && !data && (
-          <div className="text-head">No data available</div>
-        )}
       </div>
       <div className="m-4 px-2 flex justify-end">
         {/* actions */}
