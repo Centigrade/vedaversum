@@ -1,5 +1,3 @@
-import 'views/components/styles/confirmDelete.scss';
-
 import { VedaVersumArticle } from 'model/veda-versum-article';
 
 /**
@@ -25,7 +23,7 @@ function ConfirmDeleteArticle(props: DeleteArticleProps) {
     <div>
       {/* header */}
       <div className="w-full flex justify-between bg-primary text-white p-3 rounded-t-lg">
-        <h1>Confirm delete</h1>
+        <p className="text-article-text">Confirm delete</p>
         <button
           className="hover:cursor-pointer outline outline-4 outline-transparent text-base font-bold text-center py-0 px-1 active:text-primary-dark hover:text-primary-dark"
           onClick={props.closePopup}
@@ -33,7 +31,7 @@ function ConfirmDeleteArticle(props: DeleteArticleProps) {
           x
         </button>
       </div>
-      <div className="my-4 p-4 text-subhead">
+      <div className="my-4 p-4 text-article-heading">
         <p>{confirmText}</p>
         {title && <p>This action cannot be undone!</p>}
       </div>

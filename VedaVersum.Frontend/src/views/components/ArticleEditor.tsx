@@ -4,7 +4,7 @@ import { CREATE_ARTICLE_MUTATION } from 'api/article-mutations';
 import { VedaVersumArticle } from 'model/veda-versum-article';
 import { useState } from 'react';
 import { getLoggedInUserData } from 'utils/main';
-import 'views/components/styles/articleEditor.scss';
+import 'views/components/styles/popup.scss';
 
 //#region component types
 /**
@@ -106,10 +106,10 @@ function ArticleEditor(props: EditorProps) {
 
   //#region render component
   return (
-    <div data-color-mode="light">
+    <div data-color-mode="light" className="article-editor">
       {/* header */}
       <div className="w-full flex justify-between bg-primary text-white p-3 rounded-t-lg">
-        <h1>{editorSettings.popupTitle}</h1>
+        <p className="text-article-text">{editorSettings.popupTitle}</p>
         <button
           className="hover:cursor-pointer outline outline-4 outline-transparent text-base font-bold text-center py-0 px-1 active:text-primary-dark hover:text-primary-dark"
           onClick={props.closePopup}
@@ -119,7 +119,6 @@ function ArticleEditor(props: EditorProps) {
       </div>
       <div className="m-4 py-4 px-2">
         {/* article title */}
-        test
         <div className="mb-7">
           <input
             type="text"
