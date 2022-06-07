@@ -10,6 +10,8 @@ function App() {
   // login data from user need for "my articles" filter
   const loginUserData: LoggedInUserData = getLoggedInUserData();
 
+  // TODO: subscribe here to subscriptions?
+
   // search term if exists
   const { render, searchTerm } = Header();
 
