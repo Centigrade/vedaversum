@@ -1,26 +1,22 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import "./index.css";
-import reportWebVitals from "./reportWebVitals";
-import LandingPage from "./views/App";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import reportWebVitals from './reportWebVitals';
+import LandingPage from './views/App';
 
-import { ApolloProvider } from "@apollo/client";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { RedirectLandingPage } from "./authentication/RedirectLandingPage";
-import { RequireAuth } from "./authentication/RequreAuth";
-import { apolloClient } from "./utils/ApolloSetup";
-import ArticleDetailsView from "./views/ArticleDetailsView";
-import Header from "./views/components/Header";
-import PageNotFound from "./views/PageNotFound";
+import { ApolloProvider } from '@apollo/client';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { RedirectLandingPage } from './authentication/RedirectLandingPage';
+import { RequireAuth } from './authentication/RequreAuth';
+import { apolloClient } from './utils/ApolloSetup';
+import ArticleDetailsView from './views/ArticleDetailsView';
+import PageNotFound from './views/PageNotFound';
 
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 const Routing = () => {
   return (
     <Router>
       <React.StrictMode>
-        <Header />
         <Routes>
           <Route
             path="*"
@@ -49,7 +45,7 @@ const Routing = () => {
 root.render(
   <ApolloProvider client={apolloClient}>
     <Routing />
-  </ApolloProvider>
+  </ApolloProvider>,
 );
 
 // If you want to start measuring performance in your app, pass a function
