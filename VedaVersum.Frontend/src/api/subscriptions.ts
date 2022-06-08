@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 /**
- * TODO:
+ * get updates from the database when an article was edited or created
  */
 export const ARTICLE_CHANGED_SUBSCRIPTION = gql`
   subscription OnArticleChanged {
@@ -19,7 +19,7 @@ export const ARTICLE_CHANGED_SUBSCRIPTION = gql`
 `;
 
 /**
- * TODO:
+ * get updates from the database when an user comes online
  */
 export const USER_ENTERS_SUBSCRIPTION = gql`
   subscription OnUserEnters {
@@ -35,7 +35,7 @@ export const USER_ENTERS_SUBSCRIPTION = gql`
 `;
 
 /**
- * TODO:
+ * get updates from the database when an user leaves
  */
 export const USER_LEAVES_SUBSCRIPTION = gql`
   subscription OnUserLeaves {
