@@ -1,7 +1,9 @@
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
+import { UPDATE_ARTICLE_ACCESS_COUNTER_MUTATION } from 'api/article-mutations';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ARTICLE_BY_ID_QUERY } from '../api/article-queries';
-import { GetArticle } from '../model/response-types';
+import { GetArticleResponse, UpdateArticleAccessCounterResponse } from '../model/response-types';
 import ArticleItem from './components/ArticleItem';
 import Header from './components/Header';
 import UserList from './components/UserList';
@@ -11,15 +13,26 @@ function ArticleDetailsView() {
   // header
   const { render } = Header();
 
-  // article id from the properties
-  const { id } = useParams();
+  // read article id from the url parameters
+  const { id: articleId } = useParams();
 
   // get article data from the database
-  const { error, data, loading } = useQuery<GetArticle>(ARTICLE_BY_ID_QUERY, {
+  const { error, data, loading } = useQuery<GetArticleResponse>(ARTICLE_BY_ID_QUERY, {
     errorPolicy: 'all',
-    variables: { articleId: id },
+    variables: { articleId: articleId },
   });
   const currentArticle = data?.article;
+
+  // increase access counter
+  const test = useMutation<UpdateArticleAccessCounterResponse>(UPDATE_ARTICLE_ACCESS_COUNTER_MUTATION, {
+    variables: { articleId: articleId },
+  });
+
+  console.log(test);
+
+  useEffect(() => {
+    console.log('mounted');
+  }, []);
   //#endregion
 
   //#region render view

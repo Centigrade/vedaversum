@@ -4,12 +4,19 @@ import { VedaVersumArticle } from './veda-versum-article';
 // hint: "methods" refer to the corresponding methods in
 // VedaVersumQuery.cs, VedaVersumMutation.cs and OAuthMutation.cs
 
-//#region create - update - delete response type
+//#region create - update - delete response types
 /**
  * "ArticleAction" method returns created, updated or deleted article
  */
 export interface ArticleActionResponse {
   articleAction: VedaVersumArticle;
+}
+
+/**
+ * "UpdateArticleAccessCounter" method returns the article which was updated
+ */
+export interface UpdateArticleAccessCounterResponse {
+  UpdateArticleAccessCounter: VedaVersumArticle;
 }
 //#endregion
 
@@ -17,7 +24,7 @@ export interface ArticleActionResponse {
 /**
  * "article" refers to "getArticle" method that returns article with the given id from the database
  */
-export interface GetArticle {
+export interface GetArticleResponse {
   article: VedaVersumArticle;
 }
 

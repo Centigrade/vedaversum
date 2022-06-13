@@ -111,5 +111,14 @@ namespace VedaVersum.Backend.Api
 
             return article!;
         }
+
+        /*
+        TODO:
+        [Authorize]
+        public async Task<VedaVersumArticle> UpdateArticleAccessCounter(
+            string? articleId
+        ) {
+            
+        } */
     }
 }

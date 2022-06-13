@@ -25,6 +25,7 @@ export const CREATE_ARTICLE_MUTATION = gql`
   }
 `;
 
+//#region update mutations
 export const UPDATE_ARTICLE_MUTATION = gql`
   mutation UpdateArticle($articleTitle: String, $articleContent: String, $articleId: String!) {
     articleAction(action: Update, title: $articleTitle, content: $articleContent, articleId: $articleId) {
@@ -40,6 +41,24 @@ export const UPDATE_ARTICLE_MUTATION = gql`
     }
   }
 `;
+
+export const UPDATE_ARTICLE_ACCESS_COUNTER_MUTATION = gql`
+  mutation UpdateArticleAccessCounter($articleId: String!) {
+    articleAction(action: Update, articleId: $articleId) {
+      id
+      title
+      content
+      created
+      userCreated
+      relatedArticleIds
+      userUpdated
+      updatedAt
+      accessCounter
+    }
+  }
+`;
+//#endregion
+
 /* 
 export const DELETE_ARTICLE_MUTATION = gql`
   mutation DeleteArticle(
