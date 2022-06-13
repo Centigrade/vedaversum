@@ -43,7 +43,9 @@ function ArticleItem(props: ArticleItemProps) {
         <div className="w-3/4">
           <h4 className="text-article-heading mb-3 font-medium">{article.title} </h4>
           <p className="text-article-text text-gray-800">
-            {props.preview ? truncateText(article.content, numberOfCharacters) : article.content}
+            {props.preview && article.content.length > numberOfCharacters
+              ? truncateText(article.content, numberOfCharacters)
+              : article.content}
           </p>
         </div>
         <div className="w-1/4 ml-8">
