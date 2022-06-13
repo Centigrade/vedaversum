@@ -91,6 +91,8 @@ namespace VedaVersum.Backend.Api
                         article.Title = title;
                         article.Content = content;
                         article.RelatedArticleIds = relatedArticles;
+                        article.UpdatedAt = DateTime.Now;
+                        article.UserUpdated = user.Email;
                         await _dataAccess.UpdateArticle(article);
                     }
                     break;
