@@ -13,6 +13,9 @@ export interface PopUpProps<DataContextType> {
    * data that the child component needs, e.g. an article
    */
   dataContext: DataContextType;
+  /**
+   * the content which is shown inside the popup
+   */
   show: (props: PopupHostedView<DataContextType>) => any;
 }
 

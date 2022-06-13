@@ -2,7 +2,7 @@ import logOutIcon from 'assets/icons/log-out-icon.svg';
 import notificationIcon from 'assets/icons/notification-icon.svg';
 import { useState } from 'react';
 import { getAvatarUrl, getLoggedInUserData, LoggedInUserData } from 'utils/main';
-import 'views/components//styles/flyoutMenu.scss';
+import 'views/components/styles/flyoutMenu.scss';
 
 function PopUpModal() {
   //#region get user data from user logged in

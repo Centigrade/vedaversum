@@ -1,7 +1,8 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { UPDATE_ARTICLE_ACCESS_COUNTER_MUTATION } from 'api/article-mutations';
+import goBackArrow from 'assets/icons/go-back-arrow.svg';
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { ARTICLE_BY_ID_QUERY } from '../api/article-queries';
 import { GetArticleResponse, UpdateArticleAccessCounterResponse } from '../model/response-types';
 import ArticleItem from './components/ArticleItem';
@@ -11,7 +12,7 @@ import UserList from './components/UserList';
 function ArticleDetailsView() {
   //#region get article data
   // header
-  const { render } = Header();
+  const { render: renderHeader } = Header();
 
   // read article id from the url parameters
   const { id: articleId } = useParams();
@@ -38,21 +39,29 @@ function ArticleDetailsView() {
   //#region render view
   return (
     <>
-      {render}
-      <div className="md:p-6 sm:p-4 xl:mx-40 lg:mx-32 md:mx-10 text-gray-600 flex items-start">
-        <div className="w-3/4">
-          {loading && <p className="text-head">Loading...</p>}
-          {error && <p className="text-head">{error.message} :(</p>}
-          {!data && !loading && !error && <p className="text-head">No data available</p>}
-          {currentArticle && (
-            <div className="py-16">
-              <ArticleItem articleData={currentArticle} preview={false} />
-            </div>
-          )}
+      {renderHeader}
+      <div className="flex items-start">
+        <div className="p-8">
+          {/* TODO: store last filter/sort in localstorage and go back to this state */}
+          <Link to={'/'}>
+            <img src={goBackArrow} alt="arrow pointing to the left" className="w-24" />
+          </Link>
         </div>
-        <div className="w-1/4 pl-12">
-          <h2 className="mt-8 text-subhead font-semibold">People online</h2>
-          <UserList />
+        <div className="md:p-6 sm:p-4 xl:mx-20 lg:mx-12 md:mx-2 text-gray-600 flex items-start">
+          <div className="w-3/4">
+            {loading && <p className="text-head">Loading...</p>}
+            {error && <p className="text-head">{error.message} :(</p>}
+            {!data && !loading && !error && <p className="text-head">No data available</p>}
+            {currentArticle && (
+              <div className="py-11">
+                <ArticleItem articleData={currentArticle} preview={false} />
+              </div>
+            )}
+          </div>
+          <div className="w-1/4 pl-24">
+            <h2 className="mt-8 text-subhead font-semibold">People online</h2>
+            <UserList />
+          </div>
         </div>
       </div>
     </>
