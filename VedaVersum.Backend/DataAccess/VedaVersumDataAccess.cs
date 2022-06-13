@@ -83,7 +83,8 @@ namespace VedaVersum.Backend.DataAccess
                 Content = content,
                 RelatedArticleIds = relatedArticles,
                 Created = DateTime.Now,
-                UserCreated = user.Email
+                UserCreated = user.Email,
+                AccessCounter = 0
             };
 
             await _database.GetCollection<VedaVersumArticle>(VedaVersumArticlesCollectionName)

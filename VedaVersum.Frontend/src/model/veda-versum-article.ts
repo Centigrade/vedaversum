@@ -39,5 +39,5 @@ export interface VedaVersumArticle {
   /**
    * Article access counter
    */
-  accessCounter?: number;
+  accessCounter: number;
 }

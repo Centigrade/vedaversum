@@ -51,7 +51,7 @@ namespace Centigrade.VedaVersum.Model
         /// <summary>
         /// Article access counter
         /// </summary>
-        public int? AccessCounter { get; set; }
+        public int AccessCounter { get; set; }
 
     }
 }
