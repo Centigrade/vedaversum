@@ -1,8 +1,9 @@
-import { useApolloClient, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import MDEditor from '@uiw/react-md-editor';
 import { CREATE_ARTICLE_MUTATION, UPDATE_ARTICLE_MUTATION } from 'api/article-mutations';
 import { VedaVersumArticle } from 'model/veda-versum-article';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import 'views/components/styles/popup.scss';
 
 //#region component types
@@ -31,9 +32,6 @@ interface EditorProps {
 //#endregion
 
 function ArticleEditor(props: EditorProps) {
-  // needed to pass the article to the api
-  const client = useApolloClient();
-
   //#region state - article variables
   const articleData: VedaVersumArticle | undefined = props.dataContext ? props.dataContext : undefined;
   const [title, setTitle] = useState<string>(articleData ? articleData.title : '');
@@ -77,10 +75,10 @@ function ArticleEditor(props: EditorProps) {
     } else {
       setInvalidInput(false);
       if (editorSettings.type === 'create') {
-        insertArticle();
+        // insertArticle();
         console.log(insertArticleData, loadingInsertArticle, errorInsertArticle);
       } else if (editorSettings.type === 'edit') {
-        updateArticle();
+        // updateArticle();
         console.log(updateArticleData, loadingUpdateArticle, errorUpdateArticle);
       }
       props.closePopup();
@@ -141,15 +139,18 @@ function ArticleEditor(props: EditorProps) {
       </div>
       <div className="m-4 px-2 flex justify-end">
         {/* actions */}
-        <button
-          className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-primary py-2 px-3 mr-4 hover:outline-primary-light active:bg-primary-dark disabled:bg-primary-dark disabled:outline-transparent disabled:cursor-auto"
-          onClick={() => {
-            validateInput();
-          }}
-          disabled={!title}
-        >
-          {editorSettings.popupConfirmText}
-        </button>
+        {/* save changes */}
+        <Link to={articleData ? `/${articleData.id}` : '/'}>
+          <button
+            className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-primary py-2 px-3 mr-4 hover:outline-primary-light active:bg-primary-dark disabled:bg-primary-dark disabled:outline-transparent disabled:cursor-auto"
+            onClick={() => {
+              validateInput();
+            }}
+            disabled={!title}
+          >
+            {editorSettings.popupConfirmText}
+          </button>
+        </Link>
         {/* discard changes */}
         <button
           className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-gray-800 py-2 px-3 hover:outline-gray-400 active:bg-gray-600"

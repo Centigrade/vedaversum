@@ -23,7 +23,7 @@ function ArticleDetailsView() {
   });
   const currentArticle = data?.article;
 
-  // increase access counter
+  // increase access counter TODO: this should work only on mount!!
   const test = useMutation<UpdateArticleAccessCounterResponse>(UPDATE_ARTICLE_ACCESS_COUNTER_MUTATION, {
     variables: { articleId: articleId },
   });
