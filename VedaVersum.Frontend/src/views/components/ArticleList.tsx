@@ -81,8 +81,7 @@ function ArticlesList(props: ArticleListProps) {
       if (sortBy === 'latest') {
         sortedArticles.sort((a: VedaVersumArticle, b: VedaVersumArticle) => b.created.localeCompare(a.created));
       } else if (sortBy === 'trending') {
-        // TODO: implement REAL logic, this is only for testing
-        sortedArticles.sort((a: VedaVersumArticle, b: VedaVersumArticle) => a.created.localeCompare(b.created));
+        sortedArticles.sort((a: VedaVersumArticle, b: VedaVersumArticle) => b.accessCounter - a.accessCounter);
       }
       setActiveArticles(sortedArticles);
     } else {
