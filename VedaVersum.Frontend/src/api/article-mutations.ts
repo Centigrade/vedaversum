@@ -10,15 +10,8 @@ export interface ArticleInput {
   user: User;
 }
 export const CREATE_ARTICLE_MUTATION = gql`
-  mutation CreateArticle($article: ArticleInput) {
-    ArticleAction(
-      action: Create
-      title: $articleTitle
-      content: $articleContent
-      relatedArticles: $relatedArticles
-      articleId: $articleId
-      user: $user
-    ) {
+  mutation CreateArticle($articleTitle: String, $articleContent: String) {
+    articleAction(action: Create, title: $articleTitle, content: $articleContent) {
       id
       title
       content
@@ -32,24 +25,9 @@ export const CREATE_ARTICLE_MUTATION = gql`
   }
 `;
 
-/* export const UPDATE_ARTICLE_MUTATION = gql`
-  mutation UpdateArticle(
-    $articleTitle: String,
-    $articleContent: String,
-    $relatedArticles: VedaVersumArticle[],
-    $articleId: String!,
-    $user: User
-  )
-  {
-    ArticleAction(
-      action: Update,
-      title: $articleTitle,
-      content: $articleContent,
-      relatedArticles: $relatedArticles,
-      articleId: $articleId,
-      user: $user
-    )
-    {
+export const UPDATE_ARTICLE_MUTATION = gql`
+  mutation UpdateArticle($articleTitle: String, $articleContent: String, $articleId: String!) {
+    articleAction(action: Update, title: $articleTitle, content: $articleContent, articleId: $articleId) {
       id
       title
       content
@@ -62,7 +40,7 @@ export const CREATE_ARTICLE_MUTATION = gql`
     }
   }
 `;
-
+/* 
 export const DELETE_ARTICLE_MUTATION = gql`
   mutation DeleteArticle(
     $articleTitle: String,
@@ -72,7 +50,7 @@ export const DELETE_ARTICLE_MUTATION = gql`
     $user: User
   )
   {
-    ArticleAction(
+    articleAction(
       action: Delete,
       title: $articleTitle,
       content: $articleContent,

@@ -10,8 +10,6 @@ function App() {
   // login data from user need for "my articles" filter
   const loginUserData: LoggedInUserData = getLoggedInUserData();
 
-  // TODO: subscribe here to subscriptions?
-
   // search term if exists
   const { render, searchTerm } = Header();
 
@@ -44,6 +42,11 @@ function App() {
     errorPolicy: 'all',
     variables: { searchTerm: searchTerm },
   }); */
+  //#endregion
+
+  //#region subscriptions to get updates from the database  TODO: fix this with Mikhail
+  // const { articleUpdatesData, loadingArticleUpdates } = useSubscription(ARTICLE_CHANGED_SUBSCRIPTION);
+
   //#endregion
 
   // useEffect(() => {}, [searchTerm]);
@@ -79,6 +82,7 @@ function App() {
         <div className="w-1/4 pl-12">
           <h2 className="mt-8 text-subhead font-semibold">People online</h2>
           <UserList />
+          {/* <p>{!loadingArticleUpdates && articleUpdatesData}</p> */}
         </div>
       </div>
     </>
