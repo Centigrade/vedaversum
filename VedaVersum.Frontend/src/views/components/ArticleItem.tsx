@@ -34,7 +34,7 @@ function ArticleItem(props: ArticleItemProps) {
 
   //#region render component
   return (
-    <div>
+    <div className="mb-12">
       <div className="flex items-center text-article-info">
         <UserName email={article.userCreated} />
         <span>{formatDate(article.created)}</span>
@@ -50,6 +50,13 @@ function ArticleItem(props: ArticleItemProps) {
           <img src={placeholderArticleImage} alt="some pic" />
         </div>
       </div>
+      {article.updatedAt && article.userUpdated && (
+        <div className="flex mt-4">
+          <span className="mr-4">Last modified by </span>
+          <UserName email={article.userUpdated} />
+          <span>{formatDate(article.updatedAt)}</span>
+        </div>
+      )}
 
       {!props.preview && (
         <div className="flex justify-end items-center mt-6">

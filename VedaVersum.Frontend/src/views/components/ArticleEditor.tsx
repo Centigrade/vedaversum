@@ -1,9 +1,8 @@
-import { useApolloClient } from '@apollo/client';
+import { useApolloClient, useMutation } from '@apollo/client';
 import MDEditor from '@uiw/react-md-editor';
-import { CREATE_ARTICLE_MUTATION } from 'api/article-mutations';
+import { CREATE_ARTICLE_MUTATION, UPDATE_ARTICLE_MUTATION } from 'api/article-mutations';
 import { VedaVersumArticle } from 'model/veda-versum-article';
 import { useState } from 'react';
-import { getLoggedInUserData } from 'utils/main';
 import 'views/components/styles/popup.scss';
 
 //#region component types
@@ -37,7 +36,7 @@ function ArticleEditor(props: EditorProps) {
 
   //#region state - article variables
   const articleData: VedaVersumArticle | undefined = props.dataContext ? props.dataContext : undefined;
-  const [title, setTitle] = useState<string>(articleData ? articleData.title : 'Title');
+  const [title, setTitle] = useState<string>(articleData ? articleData.title : '');
   const [content, setContent] = useState<string | undefined>(articleData ? articleData.content : 'Content'); // undefined because of the md editor
   const [invalidInput, setInvalidInput] = useState<boolean>(false);
 
@@ -67,8 +66,7 @@ function ArticleEditor(props: EditorProps) {
   }
   //#endregion
 
-  //#region helper functions
-
+  //#region helper functions and database mutations
   /**
    * validates user input and shows error or confirms changes and closes popup
    */
@@ -79,9 +77,11 @@ function ArticleEditor(props: EditorProps) {
     } else {
       setInvalidInput(false);
       if (editorSettings.type === 'create') {
-        insertNewArticle();
+        insertArticle();
+        console.log(insertArticleData, loadingInsertArticle, errorInsertArticle);
       } else if (editorSettings.type === 'edit') {
-        updateCurrentArticle();
+        updateArticle();
+        console.log(updateArticleData, loadingUpdateArticle, errorUpdateArticle);
       }
       props.closePopup();
     }
@@ -90,18 +90,18 @@ function ArticleEditor(props: EditorProps) {
   /**
    * calls database mutation to insert the new article into the database
    */
-  async function insertNewArticle() {
-    const insertArticleResponse = await client.mutate({
-      mutation: CREATE_ARTICLE_MUTATION,
-      variables: { articleTitle: title, articleContent: content, user: getLoggedInUserData() },
+  const [insertArticle, { data: insertArticleData, loading: loadingInsertArticle, error: errorInsertArticle }] =
+    useMutation(CREATE_ARTICLE_MUTATION, {
+      variables: { articleTitle: title, articleContent: content },
     });
-    console.log(insertArticleResponse);
-  }
 
   /**
    * calls database mutation to update an existing article in the database
    */
-  function updateCurrentArticle() {}
+  const [updateArticle, { data: updateArticleData, loading: loadingUpdateArticle, error: errorUpdateArticle }] =
+    useMutation(UPDATE_ARTICLE_MUTATION, {
+      variables: { articleTitle: title, articleContent: content },
+    });
   //#endregion
 
   //#region render component
@@ -120,18 +120,21 @@ function ArticleEditor(props: EditorProps) {
       <div className="m-4 py-4 px-2">
         {/* article title */}
         <div className="mb-7">
-          <input
-            type="text"
-            value={title}
-            onChange={handleTitleInput}
-            minLength={2}
-            required
-            className={
-              'text-subhead text-gray-400 border-b border-gray-400 focus-visible:outline-0' +
-              (invalidInput ? 'border-b-2 border-red' : '')
-            }
-          />
-          {invalidInput && <span className="mx-2 text-red">The title must have at least 2 characters!</span>}
+          <div className="mb-4">
+            <input
+              type="text"
+              placeholder="Title"
+              value={title}
+              onChange={handleTitleInput}
+              minLength={2}
+              required
+              className={
+                'text-subhead text-gray-400 border-b border-gray-400 focus-visible:outline-0 ' +
+                (invalidInput ? 'border-b-2 border-red' : '')
+              }
+            />
+            {invalidInput && <span className="mx-2 text-red">The title must have at least 2 characters!</span>}
+          </div>
           {/* text editor */}
           <MDEditor value={content} onChange={setContent} preview="edit" height={280} />
         </div>
