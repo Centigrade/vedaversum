@@ -35,30 +35,33 @@ function ArticleItem(props: ArticleItemProps) {
   //#region render component
   return (
     <div className="mb-12">
-      <div className="flex items-center text-article-info">
-        <UserName email={article.userCreated} />
-        <span>{formatDate(article.created)}</span>
-      </div>
       <div className="flex items-between">
-        <div className="w-3/4">
-          <h4 className="text-article-heading mb-3 font-medium">{article.title} </h4>
-          <p className="text-article-text text-gray-800">
+        <div className="w-3/4 flex flex-col">
+          <div className="flex items-center text-article-info my-auto">
+            <UserName email={article.userCreated} />
+            <span>{formatDate(article.created)}</span>
+          </div>
+          <h4 className="text-article-heading my-auto font-medium text-left">{article.title} </h4>
+          <p className="text-article-text text-gray-800 my-auto">
             {props.preview && article.content.length > numberOfCharacters
               ? truncateText(article.content, numberOfCharacters)
               : article.content}
           </p>
+
+          <div className="flex my-auto">
+            {article.updatedAt && article.userUpdated && (
+              <>
+                <span className="mr-4">Last modified by </span>
+                <UserName email={article.userUpdated} />
+                <span>{formatDate(article.updatedAt)}</span>
+              </>
+            )}
+          </div>
         </div>
         <div className="w-1/4 ml-8">
           <img src={placeholderArticleImage} alt="some pic" />
         </div>
       </div>
-      {article.updatedAt && article.userUpdated && (
-        <div className="flex mt-4">
-          <span className="mr-4">Last modified by </span>
-          <UserName email={article.userUpdated} />
-          <span>{formatDate(article.updatedAt)}</span>
-        </div>
-      )}
 
       {!props.preview && (
         <div className="flex justify-end items-center mt-6">
