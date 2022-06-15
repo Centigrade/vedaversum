@@ -123,6 +123,7 @@ function ArticlesList(props: ArticleListProps) {
       setActiveArticles([]);
     }
   }
+  //#endregion
 
   //#region render component
   return (
@@ -135,7 +136,7 @@ function ArticlesList(props: ArticleListProps) {
               key={index}
               onClick={() => changeActiveArticles(tab.type)}
               className={
-                'font-medium text-xl px-3 hover:cursor-pointer p-4 ' +
+                'top-px transform translate-y-px font-medium text-xl px-3 hover:cursor-pointer p-4 ' +
                 (activeTab === tab.type ? 'text-primary border-b-4 border-primary' : 'text-gray-600')
               }
             >
