@@ -1,5 +1,5 @@
 import { VedaVersumArticle } from 'model/veda-versum-article';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ArticleItem from 'views/components/ArticleItem';
 
@@ -10,6 +10,7 @@ import ArticleItem from 'views/components/ArticleItem';
 interface ArticleListProps {
   allArticles: VedaVersumArticle[];
   articlesCreatedByUser: VedaVersumArticle[];
+  clearedLocalStorage: boolean;
 }
 /**
  * type for the tabs for the article filter/sort
@@ -21,7 +22,7 @@ interface Tab {
 /**
  * type for active tab -> these are the only valid options:
  */
-type ActiveTab = 'allArticles' | 'newArticles' | 'trendingArticles' | 'myArticles'; // TODO: clarify if new = articles the user missed or just sort by latest?
+type ActiveTab = 'allArticles' | 'newArticles' | 'trendingArticles' | 'myArticles';
 
 /**
  * type for sorting the articles -> these are the only valid options:
@@ -42,16 +43,43 @@ function ArticlesList(props: ArticleListProps) {
     { name: 'Trending', type: 'trendingArticles' },
     { name: 'Yours', type: 'myArticles' },
   ];
-  const [activeTab, setActiveTab] = useState<ActiveTab>('allArticles');
+  const [activeTab, setActiveTab] = useState<ActiveTab>();
   //#endregion
 
+  // on mount: read sorting/filter from local store
+  useEffect(() => {
+    const localStorageActiveTab = localStorage.getItem('activeTab');
+    if (localStorageActiveTab && isActiveTab(localStorageActiveTab)) {
+      setActiveTab(localStorageActiveTab);
+    } else {
+      setActiveTab('allArticles');
+    }
+  }, []);
+
+  // if local storage is cleared, reset active tab and activeArticles
+  useEffect(() => {
+    setActiveTab('allArticles');
+    setActiveArticles(props.allArticles);
+  }, [props.clearedLocalStorage, props.allArticles]);
+
   //#region helper functions
+  /**
+   * checks if a given string is one of the active tabs
+   * @param value string that is checked
+   * @returns boolean if value is an active tab
+   */
+  function isActiveTab(value: string): value is ActiveTab {
+    const activeTabs = ['allArticles', 'newArticles', 'trendingArticles', 'myArticles'];
+    return activeTabs.includes(value);
+  }
+
   /**
    * sets active tab and active articles according to the given active tab controlled by the user
    * @param selectedTab current active tab
    */
   const changeActiveArticles = (selectedTab: ActiveTab): void => {
     setActiveTab(selectedTab);
+    localStorage.setItem('activeTab', selectedTab);
     switch (selectedTab) {
       case 'allArticles':
         setActiveArticles(allArticles);

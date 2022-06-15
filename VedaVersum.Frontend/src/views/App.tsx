@@ -1,6 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { ALL_ARTICLES_QUERY, CREATED_ARTICLES_QUERY } from 'api/article-queries';
 import { GetAllArticlesResponse, GetUserCreatedArticlesResponse } from 'model/response-types';
+import { useEffect, useState } from 'react';
 import { getLoggedInUserData, LoggedInUserData } from 'utils/main';
 import ArticleList from 'views/components/ArticleList';
 import UserList from 'views/components/UserList';
@@ -11,7 +12,21 @@ function App() {
   const loginUserData: LoggedInUserData = getLoggedInUserData();
 
   // search term if exists
-  const { render: renderHeader, searchTerm } = Header();
+  const { render: renderHeader, searchTerm: propsSearchTerm, clearedAll } = Header();
+
+  //#region state
+  const [actualSearchTerm, setActualSearchTerm] = useState(propsSearchTerm ? propsSearchTerm : '');
+  //#endregion
+
+  // on mount: read search term from local store
+  useEffect(() => {
+    const localStorageSearchTerm = localStorage.getItem('searchTerm');
+    if (localStorageSearchTerm) {
+      setActualSearchTerm(localStorageSearchTerm);
+    } else {
+      setActualSearchTerm('');
+    }
+  }, []);
 
   //#region get data from the database
   // load all articles
@@ -49,20 +64,23 @@ function App() {
 
   //#endregion
 
-  // useEffect(() => {}, [searchTerm]);
+  useEffect(() => {
+    setActualSearchTerm(propsSearchTerm);
+  }, [propsSearchTerm]);
 
   return (
     <>
       {renderHeader}
-      <div className="w-full flex items-start">
+      <div className="w-full flex items-start mt-8">
         <div className="w-1/6"></div>
         {allArticlesData && articlesCreatedByUserData ? (
           // all data properly loaded
           <div className="w-3/4">
-            <h1 className="mb-3 text-head font-semibold">Start reading</h1>
+            <h1 className="my-3 text-head font-semibold">Start reading</h1>
             <ArticleList
               allArticles={allArticlesData.allArticles}
               articlesCreatedByUser={articlesCreatedByUserData.allArticlesCreatedByUser}
+              clearedLocalStorage={clearedAll}
             />
           </div>
         ) : (

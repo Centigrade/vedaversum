@@ -1,6 +1,6 @@
 import searchIcon from 'assets/icons/search-icon.svg';
 import logoWithName from 'assets/logo-with-name.svg';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ArticleEditor from 'views/components/ArticleEditor';
 import PopUpModal from 'views/components/PopUpModal';
@@ -8,9 +8,18 @@ import UserFlyoutMenu from './UserFlyoutMenu';
 
 function Header() {
   //#region state
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [clearedAll, setClearedAll] = useState(false);
   //#endregion
 
+  //#region helper functions
+  // TODO:
+  /**
+   * this function shoulg manage the search input that the api is not triggered after each letter but only when the user stopped typing
+   * @param func
+   * @param delay
+   * @returns
+   */
   function debounce<T extends unknown[]>(func: (...args: T) => void, delay: number): (...args: T) => void {
     let timer: any | null = null;
     return (...args: T) => {
@@ -21,18 +30,37 @@ function Header() {
     };
   }
 
-  const handleInput = debounce((value: string) => setSearchTerm(value), 200);
+  /**
+   * TODO:
+   */
+  function clearTemporaryData(): void {
+    setSearchTerm('');
+    localStorage.removeItem('activeTab');
+    localStorage.removeItem('searchTerm');
+    setClearedAll(!clearedAll);
+  }
+
+  // send search term to App.tsx to trigger the api and set local storage
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // debounce((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    localStorage.setItem('searchTerm', e.target.value);
+    // }, 200);
+  };
 
   //#region render component
   return {
     searchTerm,
+    clearedAll,
     render: (
       <nav className="bg-gray-800 header flex">
         <div className="w-full px-6 py-5 flex justify-between items-center">
-          <div className="w-1/2">
-            <Link to="/">
-              <img src={logoWithName} alt="VedaVersum Logo" />
-            </Link>
+          <div className="w-1/2 flex">
+            <button onClick={() => clearTemporaryData()}>
+              <Link to="/">
+                <img src={logoWithName} alt="VedaVersum Logo" />
+              </Link>
+            </button>
           </div>
           <div className="w-1/2 flex items-center justify-end">
             {/* search bar */}
@@ -43,10 +71,12 @@ function Header() {
                 className="pointer-events-none w-6 h-6 absolute top-1/2 transform -translate-y-1/2 right-1 mr-2"
               />
               <input
+                name="searchInput"
+                value={searchTerm}
                 type="text"
                 placeholder="Search"
                 className="w-full rounded py-2 px-2 mr-28 outline-4 focus-visible:outline-primary"
-                onChange={event => handleInput(event.target.value)}
+                onChange={handleInput}
               />
             </label>
             {/* create new article button */}
