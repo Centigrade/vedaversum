@@ -54,7 +54,8 @@ function App() {
   return (
     <>
       {render}
-      <div className="md:p-6 sm:p-4 xl:mx-40 lg:mx-32 md:mx-10 text-gray-600 flex items-start">
+      <div className="w-full flex items-start">
+        <div className="w-1/6"></div>
         {allArticlesData && articlesCreatedByUserData ? (
           // all data properly loaded
           <div className="w-3/4">

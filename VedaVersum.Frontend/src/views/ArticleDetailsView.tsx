@@ -40,14 +40,14 @@ function ArticleDetailsView() {
   return (
     <>
       {renderHeader}
-      <div className="flex items-start">
-        <div className="p-8">
+      <div className="flex items-start w-full">
+        <div className="p-8 w-1/6">
           {/* TODO: store last filter/sort in localstorage and go back to this state */}
           <Link to={'/'}>
-            <img src={goBackArrow} alt="arrow pointing to the left" className="w-24" />
+            <img src={goBackArrow} alt="arrow pointing to the left" className="w-1/6" />
           </Link>
         </div>
-        <div className="md:p-6 sm:p-4 xl:mx-20 lg:mx-12 md:mx-2 text-gray-600 flex items-start">
+        <div className="p-10 text-gray-600 flex items-start w-2/3">
           <div className="w-3/4">
             {loading && <p className="text-head">Loading...</p>}
             {error && <p className="text-head">{error.message} :(</p>}
@@ -63,6 +63,7 @@ function ArticleDetailsView() {
             <UserList />
           </div>
         </div>
+        <div className="w-1/6"></div>
       </div>
     </>
   );
