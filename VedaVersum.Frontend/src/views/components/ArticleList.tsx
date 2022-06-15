@@ -41,7 +41,7 @@ function ArticlesList(props: ArticleListProps) {
     { name: 'All', type: 'allArticles' },
     { name: 'New', type: 'newArticles' },
     { name: 'Trending', type: 'trendingArticles' },
-    { name: 'Yours', type: 'myArticles' },
+    { name: 'My', type: 'myArticles' },
   ];
   const [activeTab, setActiveTab] = useState<ActiveTab>();
   //#endregion
@@ -136,13 +136,14 @@ function ArticlesList(props: ArticleListProps) {
               key={index}
               onClick={() => changeActiveArticles(tab.type)}
               className={
-                'top-px transform translate-y-px font-medium text-xl px-3 hover:cursor-pointer p-4 ' +
+                'top-px transform translate-y-px font-medium text-xl px-3 hover:cursor-pointer py-4 ' +
                 (activeTab === tab.type ? 'text-primary border-b-4 border-primary' : 'text-gray-600')
               }
             >
               {tab.name}
             </div>
           ))}
+          <div className="top-px transform translate-y-px font-medium text-xl px-3 py-4 text-gray-600">Articles</div>
         </div>
       </div>
       <div>
