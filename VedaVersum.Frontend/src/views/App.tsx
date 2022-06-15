@@ -11,7 +11,7 @@ function App() {
   const loginUserData: LoggedInUserData = getLoggedInUserData();
 
   // search term if exists
-  const { render, searchTerm } = Header();
+  const { render: renderHeader, searchTerm } = Header();
 
   //#region get data from the database
   // load all articles
@@ -53,7 +53,7 @@ function App() {
 
   return (
     <>
-      {render}
+      {renderHeader}
       <div className="w-full flex items-start">
         <div className="w-1/6"></div>
         {allArticlesData && articlesCreatedByUserData ? (
