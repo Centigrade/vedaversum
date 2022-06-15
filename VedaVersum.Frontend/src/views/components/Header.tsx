@@ -15,7 +15,7 @@ function Header() {
   //#region helper functions
   // TODO:
   /**
-   * this function shoulg manage the search input that the api is not triggered after each letter but only when the user stopped typing
+   * this function should manage the search input that the api is not triggered after each letter but only when the user stopped typing
    * @param func
    * @param delay
    * @returns
@@ -31,7 +31,8 @@ function Header() {
   }
 
   /**
-   * TODO:
+   * clears temporary user data, i.e. the active tab (sorting) and the search term (filtering).
+   * notifies the parent component to transfer this information down to other child components
    */
   function clearTemporaryData(): void {
     setSearchTerm('');

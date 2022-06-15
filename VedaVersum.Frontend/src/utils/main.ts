@@ -8,8 +8,8 @@ export interface LoggedInUserData {
 }
 
 /**
- * TODO:
- * @returns
+ * reads the user's login data (name and email) from the local storage
+ * @returns an object with the user's name, email and username for visual display
  */
 export function getLoggedInUserData(): LoggedInUserData {
   const loginData = readAuthContextFromLocalStorage();

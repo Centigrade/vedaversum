@@ -48,19 +48,26 @@ function ArticlesList(props: ArticleListProps) {
 
   // on mount: read sorting/filter from local store
   useEffect(() => {
+    console.log('mount articlelist');
     const localStorageActiveTab = localStorage.getItem('activeTab');
+
     if (localStorageActiveTab && isActiveTab(localStorageActiveTab)) {
+      console.log('entered if');
+
       setActiveTab(localStorageActiveTab);
     } else {
+      console.log('entered else');
       setActiveTab('allArticles');
     }
   }, []);
 
-  // if local storage is cleared, reset active tab and activeArticles
-  useEffect(() => {
+  // TODO: fix this!
+  //if local storage is cleared, reset active tab and activeArticles
+  /*  useEffect(() => {
+    console.log('useEffect triggered');
     setActiveTab('allArticles');
     setActiveArticles(props.allArticles);
-  }, [props.clearedLocalStorage, props.allArticles]);
+  }, [props.clearedLocalStorage, props.allArticles]); */
 
   //#region helper functions
   /**
@@ -117,36 +124,6 @@ function ArticlesList(props: ArticleListProps) {
     }
   }
 
-  /**
-   * !!! only for developing / debugging !!! TODO: remove before "release"
-   * counts the number of articles
-   * @param tab according to the given tab different articles lists are analyzed
-   * @returns the number of articles
-   */
-  function numberOfArticles(tab: ActiveTab) {
-    switch (tab) {
-      case 'allArticles':
-        if (allArticles) {
-          return allArticles.length;
-        } else {
-          return '0';
-        }
-      case 'myArticles':
-        if (articlesCreatedByUser) {
-          return articlesCreatedByUser.length;
-        } else {
-          return '0';
-        }
-      default:
-        if (allArticles) {
-          return allArticles.length;
-        } else {
-          return '0';
-        }
-    }
-  }
-  //#endregion
-
   //#region render component
   return (
     <div>
@@ -162,8 +139,7 @@ function ArticlesList(props: ArticleListProps) {
                 (activeTab === tab.type ? 'text-primary border-b-4 border-primary' : 'text-gray-600')
               }
             >
-              {/* number only for developing/debugging */}
-              {`${tab.name} (${numberOfArticles(tab.type)})`}
+              {tab.name}
             </div>
           ))}
         </div>

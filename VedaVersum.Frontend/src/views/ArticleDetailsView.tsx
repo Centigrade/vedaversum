@@ -24,7 +24,8 @@ function ArticleDetailsView() {
   });
   const currentArticle = data?.article;
 
-  // increase access counter TODO: this should work only on mount!!
+  // increase access counter
+  // TODO: this should work only on mount!!
   const test = useMutation<UpdateArticleAccessCounterResponse>(UPDATE_ARTICLE_ACCESS_COUNTER_MUTATION, {
     variables: { articleId: articleId },
   });
@@ -42,7 +43,6 @@ function ArticleDetailsView() {
       {renderHeader}
       <div className="flex items-start w-full">
         <div className="p-8 w-1/6">
-          {/* TODO: store last filter/sort in localstorage and go back to this state */}
           <Link to={'/'}>
             <img src={goBackArrow} alt="arrow pointing to the left" className="w-1/6" />
           </Link>
