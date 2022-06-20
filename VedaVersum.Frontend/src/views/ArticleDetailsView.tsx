@@ -1,14 +1,18 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { UPDATE_ARTICLE_ACCESS_COUNTER_MUTATION } from 'api/article-mutations';
 import goBackArrow from 'assets/icons/go-back-arrow.svg';
+import placeholderArticleImage from 'assets/PlaceholderArticleImage.png';
 import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { formatDate, getLoggedInUserData, LoggedInUserData } from 'utils/main';
+import ArticleEditor from 'views/components/ArticleEditor';
+import ConfirmDeleteArticle from 'views/components/ConfirmDeleteArticle';
+import PopUpModal from 'views/components/PopUpModal';
 import { ARTICLE_BY_ID_QUERY } from '../api/article-queries';
 import { GetArticleResponse, UpdateArticleAccessCounterResponse } from '../model/response-types';
-import ArticleItem from './components/ArticleItem';
 import Header from './components/Header';
 import UserList from './components/UserList';
-
+import UserName from './components/UserName';
 function ArticleDetailsView() {
   //#region get article data
   // header
@@ -23,6 +27,9 @@ function ArticleDetailsView() {
     variables: { articleId: articleId },
   });
   const currentArticle = data?.article;
+
+  // get login data for author validation
+  const loginUserData: LoggedInUserData = getLoggedInUserData();
 
   // increase access counter
   // TODO: this should work only on mount!!
@@ -54,7 +61,36 @@ function ArticleDetailsView() {
             {!data && !loading && !error && <p className="text-head">No data available</p>}
             {currentArticle && (
               <div className="py-11">
-                <ArticleItem articleData={currentArticle} preview={false} />
+                <div className="w-full flex items-center mx-auto">
+                  <img src={placeholderArticleImage} alt="some pic" />
+                </div>
+                <div className="flex items-center text-article-info my-auto">
+                  <UserName email={currentArticle.userCreated} />
+                  <span>{formatDate(currentArticle.created)}</span>
+                </div>
+                <div>
+                  <h1 className="text-head my-auto font-medium text-left font-bold">{currentArticle.title} </h1>
+                  <p className="text-article-text text-gray-800 my-auto">{currentArticle.content}</p>
+                </div>
+                <div className="flex my-auto">
+                  {currentArticle.updatedAt && currentArticle.userUpdated && (
+                    <>
+                      <span className="mr-4">Last modified by </span>
+                      <UserName email={currentArticle.userUpdated} />
+                      <span>{formatDate(currentArticle.updatedAt)}</span>
+                    </>
+                  )}
+                </div>
+                <div className="flex justify-end items-center mt-6">
+                  {/* edit article */}
+                  <PopUpModal show={ArticleEditor} openModalText="Edit" dataContext={currentArticle} />
+                  {/* delete article - only accessible if logged in user === author */}
+                  {loginUserData.userEmail === currentArticle.userCreated && (
+                    <div className="ml-2">
+                      <PopUpModal show={ConfirmDeleteArticle} openModalText="Delete" dataContext={currentArticle} />
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>

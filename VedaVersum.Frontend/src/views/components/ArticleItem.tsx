@@ -1,10 +1,7 @@
 import placeholderArticleImage from 'assets/PlaceholderArticleImage.png';
 import { VedaVersumArticle } from 'model/veda-versum-article';
 import 'reactjs-popup/dist/index.css';
-import { getLoggedInUserData, LoggedInUserData } from 'utils/main';
-import ArticleEditor from 'views/components/ArticleEditor';
-import ConfirmDeleteArticle from 'views/components/ConfirmDeleteArticle';
-import PopUpModal from 'views/components/PopUpModal';
+import { formatDate } from 'utils/main';
 import UserName from './UserName';
 
 //#region type definitions
@@ -25,9 +22,6 @@ export interface ArticleItemProps {
 
 function ArticleItem(props: ArticleItemProps) {
   const article = props.articleData;
-
-  // get login data for author validation
-  const loginUserData: LoggedInUserData = getLoggedInUserData();
 
   // number of characters after which the article content is truncated
   const numberOfCharacters = 220;
@@ -62,19 +56,6 @@ function ArticleItem(props: ArticleItemProps) {
           <img src={placeholderArticleImage} alt="some pic" />
         </div>
       </div>
-
-      {!props.preview && (
-        <div className="flex justify-end items-center mt-6">
-          {/* edit article */}
-          <PopUpModal show={ArticleEditor} openModalText="Edit" dataContext={article} />
-          {/* delete article - only accessible if logged in user === author */}
-          {loginUserData.userEmail === article.userCreated && (
-            <div className="ml-2">
-              <PopUpModal show={ConfirmDeleteArticle} openModalText="Delete" dataContext={article} />
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 }
@@ -90,25 +71,6 @@ function ArticleItem(props: ArticleItemProps) {
 function truncateText(content: string, numberOfCharacters: number): string {
   let contentPreview = content;
   return contentPreview.slice(0, numberOfCharacters) + '...';
-}
-
-/**
- * formats a given date to a readable version
- * @param date given date as string that has to be formatted
- * @returns formatted date as string
- */
-function formatDate(date: string): string {
-  const givenDate = new Date(date);
-  const options: object = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour12: true,
-    hour: '2-digit',
-    minute: '2-digit',
-  };
-  const formattedDate = givenDate.toLocaleDateString('en-GB', options);
-  return ' – ' + formattedDate;
 }
 //#endregion
 export default ArticleItem;

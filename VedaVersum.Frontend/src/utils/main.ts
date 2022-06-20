@@ -32,3 +32,22 @@ export function getAvatarUrl(userName: string): string {
     return placeholderAvatarImage;
   }
 }
+
+/**
+ * formats a given date to a readable version
+ * @param date given date as string that has to be formatted
+ * @returns formatted date as string
+ */
+export function formatDate(date: string): string {
+  const givenDate = new Date(date);
+  const options: object = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour12: true,
+    hour: '2-digit',
+    minute: '2-digit',
+  };
+  const formattedDate = givenDate.toLocaleDateString('en-GB', options);
+  return ' – ' + formattedDate;
+}
