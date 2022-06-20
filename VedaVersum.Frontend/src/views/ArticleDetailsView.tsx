@@ -69,18 +69,18 @@ function ArticleDetailsView() {
             {!data && !loading && !error && <p className="text-head">No data available</p>}
             {currentArticle && (
               <div className="py-11">
-                <div className="w-full flex">
-                  <img src={articleImagePaths.articleImage} alt="some pic" className="mx-auto h-60" />
+                <div className="w-full flex mb-10">
+                  <img src={articleImagePaths.articleImage} alt="some pic" className="mx-auto h-96" />
                 </div>
-                <div className="flex items-center text-article-info my-auto">
+                <div className="flex items-center text-article-info mb-6">
                   <UserName email={currentArticle.userCreated} />
                   <span>{formatDate(currentArticle.created)}</span>
                 </div>
                 <div>
-                  <h1 className="text-head my-auto font-medium text-left font-bold">{currentArticle.title} </h1>
+                  <h1 className="text-head my-auto font-medium text-left font-bold mb-6">{currentArticle.title} </h1>
                   <p className="text-article-text text-gray-800 my-auto">{currentArticle.content}</p>
                 </div>
-                <div className="flex my-auto">
+                <div className="flex mb-8">
                   {currentArticle.updatedAt && currentArticle.userUpdated && (
                     <>
                       <span className="mr-4">Last modified by </span>
@@ -89,7 +89,7 @@ function ArticleDetailsView() {
                     </>
                   )}
                 </div>
-                <div className="flex justify-end items-center mt-6">
+                <div className="flex justify-end items-center pt-8">
                   {/* edit article */}
                   <PopUpModal show={ArticleEditor} openModalText="Edit" dataContext={currentArticle} />
                   {/* delete article - only accessible if logged in user === author */}
