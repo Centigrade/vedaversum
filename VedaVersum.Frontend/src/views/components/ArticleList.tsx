@@ -1,7 +1,7 @@
 import { VedaVersumArticle } from 'model/veda-versum-article';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import ArticleItem from 'views/components/ArticleItem';
+import ArticleListItem from 'views/components/ArticleListItem';
 
 //#region type definitions
 /**
@@ -162,7 +162,7 @@ function ArticlesList(props: ArticleListProps) {
                 }}
                 key={index}
               > */}
-                <ArticleItem articleData={article} preview={true} />
+                <ArticleListItem articleData={article} />
               </Link>
             ))}
         </div>

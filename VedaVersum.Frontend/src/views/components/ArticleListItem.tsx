@@ -13,10 +13,6 @@ export interface ArticleItemProps {
    * data from the article that should be displayed
    * */
   articleData: VedaVersumArticle;
-  /**
-   * boolean to distinguish if only a preview of the article should be shown, i.e. in a list of articles, or the entire article
-   * */
-  preview: boolean;
 }
 //#endregion
 
@@ -37,7 +33,7 @@ function ArticleItem(props: ArticleItemProps) {
           </div>
           <h4 className="text-article-heading my-auto font-medium text-left">{article.title} </h4>
           <p className="text-article-text text-gray-800 my-auto">
-            {props.preview && article.content.length > numberOfCharacters
+            {article.content.length > numberOfCharacters
               ? truncateText(article.content, numberOfCharacters)
               : article.content}
           </p>
