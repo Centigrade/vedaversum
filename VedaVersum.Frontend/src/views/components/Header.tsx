@@ -2,6 +2,7 @@ import searchIcon from 'assets/icons/search-icon.svg';
 import logoWithName from 'assets/logo-with-name.svg';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getLoggedInUserData } from 'utils/main';
 import ArticleEditor from 'views/components/ArticleEditor';
 import PopUpModal from 'views/components/PopUpModal';
 import UserFlyoutMenu from './UserFlyoutMenu';
@@ -10,7 +11,23 @@ function Header() {
   //#region state
   const [searchTerm, setSearchTerm] = useState('');
   const [clearedAll, setClearedAll] = useState(false);
+  const [numberOfNotifications, setNumberOfNotifications] = useState(0);
+
+  const userData = getLoggedInUserData();
   //#endregion
+
+  //#region subscriptions to get updates from the database  TODO: fix this with Mikhail
+  // possible solution: upgrade apollo client (https://github.com/apollographql/apollo-client/issues/7608)
+  /* const {
+    data: articleUpdatesData,
+    loading: loadingArticleUpdates,
+    error,
+  } = useSubscription(ARTICLE_CHANGED_SUBSCRIPTION); */
+
+  /* !!! this creates infinite loop !!! TODO: fix this
+  if (articleUpdatesData?.userCreated !== userData.userEmail) {
+    setNumberOfNotifications(numberOfNotifications + 1);
+  } */
 
   //#region helper functions
   // TODO:
@@ -48,6 +65,7 @@ function Header() {
     localStorage.setItem('searchTerm', e.target.value);
     // }, 200);
   };
+  //#endregion
 
   //#region render component
   return {
@@ -62,6 +80,7 @@ function Header() {
                 <img src={logoWithName} alt="VedaVersum Logo" />
               </Link>
             </button>
+            {/* <div className="text-red ml-6">subscription data: {articleUpdatesData?.title || error?.message}</div> */}
           </div>
           <div className="w-1/2 flex items-center justify-end">
             {/* search bar */}
@@ -83,7 +102,7 @@ function Header() {
             {/* create new article button */}
             <PopUpModal show={ArticleEditor} openModalText="Start writing" dataContext="" />
             {/* avatar image */}
-            <UserFlyoutMenu></UserFlyoutMenu>
+            <UserFlyoutMenu numberOfNotifications={numberOfNotifications}></UserFlyoutMenu>
           </div>
         </div>
       </nav>

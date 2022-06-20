@@ -59,9 +59,6 @@ function App() {
   }); */
   //#endregion
 
-  //#region subscriptions to get updates from the database  TODO: fix this with Mikhail
-  // const { articleUpdatesData, loadingArticleUpdates } = useSubscription(ARTICLE_CHANGED_SUBSCRIPTION);
-
   //#endregion
 
   useEffect(() => {

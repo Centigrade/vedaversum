@@ -4,7 +4,11 @@ import { useState } from 'react';
 import { getAvatarUrl, getLoggedInUserData, LoggedInUserData } from 'utils/main';
 import 'views/components/styles/flyoutMenu.scss';
 
-function PopUpModal() {
+interface UserFlyoutMenuProps {
+  numberOfNotifications: number;
+}
+
+function UserFlyoutMenu(props: UserFlyoutMenuProps) {
   //#region get user data from user logged in
   const loginUserData: LoggedInUserData = getLoggedInUserData();
   // prepare avatar image path
@@ -12,7 +16,6 @@ function PopUpModal() {
 
   // store
   const [menuOpen, setMenuOpen] = useState(false);
-  const numberOfNotifications = 178;
   //#endregion
 
   //#region render component
@@ -24,7 +27,7 @@ function PopUpModal() {
         }}
         className="fly-out-menu hover:cursor-pointer relative"
       >
-        {numberOfNotifications > 0 && (
+        {props.numberOfNotifications > 0 && (
           <div
             className={
               'z-10 absolute w-3 h-3 rounded-full bg-red outline outline-2 bottom-7 left-7 ' +
@@ -50,7 +53,9 @@ function PopUpModal() {
           <div className="mt-8 flex align-center hover:cursor-pointer">
             <img src={notificationIcon} alt="a bell" className="mr-5" />
             <span>Notifications</span>
-            {numberOfNotifications > 0 && <span className="text-primary ml-4">{numberOfNotifications}</span>}
+            {props.numberOfNotifications > 0 && (
+              <span className="text-primary ml-4">{props.numberOfNotifications}</span>
+            )}
           </div>
           <div className="mt-4 flex align-center hover:cursor-pointer">
             <img src={logOutIcon} alt="a bell" className="mr-5" />
@@ -62,4 +67,4 @@ function PopUpModal() {
   );
 }
 //#endregion
-export default PopUpModal;
+export default UserFlyoutMenu;
