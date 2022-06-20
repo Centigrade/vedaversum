@@ -1,7 +1,6 @@
-import placeholderArticleImage from 'assets/PlaceholderArticleImage.png';
 import { VedaVersumArticle } from 'model/veda-versum-article';
 import 'reactjs-popup/dist/index.css';
-import { formatDate } from 'utils/main';
+import { formatDate, getRandomArticleImagePath } from 'utils/main';
 import UserName from './UserName';
 
 //#region type definitions
@@ -49,7 +48,7 @@ function ArticleItem(props: ArticleItemProps) {
           </div>
         </div>
         <div className="w-1/4 ml-8">
-          <img src={placeholderArticleImage} alt="some pic" />
+          <img src={getRandomArticleImagePath(article.id).previewImage} alt="some pic" />
         </div>
       </div>
     </div>

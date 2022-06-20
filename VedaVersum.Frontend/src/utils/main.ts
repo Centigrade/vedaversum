@@ -1,10 +1,27 @@
-import placeholderAvatarImage from 'assets/images/placeholderUserAvatar.png';
+import ticketsPreview from 'assets/images/9EuroTicketPreview.png';
+import tickets from 'assets/images/9EuroTickets.png';
+import burningCar from 'assets/images/BurningCar.png';
+import burningCarPreview from 'assets/images/BurningCarPreview.png';
+import error from 'assets/images/Error.png';
+import imageNotFound from 'assets/images/ImageNotFound.png';
+import partyFloor from 'assets/images/PartyFloor.png';
+import partyFloorPreview from 'assets/images/PartyFloorPreview.png';
+import smiley from 'assets/images/Smiley.png';
+import tent from 'assets/images/Tent.png';
+import uiux from 'assets/images/UI-UX.png';
+import wall from 'assets/images/Wall9thFloor.png';
+import wallPreview from 'assets/images/Wall9thFloorPreview.png';
 import { readAuthContextFromLocalStorage } from 'authentication/AutContext';
 
 export interface LoggedInUserData {
   userName: string;
   userEmail: string;
   visualUserName: string;
+}
+
+export interface ArticleImagePaths {
+  previewImage: string;
+  articleImage: string;
 }
 
 /**
@@ -29,7 +46,7 @@ export function getAvatarUrl(userName: string): string {
   if (userName) {
     return `https://www.centigrade.de/basic/resources/images/team/pixel-avatar-portraits/${userName}.png`;
   } else {
-    return placeholderAvatarImage;
+    return smiley;
   }
 }
 
@@ -50,4 +67,51 @@ export function formatDate(date: string): string {
   };
   const formattedDate = givenDate.toLocaleDateString('en-GB', options);
   return ' – ' + formattedDate;
+}
+
+/**
+ * reads article image paths from the local storage
+ * @param articleId the id of the article
+ * @returns an object with the preview image path and the article image path
+ */
+export function getArticleImagePathsFromLocalStorage(articleId: string | undefined): ArticleImagePaths {
+  let previewImage = imageNotFound;
+  let articleImage = imageNotFound;
+  if (articleId) {
+    const localStoragePreviewImage = localStorage.getItem(`${articleId}_previewImage`);
+    const localStorageArticleImage = localStorage.getItem(`${articleId}_articleImage`);
+    if (localStoragePreviewImage && localStorageArticleImage) {
+      previewImage = localStoragePreviewImage;
+      articleImage = localStorageArticleImage;
+      return {
+        previewImage: previewImage,
+        articleImage: articleImage,
+      };
+    } else {
+      return getRandomArticleImagePath(articleId);
+    }
+  } else {
+    return {
+      previewImage: imageNotFound,
+      articleImage: imageNotFound,
+    };
+  }
+}
+
+/**
+ * selects randomly an image for the given article and stores it in the local storage
+ * @param articleId the id of the article
+ * @returns an object with the preview image path and the article image path
+ */
+export function getRandomArticleImagePath(articleId: string): ArticleImagePaths {
+  const previewImages = [tent, error, ticketsPreview, partyFloorPreview, smiley, wallPreview, burningCarPreview, uiux];
+  const articleImages = [tent, error, tickets, partyFloor, smiley, wall, burningCar, uiux];
+  const randomImageIndex = Math.floor(Math.random() * previewImages.length);
+  const imagePaths: ArticleImagePaths = {
+    previewImage: previewImages[randomImageIndex],
+    articleImage: articleImages[randomImageIndex],
+  };
+  localStorage.setItem(`${articleId}_previewImage`, imagePaths.previewImage);
+  localStorage.setItem(`${articleId}_articleImage`, imagePaths.articleImage);
+  return imagePaths;
 }

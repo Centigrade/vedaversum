@@ -1,10 +1,15 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { UPDATE_ARTICLE_ACCESS_COUNTER_MUTATION } from 'api/article-mutations';
 import goBackArrow from 'assets/icons/go-back-arrow.svg';
-import placeholderArticleImage from 'assets/PlaceholderArticleImage.png';
 import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { formatDate, getLoggedInUserData, LoggedInUserData } from 'utils/main';
+import {
+  ArticleImagePaths,
+  formatDate,
+  getArticleImagePathsFromLocalStorage,
+  getLoggedInUserData,
+  LoggedInUserData,
+} from 'utils/main';
 import ArticleEditor from 'views/components/ArticleEditor';
 import ConfirmDeleteArticle from 'views/components/ConfirmDeleteArticle';
 import PopUpModal from 'views/components/PopUpModal';
@@ -30,6 +35,9 @@ function ArticleDetailsView() {
 
   // get login data for author validation
   const loginUserData: LoggedInUserData = getLoggedInUserData();
+
+  // get image paths from local storage
+  const articleImagePaths: ArticleImagePaths = getArticleImagePathsFromLocalStorage(currentArticle?.id);
 
   // increase access counter
   // TODO: this should work only on mount!!
@@ -61,8 +69,8 @@ function ArticleDetailsView() {
             {!data && !loading && !error && <p className="text-head">No data available</p>}
             {currentArticle && (
               <div className="py-11">
-                <div className="w-full flex items-center mx-auto">
-                  <img src={placeholderArticleImage} alt="some pic" />
+                <div className="w-full flex">
+                  <img src={articleImagePaths.articleImage} alt="some pic" className="mx-auto h-60" />
                 </div>
                 <div className="flex items-center text-article-info my-auto">
                   <UserName email={currentArticle.userCreated} />
