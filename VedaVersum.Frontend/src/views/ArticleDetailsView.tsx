@@ -44,9 +44,6 @@ function ArticleDetailsView() {
   const test = useMutation<UpdateArticleAccessCounterResponse>(UPDATE_ARTICLE_ACCESS_COUNTER_MUTATION, {
     variables: { articleId: articleId },
   });
-
-  console.log(test);
-
   useEffect(() => {
     console.log('mounted');
   }, []);

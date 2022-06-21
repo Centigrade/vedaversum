@@ -79,6 +79,8 @@ function ArticleEditor(props: EditorProps) {
       } else if (editorSettings.type === 'edit') {
         updateArticle();
       }
+      if (errorInsertArticle || errorUpdateArticle) {
+      }
       props.closePopup();
     }
   }
@@ -96,7 +98,7 @@ function ArticleEditor(props: EditorProps) {
    */
   const [updateArticle, { data: updateArticleData, loading: loadingUpdateArticle, error: errorUpdateArticle }] =
     useMutation(UPDATE_ARTICLE_MUTATION, {
-      variables: { articleTitle: title, articleContent: content },
+      variables: { articleId: articleData?.id, articleTitle: title, articleContent: content },
     });
   //#endregion
 
@@ -135,29 +137,37 @@ function ArticleEditor(props: EditorProps) {
           <MDEditor value={content} onChange={setContent} preview="edit" height={280} />
         </div>
       </div>
-      <div className="m-4 px-2 flex justify-end">
+      <div className="m-4 px-2 flex justify-end align-center">
+        {errorInsertArticle && (
+          <div className="mr-8 font-bold text-red text-article-heading">Error: {errorInsertArticle.message}</div>
+        )}
+        {errorUpdateArticle && (
+          <div className="mr-8 font-bold text-red text-article-heading">Error: {errorUpdateArticle.message}</div>
+        )}
         {/* actions */}
-        {/* save changes */}
-        <Link to={articleData ? `/${articleData.id}` : '/'}>
+        <div>
+          {/* save changes */}
+          <Link to={articleData ? `/${articleData.id}` : '/'}>
+            <button
+              className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-primary py-2 px-3 mr-4 hover:outline-primary-light active:bg-primary-dark disabled:bg-primary-dark disabled:outline-transparent disabled:cursor-auto"
+              onClick={() => {
+                validateInput();
+              }}
+              disabled={!title}
+            >
+              {editorSettings.popupConfirmText}
+            </button>
+          </Link>
+          {/* discard changes */}
           <button
-            className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-primary py-2 px-3 mr-4 hover:outline-primary-light active:bg-primary-dark disabled:bg-primary-dark disabled:outline-transparent disabled:cursor-auto"
+            className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-gray-800 py-2 px-3 hover:outline-gray-400 active:bg-gray-600"
             onClick={() => {
-              validateInput();
+              props.closePopup();
             }}
-            disabled={!title}
           >
-            {editorSettings.popupConfirmText}
+            {editorSettings.popupCancelText}
           </button>
-        </Link>
-        {/* discard changes */}
-        <button
-          className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-gray-800 py-2 px-3 hover:outline-gray-400 active:bg-gray-600"
-          onClick={() => {
-            props.closePopup();
-          }}
-        >
-          {editorSettings.popupCancelText}
-        </button>
+        </div>
       </div>
     </div>
   );
