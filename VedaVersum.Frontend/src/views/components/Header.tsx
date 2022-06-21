@@ -1,3 +1,5 @@
+import { useSubscription } from '@apollo/client';
+import { ARTICLE_CHANGED_SUBSCRIPTION } from 'api/subscriptions';
 import searchIcon from 'assets/icons/search-icon.svg';
 import logoWithName from 'assets/logo-with-name.svg';
 import React, { useState } from 'react';
@@ -18,11 +20,11 @@ function Header() {
 
   //#region subscriptions to get updates from the database  TODO: fix this with Mikhail
   // possible solution: upgrade apollo client (https://github.com/apollographql/apollo-client/issues/7608)
-  /* const {
+  const {
     data: articleUpdatesData,
     loading: loadingArticleUpdates,
     error,
-  } = useSubscription(ARTICLE_CHANGED_SUBSCRIPTION); */
+  } = useSubscription(ARTICLE_CHANGED_SUBSCRIPTION);
 
   /* !!! this creates infinite loop !!! TODO: fix this
   if (articleUpdatesData?.userCreated !== userData.userEmail) {
@@ -80,7 +82,7 @@ function Header() {
                 <img src={logoWithName} alt="VedaVersum Logo" />
               </Link>
             </button>
-            {/* <div className="text-red ml-6">subscription data: {articleUpdatesData?.title || error?.message}</div> */}
+            <div className="text-red ml-6">subscription data: {articleUpdatesData?.title || error?.message}</div>
           </div>
           <div className="w-1/2 flex items-center justify-end">
             {/* search bar */}

@@ -4,16 +4,19 @@ import { gql } from '@apollo/client';
  */
 export const ARTICLE_CHANGED_SUBSCRIPTION = gql`
   subscription OnArticleChanged {
-    ArticleChanged {
-      id
-      title
-      content
-      created
-      userCreated
-      relatedArticleIds
-      userUpdated
-      updatedAt
-      accessCounter
+    articleChanged {
+      action
+      vedaVersumArticle {
+        id
+        title
+        content
+        created
+        userCreated
+        relatedArticleIds
+        userUpdated
+        updatedAt
+        accessCounter
+      }
     }
   }
 `;
