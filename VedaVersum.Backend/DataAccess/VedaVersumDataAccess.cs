@@ -98,7 +98,6 @@ namespace VedaVersum.Backend.DataAccess
         /// <inheritdoc />
         public Task UpdateArticle(VedaVersumArticle article)
         {
-            article.UpdatedAt = DateTime.Now;
             return _database.GetCollection<VedaVersumArticle>(VedaVersumArticlesCollectionName)
                 .ReplaceOneAsync(
                     Builders<VedaVersumArticle>.Filter.Where(c => c.Id == article.Id),

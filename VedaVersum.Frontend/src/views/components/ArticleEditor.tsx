@@ -75,11 +75,9 @@ function ArticleEditor(props: EditorProps) {
     } else {
       setInvalidInput(false);
       if (editorSettings.type === 'create') {
-        // insertArticle();
-        console.log(insertArticleData, loadingInsertArticle, errorInsertArticle);
+        insertArticle();
       } else if (editorSettings.type === 'edit') {
-        // updateArticle();
-        console.log(updateArticleData, loadingUpdateArticle, errorUpdateArticle);
+        updateArticle();
       }
       props.closePopup();
     }

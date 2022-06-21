@@ -10,8 +10,8 @@ export interface ArticleInput {
   user: User;
 }
 export const CREATE_ARTICLE_MUTATION = gql`
-  mutation CreateArticle($articleTitle: String, $articleContent: String) {
-    articleAction(action: Create, title: $articleTitle, content: $articleContent) {
+  mutation CreateArticle($articleTitle: String!, $articleContent: String!) {
+    articleAction(action: CREATE, title: $articleTitle, content: $articleContent) {
       id
       title
       content
@@ -27,8 +27,8 @@ export const CREATE_ARTICLE_MUTATION = gql`
 
 //#region update mutations
 export const UPDATE_ARTICLE_MUTATION = gql`
-  mutation UpdateArticle($articleTitle: String, $articleContent: String, $articleId: String!) {
-    articleAction(action: Update, title: $articleTitle, content: $articleContent, articleId: $articleId) {
+  mutation UpdateArticle($articleTitle: String!, $articleContent: String!, $articleId: String!) {
+    articleAction(action: UPDATE, title: $articleTitle, content: $articleContent, articleId: $articleId) {
       id
       title
       content
@@ -59,25 +59,9 @@ export const UPDATE_ARTICLE_ACCESS_COUNTER_MUTATION = gql`
 `;
 //#endregion
 
-/* 
 export const DELETE_ARTICLE_MUTATION = gql`
-  mutation DeleteArticle(
-    $articleTitle: String,
-    $articleContent: String,
-    $relatedArticles: VedaVersumArticle[],
-    $articleId: String!,
-    $user: User
-  )
-  {
-    articleAction(
-      action: Delete,
-      title: $articleTitle,
-      content: $articleContent,
-      relatedArticles: $relatedArticles,
-      articleId: $articleId,
-      user: $user
-    )
-    {
+  mutation DeleteArticle($articleId: String!, $articleContent: String!, $articleTitle: String!) {
+    articleAction(action: DELETE, articleId: $articleId, title: $articleTitle, content: $articleContent) {
       id
       title
       content
@@ -89,4 +73,4 @@ export const DELETE_ARTICLE_MUTATION = gql`
       accessCounter
     }
   }
-`; */
+`;
