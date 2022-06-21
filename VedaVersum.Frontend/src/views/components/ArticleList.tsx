@@ -43,22 +43,18 @@ function ArticlesList(props: ArticleListProps) {
     { name: 'Trending', type: 'trendingArticles' },
     { name: 'My', type: 'myArticles' },
   ];
-  const [activeTab, setActiveTab] = useState<ActiveTab>();
+  const localStorageActiveTab = localStorage.getItem('activeTab');
+  let currentActiveTab: ActiveTab = 'allArticles';
+  if (localStorageActiveTab && isActiveTab(localStorageActiveTab)) {
+    currentActiveTab = localStorageActiveTab;
+  }
+  const [activeTab, setActiveTab] = useState<ActiveTab>(currentActiveTab);
   //#endregion
 
   // on mount: read sorting/filter from local store
   useEffect(() => {
     console.log('mount articlelist');
-    const localStorageActiveTab = localStorage.getItem('activeTab');
-
-    if (localStorageActiveTab && isActiveTab(localStorageActiveTab)) {
-      console.log('entered if');
-
-      setActiveTab(localStorageActiveTab);
-    } else {
-      console.log('entered else');
-      setActiveTab('allArticles');
-    }
+    changeActiveArticles(activeTab);
   }, []);
 
   // TODO: fix this!
@@ -84,7 +80,7 @@ function ArticlesList(props: ArticleListProps) {
    * sets active tab and active articles according to the given active tab controlled by the user
    * @param selectedTab current active tab
    */
-  const changeActiveArticles = (selectedTab: ActiveTab): void => {
+  function changeActiveArticles(selectedTab: ActiveTab): void {
     setActiveTab(selectedTab);
     localStorage.setItem('activeTab', selectedTab);
     switch (selectedTab) {
@@ -104,7 +100,7 @@ function ArticlesList(props: ArticleListProps) {
         setActiveArticles(allArticles);
         break;
     }
-  };
+  }
 
   /**
    * sorts all articles by a given sorting option and sets the active articles to the sorted articles
