@@ -164,27 +164,25 @@ function ArticleEditor(props: EditorProps) {
       )}
       <div className="m-4 px-2 flex justify-end align-center">
         {/* actions */}
-        <div>
-          {/* save changes */}
-          <button
-            className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-primary py-2 px-3 mr-4 hover:outline-primary-light active:bg-primary-dark disabled:bg-primary-dark disabled:outline-transparent disabled:cursor-auto"
-            onClick={() => {
-              validateInput();
-            }}
-            disabled={!title}
-          >
-            {editorSettings.popupConfirmText}
-          </button>
-          {/* discard changes */}
-          <button
-            className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-gray-800 py-2 px-3 hover:outline-gray-400 active:bg-gray-600"
-            onClick={() => {
-              props.closePopup();
-            }}
-          >
-            {editorSettings.popupCancelText}
-          </button>
-        </div>
+        {/* save changes */}
+        <button
+          className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-primary py-2 px-3 mr-4 hover:outline-primary-light active:bg-primary-dark disabled:bg-primary-dark disabled:outline-transparent disabled:cursor-auto"
+          onClick={() => {
+            validateInput();
+          }}
+          disabled={!title}
+        >
+          {editorSettings.popupConfirmText}
+        </button>
+        {/* discard changes */}
+        <button
+          className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-gray-800 py-2 px-3 hover:outline-gray-400 active:bg-gray-600"
+          onClick={() => {
+            props.closePopup();
+          }}
+        >
+          {editorSettings.popupCancelText}
+        </button>
       </div>
     </div>
   );
