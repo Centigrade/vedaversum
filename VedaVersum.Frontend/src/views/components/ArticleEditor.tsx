@@ -1,9 +1,9 @@
-import { useMutation } from '@apollo/client';
+import { ApolloError, useMutation } from '@apollo/client';
 import MDEditor from '@uiw/react-md-editor';
 import { CREATE_ARTICLE_MUTATION, UPDATE_ARTICLE_MUTATION } from 'api/article-mutations';
 import { VedaVersumArticle } from 'model/veda-versum-article';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import 'views/components/styles/popup.scss';
 
 //#region component types
@@ -38,10 +38,16 @@ function ArticleEditor(props: EditorProps) {
   const [content, setContent] = useState<string | undefined>(articleData ? articleData.content : 'Content'); // undefined because of the md editor
   const [invalidInput, setInvalidInput] = useState<boolean>(false);
 
+  // error to show if create/update database failed
+  const [databaseError, setDatabaseError] = useState<ApolloError | undefined>(undefined);
+
   // event handler for the title input
   const handleTitleInput = (event: any) => {
     setTitle(event.target.value);
   };
+
+  // variable needed for router navigation
+  let navigateTo = useNavigate();
   //#endregion
 
   //#region editor variables
@@ -79,9 +85,6 @@ function ArticleEditor(props: EditorProps) {
       } else if (editorSettings.type === 'edit') {
         updateArticle();
       }
-      if (errorInsertArticle || errorUpdateArticle) {
-      }
-      props.closePopup();
     }
   }
 
@@ -91,6 +94,16 @@ function ArticleEditor(props: EditorProps) {
   const [insertArticle, { data: insertArticleData, loading: loadingInsertArticle, error: errorInsertArticle }] =
     useMutation(CREATE_ARTICLE_MUTATION, {
       variables: { articleTitle: title, articleContent: content },
+      onError: error => {
+        console.log(error.message);
+        setDatabaseError(error);
+      },
+      onCompleted: data => {
+        console.log(data);
+        props.closePopup();
+        localStorage.setItem('activeTab', 'newArticles');
+        navigateTo('/');
+      },
     });
 
   /**
@@ -99,6 +112,15 @@ function ArticleEditor(props: EditorProps) {
   const [updateArticle, { data: updateArticleData, loading: loadingUpdateArticle, error: errorUpdateArticle }] =
     useMutation(UPDATE_ARTICLE_MUTATION, {
       variables: { articleId: articleData?.id, articleTitle: title, articleContent: content },
+      onError: error => {
+        console.log(error.message);
+        setDatabaseError(error);
+      },
+      onCompleted: data => {
+        console.log(data);
+        props.closePopup();
+        navigateTo(`/${data.articleAction.id}`);
+      },
     });
   //#endregion
 
@@ -137,27 +159,22 @@ function ArticleEditor(props: EditorProps) {
           <MDEditor value={content} onChange={setContent} preview="edit" height={280} />
         </div>
       </div>
+      {databaseError && (
+        <div className="ml-6 my-6 font-bold text-red text-article-heading">Error - {databaseError.message}</div>
+      )}
       <div className="m-4 px-2 flex justify-end align-center">
-        {errorInsertArticle && (
-          <div className="mr-8 font-bold text-red text-article-heading">Error: {errorInsertArticle.message}</div>
-        )}
-        {errorUpdateArticle && (
-          <div className="mr-8 font-bold text-red text-article-heading">Error: {errorUpdateArticle.message}</div>
-        )}
         {/* actions */}
         <div>
           {/* save changes */}
-          <Link to={articleData ? `/${articleData.id}` : '/'}>
-            <button
-              className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-primary py-2 px-3 mr-4 hover:outline-primary-light active:bg-primary-dark disabled:bg-primary-dark disabled:outline-transparent disabled:cursor-auto"
-              onClick={() => {
-                validateInput();
-              }}
-              disabled={!title}
-            >
-              {editorSettings.popupConfirmText}
-            </button>
-          </Link>
+          <button
+            className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-primary py-2 px-3 mr-4 hover:outline-primary-light active:bg-primary-dark disabled:bg-primary-dark disabled:outline-transparent disabled:cursor-auto"
+            onClick={() => {
+              validateInput();
+            }}
+            disabled={!title}
+          >
+            {editorSettings.popupConfirmText}
+          </button>
           {/* discard changes */}
           <button
             className="hover:cursor-pointer outline outline-4 outline-transparent text-white text-base text-center rounded-lg font-white bg-gray-800 py-2 px-3 hover:outline-gray-400 active:bg-gray-600"
