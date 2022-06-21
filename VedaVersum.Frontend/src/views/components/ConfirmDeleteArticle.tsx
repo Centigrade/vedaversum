@@ -16,7 +16,7 @@ function ConfirmDeleteArticle(props: DeleteArticleProps) {
   const confirmText = `Are you sure you want to delete the article "${title}"?`;
 
   /**
-   * calls database mutation to update an existing article in the database
+   * calls database mutation to delete an existing article in the database
    */
   const [deleteArticle, { data: deleteArticleData, loading: loadingDeleteArticle, error: errorDeleteArticle }] =
     useMutation(DELETE_ARTICLE_MUTATION, {
