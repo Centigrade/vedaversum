@@ -14,9 +14,12 @@ function Header() {
   const [searchTerm, setSearchTerm] = useState('');
   const [numberOfNotifications, setNumberOfNotifications] = useState(0);
 
+  // needed to filter changes that the user made by her/himself
   const userData = getLoggedInUserData();
 
+  // variable needed for router navigation
   const navigateTo = useNavigate();
+
   //#endregion
 
   //#region subscriptions to get updates from the database  TODO: fix this with Mikhail
@@ -36,17 +39,17 @@ function Header() {
   // Here is a workaround - we are getting the Apollo client and subscribing to new events manually.
   // When events from server arrive, the new value pushes to the state
   const client = useApolloClient(); // Apollo client instance
-  const [articleTitleFromSubscription, setArticleTitleFromSubscription] = React.useState(''); // value for keeping new data from subscription
   React.useEffect(() => {
     // Subscribing to GraphQL subscription:
     client.subscribe({ query: ARTICLE_CHANGED_SUBSCRIPTION }).subscribe((result: any) => {
       // This executes each time when GraphQL pushes subscription notification
-      if (result.data?.articleChanged?.vedaVersumArticle.title) {
-        console.log(result.data?.articleChanged?.vedaVersumArticle.title);
-        setArticleTitleFromSubscription(result.data?.articleChanged?.vedaVersumArticle.title);
-      }
+      console.log(result.data?.articleChanged?.vedaVersumArticle);
+
+      // if (result.data?.articleChanged?.vedaVersumArticle.userUpdated !== userData.userEmail) {
+      setNumberOfNotifications(numberOfNotifications + 1);
+      // }
     });
-  }, [client]);
+  }, [client, userData, numberOfNotifications]);
 
   //#region helper functions
   // TODO:
@@ -97,7 +100,7 @@ function Header() {
             <button onClick={() => resetToLandingPage()}>
               <img src={logoWithName} alt="VedaVersum Logo" />
             </button>
-            <div className="text-red ml-6">subscription data: {articleTitleFromSubscription}</div>
+            {<div className="text-red ml-6">subscription data: {numberOfNotifications}</div>}
           </div>
           <div className="w-1/2 flex items-center justify-end">
             {/* search bar */}
