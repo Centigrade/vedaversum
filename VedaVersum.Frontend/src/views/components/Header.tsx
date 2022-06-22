@@ -1,3 +1,5 @@
+import { useApolloClient } from '@apollo/client';
+import { ARTICLE_CHANGED_SUBSCRIPTION } from 'api/subscriptions';
 import searchIcon from 'assets/icons/search-icon.svg';
 import logoWithName from 'assets/logo-with-name.svg';
 import React, { useState } from 'react';
@@ -29,6 +31,22 @@ function Header() {
   if (articleUpdatesData?.userCreated !== userData.userEmail) {
     setNumberOfNotifications(numberOfNotifications + 1);
   } */
+
+  // TODO: Apollo hook does not work because of the issue below :)
+  // Here is a workaround - we are getting the Apollo client and subscribing to new events manually.
+  // When events from server arrive, the new value pushes to the state
+  const client = useApolloClient(); // Apollo client instance
+  const [articleTitleFromSubscription, setArticleTitleFromSubscription] = React.useState(''); // value for keeping new data from subscription
+  React.useEffect(() => {
+    // Subscribing to GraphQL subscription:
+    client.subscribe({ query: ARTICLE_CHANGED_SUBSCRIPTION }).subscribe((result: any) => {
+      // This executes each time when GraphQL pushes subscription notification
+      if (result.data?.articleChanged?.vedaVersumArticle.title) {
+        console.log(result.data?.articleChanged?.vedaVersumArticle.title);
+        setArticleTitleFromSubscription(result.data?.articleChanged?.vedaVersumArticle.title);
+      }
+    });
+  }, [client]);
 
   //#region helper functions
   // TODO:
@@ -79,7 +97,7 @@ function Header() {
             <button onClick={() => resetToLandingPage()}>
               <img src={logoWithName} alt="VedaVersum Logo" />
             </button>
-            {/* <div className="text-red ml-6">subscription data: {articleUpdatesData?.title || error?.message}</div> */}
+            <div className="text-red ml-6">subscription data: {articleTitleFromSubscription}</div>
           </div>
           <div className="w-1/2 flex items-center justify-end">
             {/* search bar */}
