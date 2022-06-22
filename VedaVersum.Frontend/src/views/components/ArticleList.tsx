@@ -10,7 +10,6 @@ import ArticleListItem from 'views/components/ArticleListItem';
 interface ArticleListProps {
   allArticles: VedaVersumArticle[];
   articlesCreatedByUser: VedaVersumArticle[];
-  clearedLocalStorage: boolean;
 }
 /**
  * type for the tabs for the article filter/sort
@@ -119,6 +118,11 @@ function ArticlesList(props: ArticleListProps) {
   useEffect(() => {
     changeActiveArticles(activeTab);
   }, [changeActiveArticles, activeTab]);
+
+  // on mount: set active articles according to the active tab
+  /* useEffect(() => {
+    console.log('mounted');
+  }, []); */
 
   //#region render component
   return (

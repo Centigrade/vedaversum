@@ -12,7 +12,7 @@ function App() {
   const loginUserData: LoggedInUserData = getLoggedInUserData();
 
   // search term if exists
-  const { render: renderHeader, searchTerm: propsSearchTerm, clearedAll } = Header();
+  const { render: renderHeader, searchTerm: propsSearchTerm } = Header();
 
   //#region state
   const [actualSearchTerm, setActualSearchTerm] = useState(propsSearchTerm ? propsSearchTerm : '');
@@ -77,7 +77,6 @@ function App() {
             <ArticleList
               allArticles={allArticlesData.allArticles}
               articlesCreatedByUser={articlesCreatedByUserData.allArticlesCreatedByUser}
-              clearedLocalStorage={clearedAll}
             />
           </div>
         ) : (

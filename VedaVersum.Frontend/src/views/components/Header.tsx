@@ -1,7 +1,7 @@
 import searchIcon from 'assets/icons/search-icon.svg';
 import logoWithName from 'assets/logo-with-name.svg';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { getLoggedInUserData } from 'utils/main';
 import ArticleEditor from 'views/components/ArticleEditor';
 import PopUpModal from 'views/components/PopUpModal';
@@ -10,10 +10,11 @@ import UserFlyoutMenu from './UserFlyoutMenu';
 function Header() {
   //#region state
   const [searchTerm, setSearchTerm] = useState('');
-  const [clearedAll, setClearedAll] = useState(false);
   const [numberOfNotifications, setNumberOfNotifications] = useState(0);
 
   const userData = getLoggedInUserData();
+
+  const navigateTo = useNavigate();
   //#endregion
 
   //#region subscriptions to get updates from the database  TODO: fix this with Mikhail
@@ -51,11 +52,11 @@ function Header() {
    * clears temporary user data, i.e. the active tab (sorting) and the search term (filtering).
    * notifies the parent component to transfer this information down to other child components
    */
-  function clearTemporaryData(): void {
+  function resetToLandingPage(): void {
     setSearchTerm('');
-    localStorage.removeItem('activeTab');
-    localStorage.removeItem('searchTerm');
-    setClearedAll(!clearedAll);
+    localStorage.setItem('activeTab', 'allArticles');
+    localStorage.setItem('searchTerm', '');
+    navigateTo('/');
   }
 
   // send search term to App.tsx to trigger the api and set local storage
@@ -63,6 +64,7 @@ function Header() {
     // debounce((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
     localStorage.setItem('searchTerm', e.target.value);
+    navigateTo('/');
     // }, 200);
   };
   //#endregion
@@ -70,15 +72,12 @@ function Header() {
   //#region render component
   return {
     searchTerm,
-    clearedAll,
     render: (
       <nav className="bg-gray-800 header flex">
         <div className="w-full px-6 py-5 flex justify-between items-center">
           <div className="w-1/2 flex">
-            <button onClick={() => clearTemporaryData()}>
-              <Link to="/">
-                <img src={logoWithName} alt="VedaVersum Logo" />
-              </Link>
+            <button onClick={() => resetToLandingPage()}>
+              <img src={logoWithName} alt="VedaVersum Logo" />
             </button>
             {/* <div className="text-red ml-6">subscription data: {articleUpdatesData?.title || error?.message}</div> */}
           </div>
