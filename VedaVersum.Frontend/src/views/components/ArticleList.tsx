@@ -1,5 +1,5 @@
 import { VedaVersumArticle } from 'model/veda-versum-article';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ArticleListItem from 'views/components/ArticleListItem';
 
@@ -43,27 +43,15 @@ function ArticlesList(props: ArticleListProps) {
     { name: 'Trending', type: 'trendingArticles' },
     { name: 'My', type: 'myArticles' },
   ];
+  // read active tab from local storage to keep sorting
   const localStorageActiveTab = localStorage.getItem('activeTab');
   let currentActiveTab: ActiveTab = 'allArticles';
   if (localStorageActiveTab && isActiveTab(localStorageActiveTab)) {
     currentActiveTab = localStorageActiveTab;
   }
+  // active tab that defines which articles are shown
   const [activeTab, setActiveTab] = useState<ActiveTab>(currentActiveTab);
   //#endregion
-
-  // on mount: read sorting/filter from local store
-  useEffect(() => {
-    console.log('mount articlelist');
-    changeActiveArticles(activeTab);
-  }, []);
-
-  // TODO: fix this!
-  //if local storage is cleared, reset active tab and activeArticles
-  /*  useEffect(() => {
-    console.log('useEffect triggered');
-    setActiveTab('allArticles');
-    setActiveArticles(props.allArticles);
-  }, [props.clearedLocalStorage, props.allArticles]); */
 
   //#region helper functions
   /**
@@ -77,49 +65,60 @@ function ArticlesList(props: ArticleListProps) {
   }
 
   /**
-   * sets active tab and active articles according to the given active tab controlled by the user
-   * @param selectedTab current active tab
-   */
-  function changeActiveArticles(selectedTab: ActiveTab): void {
-    setActiveTab(selectedTab);
-    localStorage.setItem('activeTab', selectedTab);
-    switch (selectedTab) {
-      case 'allArticles':
-        setActiveArticles(allArticles);
-        break;
-      case 'newArticles':
-        activeArticles ? sortArticlesBy('latest') : setActiveArticles([]);
-        break;
-      case 'trendingArticles':
-        activeArticles ? sortArticlesBy('trending') : setActiveArticles([]);
-        break;
-      case 'myArticles':
-        articlesCreatedByUser ? setActiveArticles(articlesCreatedByUser) : setActiveArticles([]);
-        break;
-      default:
-        setActiveArticles(allArticles);
-        break;
-    }
-  }
-
-  /**
    * sorts all articles by a given sorting option and sets the active articles to the sorted articles
    * @param sortBy a sorting option selected by the user
    */
-  function sortArticlesBy(sortBy: SortingOption) {
-    if (allArticles) {
-      let sortedArticles = [...allArticles];
-      if (sortBy === 'latest') {
-        sortedArticles.sort((a: VedaVersumArticle, b: VedaVersumArticle) => b.created.localeCompare(a.created));
-      } else if (sortBy === 'trending') {
-        sortedArticles.sort((a: VedaVersumArticle, b: VedaVersumArticle) => b.accessCounter - a.accessCounter);
+  const sortArticlesBy = useCallback(
+    (sortBy: SortingOption) => {
+      if (allArticles) {
+        let sortedArticles = [...allArticles];
+        if (sortBy === 'latest') {
+          sortedArticles.sort((a: VedaVersumArticle, b: VedaVersumArticle) => b.created.localeCompare(a.created));
+        } else if (sortBy === 'trending') {
+          sortedArticles.sort((a: VedaVersumArticle, b: VedaVersumArticle) => b.accessCounter - a.accessCounter);
+        }
+        setActiveArticles(sortedArticles);
+      } else {
+        setActiveArticles([]);
       }
-      setActiveArticles(sortedArticles);
-    } else {
-      setActiveArticles([]);
-    }
-  }
+    },
+    [allArticles],
+  );
+
+  /**
+   * sets active tab and active articles according to the active tab controlled by the user
+   */
+  // callback makes that the active articles change when the active tab has changed
+  const changeActiveArticles = useCallback(
+    (selectedTab: ActiveTab) => {
+      setActiveTab(selectedTab);
+      localStorage.setItem('activeTab', selectedTab);
+      switch (selectedTab) {
+        case 'allArticles':
+          setActiveArticles(allArticles);
+          break;
+        case 'newArticles':
+          sortArticlesBy('latest');
+          break;
+        case 'trendingArticles':
+          sortArticlesBy('trending');
+          break;
+        case 'myArticles':
+          articlesCreatedByUser ? setActiveArticles(articlesCreatedByUser) : setActiveArticles([]);
+          break;
+        default:
+          setActiveArticles(allArticles);
+          break;
+      }
+    },
+    [allArticles, articlesCreatedByUser, sortArticlesBy],
+  );
   //#endregion
+
+  // on mount: set active articles according to the active tab
+  useEffect(() => {
+    changeActiveArticles(activeTab);
+  }, [changeActiveArticles, activeTab]);
 
   //#region render component
   return (
