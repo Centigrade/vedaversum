@@ -6,27 +6,11 @@ import { getLoggedInUserData, LoggedInUserData } from 'utils/main';
 import ArticleList from 'views/components/ArticleList';
 import UserList from 'views/components/UserList';
 import Header from './components/Header';
+import RenderedArticles from './components/RenderedArticles';
 
 function App() {
   // login data from user need for "my articles" filter
   const loginUserData: LoggedInUserData = getLoggedInUserData();
-
-  // search term if exists
-  const { render: renderHeader, searchTerm: propsSearchTerm } = Header();
-
-  //#region state
-  const [actualSearchTerm, setActualSearchTerm] = useState(propsSearchTerm ? propsSearchTerm : '');
-  //#endregion
-
-  // on mount: read search term from local store
-  useEffect(() => {
-    const localStorageSearchTerm = localStorage.getItem('searchTerm');
-    if (localStorageSearchTerm) {
-      setActualSearchTerm(localStorageSearchTerm);
-    } else {
-      setActualSearchTerm('');
-    }
-  }, []);
 
   //#region get data from the database
   // load all articles
@@ -59,6 +43,21 @@ function App() {
   }); */
   //#endregion
 
+  //#region state and child components
+  // header and search term if exists
+  const { render: renderHeader, searchTerm: propsSearchTerm, notificationsClicked } = Header();
+
+  const [actualSearchTerm, setActualSearchTerm] = useState(propsSearchTerm ? propsSearchTerm : '');
+
+  // on mount: read search term from local store
+  useEffect(() => {
+    const localStorageSearchTerm = localStorage.getItem('searchTerm');
+    if (localStorageSearchTerm) {
+      setActualSearchTerm(localStorageSearchTerm);
+    } else {
+      setActualSearchTerm('');
+    }
+  }, []);
   //#endregion
 
   useEffect(() => {
@@ -73,11 +72,16 @@ function App() {
         {allArticlesData && articlesCreatedByUserData ? (
           // all data properly loaded
           <div className="w-3/4">
-            <h1 className="my-3 text-head font-semibold">Start reading</h1>
-            <ArticleList
-              allArticles={allArticlesData.allArticles}
-              articlesCreatedByUser={articlesCreatedByUserData.allArticlesCreatedByUser}
-            />
+            {notificationsClicked && <RenderedArticles articles={allArticlesData.allArticles}></RenderedArticles>}
+            {!notificationsClicked && (
+              <>
+                <h1 className="my-3 text-head font-semibold">Start reading</h1>
+                <ArticleList
+                  allArticles={allArticlesData.allArticles}
+                  articlesCreatedByUser={articlesCreatedByUserData.allArticlesCreatedByUser}
+                />
+              </>
+            )}
           </div>
         ) : (
           <div className="w-3/4">

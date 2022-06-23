@@ -2,7 +2,7 @@ import { useApolloClient } from '@apollo/client';
 import { ARTICLE_CHANGED_SUBSCRIPTION } from 'api/subscriptions';
 import searchIcon from 'assets/icons/search-icon.svg';
 import logoWithName from 'assets/logo-with-name.svg';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getLoggedInUserData } from 'utils/main';
 import ArticleEditor from 'views/components/ArticleEditor';
@@ -12,7 +12,7 @@ import UserFlyoutMenu from './UserFlyoutMenu';
 function Header() {
   //#region state
   const [searchTerm, setSearchTerm] = useState('');
-  const [numberOfNotifications, setNumberOfNotifications] = useState(0);
+  const [numberOfNotifications, setNumberOfNotifications] = useState(1);
 
   // needed to filter changes that the user made by her/himself
   const userData = getLoggedInUserData();
@@ -20,23 +20,26 @@ function Header() {
   // variable needed for router navigation
   const navigateTo = useNavigate();
 
+  // user fly out menu and notifications clicked
+  const { render: renderFlyOutMenu, notificationsClicked } = UserFlyoutMenu({
+    numberOfNotifications: numberOfNotifications,
+  });
   //#endregion
 
-  //#region subscriptions to get updates from the database  TODO: fix this with Mikhail
-  // possible solution: upgrade apollo client (https://github.com/apollographql/apollo-client/issues/7608)
-  /*  const {
-    data: articleUpdatesData,
-    loading: loadingArticleUpdates,
-    error,
-  } = useSubscription(ARTICLE_CHANGED_SUBSCRIPTION); */
+  /**
+   * reset notifications when the users read them
+   */
 
-  /* !!! this creates infinite loop !!! TODO: fix this
-  if (articleUpdatesData?.userCreated !== userData.userEmail) {
-    setNumberOfNotifications(numberOfNotifications + 1);
-  } */
+  useEffect(() => {
+    console.log(notificationsClicked);
 
-  // TODO: Apollo hook does not work because of the issue below :)
-  // Here is a workaround - we are getting the Apollo client and subscribing to new events manually.
+    if (notificationsClicked) {
+      setNumberOfNotifications(0);
+    }
+  }, [notificationsClicked]);
+
+  // React prevents apollo client from using subscriptions - therefore here is a workaround:
+  // we are getting the Apollo client and subscribing to new events manually.
   // When events from server arrive, the new value pushes to the state
   const client = useApolloClient(); // Apollo client instance
   React.useEffect(() => {
@@ -93,6 +96,7 @@ function Header() {
   //#region render component
   return {
     searchTerm,
+    notificationsClicked,
     render: (
       <nav className="bg-gray-800 header flex">
         <div className="w-full px-6 py-5 flex justify-between items-center">
@@ -122,7 +126,7 @@ function Header() {
             {/* create new article button */}
             <PopUpModal show={ArticleEditor} openModalText="Start writing" dataContext="" />
             {/* avatar image */}
-            <UserFlyoutMenu numberOfNotifications={numberOfNotifications}></UserFlyoutMenu>
+            {renderFlyOutMenu}
           </div>
         </div>
       </nav>

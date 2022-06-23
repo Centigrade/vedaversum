@@ -1,7 +1,7 @@
 import { VedaVersumArticle } from 'model/veda-versum-article';
 import { useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import ArticleListItem from 'views/components/ArticleListItem';
+import { sortArticlesBy } from 'utils/main';
+import RenderedArticles from './RenderedArticles';
 
 //#region type definitions
 /**
@@ -22,11 +22,6 @@ interface Tab {
  * type for active tab -> these are the only valid options:
  */
 type ActiveTab = 'allArticles' | 'newArticles' | 'trendingArticles' | 'myArticles';
-
-/**
- * type for sorting the articles -> these are the only valid options:
- */
-type SortingOption = 'latest' | 'trending';
 //#endregion
 
 function ArticlesList(props: ArticleListProps) {
@@ -64,27 +59,6 @@ function ArticlesList(props: ArticleListProps) {
   }
 
   /**
-   * sorts all articles by a given sorting option and sets the active articles to the sorted articles
-   * @param sortBy a sorting option selected by the user
-   */
-  const sortArticlesBy = useCallback(
-    (sortBy: SortingOption) => {
-      if (allArticles) {
-        let sortedArticles = [...allArticles];
-        if (sortBy === 'latest') {
-          sortedArticles.sort((a: VedaVersumArticle, b: VedaVersumArticle) => b.created.localeCompare(a.created));
-        } else if (sortBy === 'trending') {
-          sortedArticles.sort((a: VedaVersumArticle, b: VedaVersumArticle) => b.accessCounter - a.accessCounter);
-        }
-        setActiveArticles(sortedArticles);
-      } else {
-        setActiveArticles([]);
-      }
-    },
-    [allArticles],
-  );
-
-  /**
    * sets active tab and active articles according to the active tab controlled by the user
    */
   // callback makes that the active articles change when the active tab has changed
@@ -97,10 +71,10 @@ function ArticlesList(props: ArticleListProps) {
           setActiveArticles(allArticles);
           break;
         case 'newArticles':
-          sortArticlesBy('latest');
+          setActiveArticles(sortArticlesBy('latest', allArticles));
           break;
         case 'trendingArticles':
-          sortArticlesBy('trending');
+          setActiveArticles(sortArticlesBy('trending', allArticles));
           break;
         case 'myArticles':
           articlesCreatedByUser ? setActiveArticles(articlesCreatedByUser) : setActiveArticles([]);
@@ -110,7 +84,7 @@ function ArticlesList(props: ArticleListProps) {
           break;
       }
     },
-    [allArticles, articlesCreatedByUser, sortArticlesBy],
+    [allArticles, articlesCreatedByUser],
   );
   //#endregion
 
@@ -148,22 +122,7 @@ function ArticlesList(props: ArticleListProps) {
       <div>
         {/* show articles */}
         <div>
-          {/* data available */}
-          {activeArticles &&
-            activeArticles.map((article, index) => (
-              // TODO: pretty url
-              // const articleURL = article.title.replace(" ", "-"); /${replaceSpaces(article.title)}
-              <Link to={`/${article.id}`} key={index}>
-                {/* <Link
-                to={{
-                  pathname: `/${article.title}`,
-                  state: { id: article.id },
-                }}
-                key={index}
-              > */}
-                <ArticleListItem articleData={article} />
-              </Link>
-            ))}
+          <RenderedArticles articles={activeArticles}></RenderedArticles>
         </div>
       </div>
     </div>
