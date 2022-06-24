@@ -16,6 +16,7 @@ function UsersList() {
   //#region render component
   return (
     <div>
+      <h2 className="mt-8 text-subhead font-semibold">People online</h2>
       <div>
         {data.activeUsers.map(user => (
           <div className="mt-2" key={user.id}>

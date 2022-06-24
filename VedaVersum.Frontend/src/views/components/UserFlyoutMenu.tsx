@@ -1,20 +1,26 @@
 import logOutIcon from 'assets/icons/log-out-icon.svg';
 import notificationIcon from 'assets/icons/notification-icon.svg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getAvatarUrl, getLoggedInUserData, LoggedInUserData } from 'utils/main';
 import 'views/components/styles/flyoutMenu.scss';
 
 interface UserFlyoutMenuProps {
   numberOfNotifications: number;
+  resetNotificationsClickedState: boolean;
 }
 
 function UserFlyoutMenu(props: UserFlyoutMenuProps) {
-  //#region get user data from user logged in
+  //#region variables
+  // get user data from user logged in
   const loginUserData: LoggedInUserData = getLoggedInUserData();
   // prepare avatar image path
   const avatarUrl = getAvatarUrl(loginUserData.userName);
 
-  // store
+  // variable needed for router navigation
+  let navigateTo = useNavigate();
+
+  // state
   const [menuOpen, setMenuOpen] = useState(false);
   const [notificationsClicked, setNotificationsClicked] = useState(false);
   //#endregion
@@ -22,7 +28,14 @@ function UserFlyoutMenu(props: UserFlyoutMenuProps) {
   function handleNotificationsClick(): void {
     setNotificationsClicked(true);
     setMenuOpen(false);
+    navigateTo('/');
   }
+
+  useEffect(() => {
+    if (props.resetNotificationsClickedState) {
+      setNotificationsClicked(false);
+    }
+  }, [props.resetNotificationsClickedState]);
 
   //#region render component
   return {

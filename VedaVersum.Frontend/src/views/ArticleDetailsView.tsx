@@ -1,7 +1,5 @@
-import { useMutation, useQuery } from '@apollo/client';
-import { UPDATE_ARTICLE_ACCESS_COUNTER_MUTATION } from 'api/article-mutations';
+import { useQuery } from '@apollo/client';
 import goBackArrow from 'assets/icons/go-back-arrow.svg';
-import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
   ArticleImagePaths,
@@ -14,7 +12,7 @@ import ArticleEditor from 'views/components/ArticleEditor';
 import ConfirmDeleteArticle from 'views/components/ConfirmDeleteArticle';
 import PopUpModal from 'views/components/PopUpModal';
 import { ARTICLE_BY_ID_QUERY } from '../api/article-queries';
-import { GetArticleResponse, UpdateArticleAccessCounterResponse } from '../model/response-types';
+import { GetArticleResponse } from '../model/response-types';
 import Header from './components/Header';
 import UserList from './components/UserList';
 import UserName from './components/UserName';
@@ -41,12 +39,12 @@ function ArticleDetailsView() {
 
   // increase access counter
   // TODO: this should work only on mount!!
-  const test = useMutation<UpdateArticleAccessCounterResponse>(UPDATE_ARTICLE_ACCESS_COUNTER_MUTATION, {
+  /* const test = useMutation<UpdateArticleAccessCounterResponse>(UPDATE_ARTICLE_ACCESS_COUNTER_MUTATION, {
     variables: { articleId: articleId },
   });
   useEffect(() => {
     console.log('mounted');
-  }, []);
+  }, []); */
   //#endregion
 
   //#region render view
@@ -100,7 +98,6 @@ function ArticleDetailsView() {
             )}
           </div>
           <div className="w-1/4 pl-24">
-            <h2 className="mt-8 text-subhead font-semibold">People online</h2>
             <UserList />
           </div>
         </div>

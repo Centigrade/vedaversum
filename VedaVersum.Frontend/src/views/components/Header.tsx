@@ -9,10 +9,15 @@ import ArticleEditor from 'views/components/ArticleEditor';
 import PopUpModal from 'views/components/PopUpModal';
 import UserFlyoutMenu from './UserFlyoutMenu';
 
-function Header() {
+interface HeaderProps {
+  resetNotificationsClickedState: boolean;
+}
+
+function Header(props?: HeaderProps) {
   //#region state
   const [searchTerm, setSearchTerm] = useState('');
   const [numberOfNotifications, setNumberOfNotifications] = useState(1);
+  const [resetNotificationsClickedState, setResetNotificationsClicked] = useState(false);
 
   // needed to filter changes that the user made by her/himself
   const userData = getLoggedInUserData();
@@ -23,20 +28,23 @@ function Header() {
   // user fly out menu and notifications clicked
   const { render: renderFlyOutMenu, notificationsClicked } = UserFlyoutMenu({
     numberOfNotifications: numberOfNotifications,
+    resetNotificationsClickedState: resetNotificationsClickedState,
   });
   //#endregion
 
-  /**
-   * reset notifications when the users read them
-   */
-
+  //reset notifications when the user clicked them
   useEffect(() => {
-    console.log(notificationsClicked);
-
     if (notificationsClicked) {
       setNumberOfNotifications(0);
     }
   }, [notificationsClicked]);
+
+  // change article view when user leaves the notification view
+  useEffect(() => {
+    if (props?.resetNotificationsClickedState) {
+      setResetNotificationsClicked(true);
+    }
+  }, [props?.resetNotificationsClickedState]);
 
   // React prevents apollo client from using subscriptions - therefore here is a workaround:
   // we are getting the Apollo client and subscribing to new events manually.
@@ -104,7 +112,10 @@ function Header() {
             <button onClick={() => resetToLandingPage()}>
               <img src={logoWithName} alt="VedaVersum Logo" />
             </button>
-            {<div className="text-red ml-6">subscription data: {numberOfNotifications}</div>}
+            <button className="bg-red mx-6 " onClick={() => setNumberOfNotifications(numberOfNotifications + 1)}>
+              notif++
+            </button>
+            <div className="text-red ml-6">subscription data: {numberOfNotifications}</div>
           </div>
           <div className="w-1/2 flex items-center justify-end">
             {/* search bar */}

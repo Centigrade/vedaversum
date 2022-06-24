@@ -1,12 +1,13 @@
 import { useQuery } from '@apollo/client';
 import { ALL_ARTICLES_QUERY, CREATED_ARTICLES_QUERY } from 'api/article-queries';
+import goBackArrow from 'assets/icons/go-back-arrow.svg';
 import { GetAllArticlesResponse, GetUserCreatedArticlesResponse } from 'model/response-types';
 import { useEffect, useState } from 'react';
 import { getLoggedInUserData, LoggedInUserData } from 'utils/main';
 import ArticleList from 'views/components/ArticleList';
 import UserList from 'views/components/UserList';
 import Header from './components/Header';
-import RenderedArticles from './components/RenderedArticles';
+import LastUpdatedArticles from './components/LastUpdatedArticles';
 
 function App() {
   // login data from user need for "my articles" filter
@@ -44,8 +45,14 @@ function App() {
   //#endregion
 
   //#region state and child components
+  const [notificationsRead, setNotificationsRead] = useState(false);
+
   // header and search term if exists
-  const { render: renderHeader, searchTerm: propsSearchTerm, notificationsClicked } = Header();
+  const {
+    render: renderHeader,
+    searchTerm: propsSearchTerm,
+    notificationsClicked,
+  } = Header({ resetNotificationsClickedState: notificationsRead });
 
   const [actualSearchTerm, setActualSearchTerm] = useState(propsSearchTerm ? propsSearchTerm : '');
 
@@ -68,11 +75,17 @@ function App() {
     <>
       {renderHeader}
       <div className="w-full flex items-start mt-8">
-        <div className="w-1/6"></div>
+        <div className="p-8 w-1/6">
+          {notificationsClicked && (
+            <button onClick={() => setNotificationsRead(true)}>
+              <img src={goBackArrow} alt="arrow pointing to the left" />
+            </button>
+          )}
+        </div>{' '}
         {allArticlesData && articlesCreatedByUserData ? (
           // all data properly loaded
           <div className="w-3/4">
-            {notificationsClicked && <RenderedArticles articles={allArticlesData.allArticles}></RenderedArticles>}
+            {notificationsClicked && <LastUpdatedArticles articles={allArticlesData.allArticles}></LastUpdatedArticles>}
             {!notificationsClicked && (
               <>
                 <h1 className="my-3 text-head font-semibold">Start reading</h1>
@@ -99,7 +112,6 @@ function App() {
           </div>
         )}
         <div className="w-1/4 pl-12">
-          <h2 className="mt-8 text-subhead font-semibold">People online</h2>
           <UserList />
           {/* <p>{!loadingArticleUpdates && articleUpdatesData}</p> */}
         </div>

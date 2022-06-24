@@ -1,4 +1,5 @@
 import { VedaVersumArticle } from 'model/veda-versum-article';
+import { useEffect } from 'react';
 import RenderedArticles from './RenderedArticles';
 //#region type definitions
 /**
@@ -10,6 +11,10 @@ interface LastUpdatedArticlesProps {
 //#endregion
 
 function LastUpdatedArticles(props: LastUpdatedArticlesProps) {
+  useEffect(() => {
+    console.log('mounted last updated');
+  }, []);
+
   return (
     <>
       <h1 className="mt-3 mb-6 text-head font-semibold">Last updated</h1>
