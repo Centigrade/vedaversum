@@ -5,6 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import LandingPage from './views/App';
 
 import { ApolloProvider } from '@apollo/client';
+import Header from 'Header';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { RedirectLandingPage } from './authentication/RedirectLandingPage';
 import { RequireAuth } from './authentication/RequreAuth';
@@ -16,6 +17,7 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 const Routing = () => {
   return (
     <Router>
+      <Header />
       <React.StrictMode>
         <Routes>
           <Route

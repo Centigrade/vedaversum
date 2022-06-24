@@ -7,13 +7,13 @@ import { useNavigate } from 'react-router-dom';
 import { getLoggedInUserData } from 'utils/main';
 import ArticleEditor from 'views/components/ArticleEditor';
 import PopUpModal from 'views/components/PopUpModal';
-import UserFlyoutMenu from './UserFlyoutMenu';
+import UserFlyoutMenu from './views/components/UserFlyoutMenu';
 
 interface HeaderProps {
   resetNotificationsClickedState: boolean;
 }
 
-function Header(props?: HeaderProps) {
+function Header() {
   //#region state
   const [searchTerm, setSearchTerm] = useState('');
   const [numberOfNotifications, setNumberOfNotifications] = useState(1);
@@ -40,11 +40,11 @@ function Header(props?: HeaderProps) {
   }, [notificationsClicked]);
 
   // change article view when user leaves the notification view
-  useEffect(() => {
+  /* useEffect(() => {
     if (props?.resetNotificationsClickedState) {
       setResetNotificationsClicked(true);
     }
-  }, [props?.resetNotificationsClickedState]);
+  }, [props?.resetNotificationsClickedState]); */
 
   // React prevents apollo client from using subscriptions - therefore here is a workaround:
   // we are getting the Apollo client and subscribing to new events manually.
@@ -102,47 +102,48 @@ function Header(props?: HeaderProps) {
   //#endregion
 
   //#region render component
-  return {
-    searchTerm,
-    notificationsClicked,
-    render: (
-      <nav className="bg-gray-800 header flex">
-        <div className="w-full px-6 py-5 flex justify-between items-center">
-          <div className="w-1/2 flex">
-            <button onClick={() => resetToLandingPage()}>
-              <img src={logoWithName} alt="VedaVersum Logo" />
-            </button>
-            <button className="bg-red mx-6 " onClick={() => setNumberOfNotifications(numberOfNotifications + 1)}>
-              notif++
-            </button>
-            <div className="text-red ml-6">subscription data: {numberOfNotifications}</div>
-          </div>
-          <div className="w-1/2 flex items-center justify-end">
-            {/* search bar */}
-            <label className="relative block mr-4">
-              <img
-                src={searchIcon}
-                alt="magnifying glass"
-                className="pointer-events-none w-6 h-6 absolute top-1/2 transform -translate-y-1/2 right-1 mr-2"
-              />
-              <input
-                name="searchInput"
-                value={searchTerm}
-                type="text"
-                placeholder="Search"
-                className="w-full rounded py-2 px-2 mr-28 outline-4 focus-visible:outline-primary"
-                onChange={handleInput}
-              />
-            </label>
-            {/* create new article button */}
-            <PopUpModal show={ArticleEditor} openModalText="Start writing" dataContext="" />
-            {/* avatar image */}
-            {renderFlyOutMenu}
-          </div>
+  //return{
+  // searchTerm,
+  // notificationsClicked,
+  //render:
+  return (
+    <nav className="bg-gray-800 header flex">
+      <div className="w-full px-6 py-5 flex justify-between items-center">
+        <div className="w-1/2 flex">
+          <button onClick={() => resetToLandingPage()}>
+            <img src={logoWithName} alt="VedaVersum Logo" />
+          </button>
+          <button className="bg-red mx-6 " onClick={() => setNumberOfNotifications(numberOfNotifications + 1)}>
+            notif++
+          </button>
+          <div className="text-red ml-6">subscription data: {numberOfNotifications}</div>
         </div>
-      </nav>
-    ),
-  };
+        <div className="w-1/2 flex items-center justify-end">
+          {/* search bar */}
+          <label className="relative block mr-4">
+            <img
+              src={searchIcon}
+              alt="magnifying glass"
+              className="pointer-events-none w-6 h-6 absolute top-1/2 transform -translate-y-1/2 right-1 mr-2"
+            />
+            <input
+              name="searchInput"
+              value={searchTerm}
+              type="text"
+              placeholder="Search"
+              className="w-full rounded py-2 px-2 mr-28 outline-4 focus-visible:outline-primary"
+              onChange={handleInput}
+            />
+          </label>
+          {/* create new article button */}
+          <PopUpModal show={ArticleEditor} openModalText="Start writing" dataContext="" />
+          {/* avatar image */}
+          {renderFlyOutMenu}
+        </div>
+      </div>
+    </nav>
+  );
+  // };
 }
 //#endregion
 export default Header;

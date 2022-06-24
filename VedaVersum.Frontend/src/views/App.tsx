@@ -1,13 +1,10 @@
 import { useQuery } from '@apollo/client';
 import { ALL_ARTICLES_QUERY, CREATED_ARTICLES_QUERY } from 'api/article-queries';
-import goBackArrow from 'assets/icons/go-back-arrow.svg';
 import { GetAllArticlesResponse, GetUserCreatedArticlesResponse } from 'model/response-types';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { getLoggedInUserData, LoggedInUserData } from 'utils/main';
 import ArticleList from 'views/components/ArticleList';
 import UserList from 'views/components/UserList';
-import Header from './components/Header';
-import LastUpdatedArticles from './components/LastUpdatedArticles';
 
 function App() {
   // login data from user need for "my articles" filter
@@ -48,53 +45,53 @@ function App() {
   const [notificationsRead, setNotificationsRead] = useState(false);
 
   // header and search term if exists
-  const {
+  /* const {
     render: renderHeader,
     searchTerm: propsSearchTerm,
     notificationsClicked,
-  } = Header({ resetNotificationsClickedState: notificationsRead });
+  } = Header({ resetNotificationsClickedState: notificationsRead }); 
 
-  const [actualSearchTerm, setActualSearchTerm] = useState(propsSearchTerm ? propsSearchTerm : '');
+  const [actualSearchTerm, setActualSearchTerm] = useState(propsSearchTerm ? propsSearchTerm : '');*/
 
   // on mount: read search term from local store
-  useEffect(() => {
+  /*  useEffect(() => {
     const localStorageSearchTerm = localStorage.getItem('searchTerm');
     if (localStorageSearchTerm) {
       setActualSearchTerm(localStorageSearchTerm);
     } else {
       setActualSearchTerm('');
     }
-  }, []);
+  }, []); */
   //#endregion
 
-  useEffect(() => {
+  /*  useEffect(() => {
     setActualSearchTerm(propsSearchTerm);
-  }, [propsSearchTerm]);
+  }, [propsSearchTerm]); */
 
   return (
     <>
-      {renderHeader}
+      {/* {renderHeader} */}
       <div className="w-full flex items-start mt-8">
         <div className="p-8 w-1/6">
-          {notificationsClicked && (
+          {/* {notificationsClicked && (
             <button onClick={() => setNotificationsRead(true)}>
               <img src={goBackArrow} alt="arrow pointing to the left" />
             </button>
-          )}
+          )} */}
         </div>{' '}
         {allArticlesData && articlesCreatedByUserData ? (
           // all data properly loaded
           <div className="w-3/4">
-            {notificationsClicked && <LastUpdatedArticles articles={allArticlesData.allArticles}></LastUpdatedArticles>}
-            {!notificationsClicked && (
-              <>
-                <h1 className="my-3 text-head font-semibold">Start reading</h1>
-                <ArticleList
-                  allArticles={allArticlesData.allArticles}
-                  articlesCreatedByUser={articlesCreatedByUserData.allArticlesCreatedByUser}
-                />
-              </>
-            )}
+            {/* {notificationsClicked && <LastUpdatedArticles articles={allArticlesData.allArticles}></LastUpdatedArticles>} */}
+            {/* {!notificationsClicked && ( */}
+            <>
+              <h1 className="my-3 text-head font-semibold">Start reading</h1>
+              <ArticleList
+                allArticles={allArticlesData.allArticles}
+                articlesCreatedByUser={articlesCreatedByUserData.allArticlesCreatedByUser}
+              />
+            </>
+            {/* )} */}
           </div>
         ) : (
           <div className="w-3/4">

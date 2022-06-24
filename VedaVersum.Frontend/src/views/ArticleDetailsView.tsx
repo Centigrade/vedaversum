@@ -13,13 +13,10 @@ import ConfirmDeleteArticle from 'views/components/ConfirmDeleteArticle';
 import PopUpModal from 'views/components/PopUpModal';
 import { ARTICLE_BY_ID_QUERY } from '../api/article-queries';
 import { GetArticleResponse } from '../model/response-types';
-import Header from './components/Header';
 import UserList from './components/UserList';
 import UserName from './components/UserName';
 function ArticleDetailsView() {
   //#region get article data
-  // header
-  const { render: renderHeader } = Header();
 
   // read article id from the url parameters
   const { id: articleId } = useParams();
@@ -50,7 +47,6 @@ function ArticleDetailsView() {
   //#region render view
   return (
     <>
-      {renderHeader}
       <div className="flex items-start w-full">
         <div className="p-8 w-1/6">
           <Link to={'/'}>
