@@ -3,12 +3,14 @@ import { ARTICLE_CHANGED_SUBSCRIPTION } from 'api/subscriptions';
 import searchIcon from 'assets/icons/search-icon.svg';
 import logoWithName from 'assets/logo-with-name.svg';
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { increaseCounterByValue } from 'utils/counterReducer';
 import { getLoggedInUserData } from 'utils/main';
+import { store } from 'utils/store';
 import ArticleEditor from 'views/components/ArticleEditor';
 import PopUpModal from 'views/components/PopUpModal';
 import UserFlyoutMenu from './views/components/UserFlyoutMenu';
-
 interface HeaderProps {
   resetNotificationsClickedState: boolean;
 }
@@ -18,6 +20,10 @@ function Header() {
   const [searchTerm, setSearchTerm] = useState('');
   const [numberOfNotifications, setNumberOfNotifications] = useState(1);
   const [resetNotificationsClickedState, setResetNotificationsClicked] = useState(false);
+
+  console.log('Initial state: ', store.getState());
+  const counter = useSelector((state: any) => state.counter);
+  const dispatch = useDispatch();
 
   // needed to filter changes that the user made by her/himself
   const userData = getLoggedInUserData();
@@ -46,6 +52,7 @@ function Header() {
     }
   }, [props?.resetNotificationsClickedState]); */
 
+  //#region subscription to article changes
   // React prevents apollo client from using subscriptions - therefore here is a workaround:
   // we are getting the Apollo client and subscribing to new events manually.
   // When events from server arrive, the new value pushes to the state
@@ -61,6 +68,7 @@ function Header() {
       // }
     });
   }, [client, userData, numberOfNotifications]);
+  //#endregion
 
   //#region helper functions
   // TODO:
@@ -116,7 +124,11 @@ function Header() {
           <button className="bg-red mx-6 " onClick={() => setNumberOfNotifications(numberOfNotifications + 1)}>
             notif++
           </button>
+          <button className="bg-red mx-6 " onClick={() => dispatch(increaseCounterByValue(2))}>
+            counter++
+          </button>
           <div className="text-red ml-6">subscription data: {numberOfNotifications}</div>
+          <div className="text-red ml-6">test counter: {counter.value}</div>
         </div>
         <div className="w-1/2 flex items-center justify-end">
           {/* search bar */}

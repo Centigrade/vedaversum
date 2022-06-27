@@ -1,15 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import reportWebVitals from './reportWebVitals';
-import LandingPage from './views/App';
-
 import { ApolloProvider } from '@apollo/client';
 import Header from 'Header';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { store } from 'utils/store';
 import { RedirectLandingPage } from './authentication/RedirectLandingPage';
 import { RequireAuth } from './authentication/RequreAuth';
+import './index.css';
+import reportWebVitals from './reportWebVitals';
 import { apolloClient } from './utils/ApolloSetup';
+import App from './views/App';
 import ArticleDetailsView from './views/ArticleDetailsView';
 import PageNotFound from './views/PageNotFound';
 
@@ -24,7 +25,7 @@ const Routing = () => {
             path="*"
             element={
               <RequireAuth>
-                <LandingPage />
+                <App />
               </RequireAuth>
             }
           />
@@ -46,7 +47,9 @@ const Routing = () => {
 
 root.render(
   <ApolloProvider client={apolloClient}>
-    <Routing />
+    <Provider store={store}>
+      <Routing />
+    </Provider>
   </ApolloProvider>,
 );
 

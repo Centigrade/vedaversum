@@ -61,7 +61,7 @@ function ArticlesList(props: ArticleListProps) {
   /**
    * sets active tab and active articles according to the active tab controlled by the user
    */
-  // callback makes that the active articles change when the active tab has changed
+  // callback makes that the active articles change automatically when the active tab has changed
   const changeActiveArticles = useCallback(
     (selectedTab: ActiveTab) => {
       setActiveTab(selectedTab);
