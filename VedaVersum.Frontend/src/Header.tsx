@@ -39,13 +39,13 @@ function Header() {
     // Subscribing to GraphQL subscription:
     client.subscribe({ query: ARTICLE_CHANGED_SUBSCRIPTION }).subscribe((result: any) => {
       // This executes each time when GraphQL pushes subscription notification
-      console.log(result.data?.articleChanged?.vedaVersumArticle);
+      console.log(result.data?.articleChanged?.vedaVersumArticle.title);
 
-      // if (result.data?.articleChanged?.vedaVersumArticle.userUpdated !== userData.userEmail) {
-      dispatch(increaseNotificationsCounter);
-      // }
+      if (result.data?.articleChanged?.vedaVersumArticle.userUpdated !== userData.userEmail) {
+        dispatch(increaseNotificationsCounter());
+      }
     });
-  }, [client, userData, notificationsCounter, dispatch]);
+  }, [client, userData, dispatch]);
   //#endregion
 
   //#region helper functions

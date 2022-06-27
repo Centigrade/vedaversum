@@ -46,7 +46,7 @@ export function getLoggedInUserData(): LoggedInUserData {
   const loginData = readAuthContextFromLocalStorage();
   return {
     userName: loginData?.user?.name || '',
-    userEmail: loginData?.user?.email || '',
+    userEmail: loginData?.user?.email || '', // FOR TESTING: 'xyz@centigrade.de'
     visualUserName: loginData?.user?.name.split('.')[0] || '',
   };
 }
