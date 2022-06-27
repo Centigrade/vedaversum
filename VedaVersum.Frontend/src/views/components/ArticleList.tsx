@@ -1,5 +1,7 @@
 import { VedaVersumArticle } from 'model/veda-versum-article';
 import { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'store/store';
 import { sortArticlesBy } from 'utils/main';
 import RenderedArticles from './RenderedArticles';
 
@@ -21,7 +23,7 @@ interface Tab {
 /**
  * type for active tab -> these are the only valid options:
  */
-type ActiveTab = 'allArticles' | 'newArticles' | 'trendingArticles' | 'myArticles';
+export type ActiveTab = 'allArticles' | 'newArticles' | 'trendingArticles' | 'myArticles';
 //#endregion
 
 function ArticlesList(props: ArticleListProps) {
@@ -45,6 +47,10 @@ function ArticlesList(props: ArticleListProps) {
   }
   // active tab that defines which articles are shown
   const [activeTab, setActiveTab] = useState<ActiveTab>(currentActiveTab);
+
+  // set active articles according to the active tab
+  const activeTab2 = useSelector((state: RootState) => state.activeTab);
+  const dispatch = useDispatch();
   //#endregion
 
   //#region helper functions
@@ -92,11 +98,6 @@ function ArticlesList(props: ArticleListProps) {
   useEffect(() => {
     changeActiveArticles(activeTab);
   }, [changeActiveArticles, activeTab]);
-
-  // on mount: set active articles according to the active tab
-  /* useEffect(() => {
-    console.log('mounted');
-  }, []); */
 
   //#region render component
   return (

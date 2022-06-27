@@ -2,29 +2,28 @@ import { useApolloClient } from '@apollo/client';
 import { ARTICLE_CHANGED_SUBSCRIPTION } from 'api/subscriptions';
 import searchIcon from 'assets/icons/search-icon.svg';
 import logoWithName from 'assets/logo-with-name.svg';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { increaseCounterByValue } from 'utils/counterReducer';
+import { increaseNotificationsCounter } from 'store/notificationsCounter.reducer';
+import { RootState } from 'store/store';
 import { getLoggedInUserData } from 'utils/main';
-import { store } from 'utils/store';
 import ArticleEditor from 'views/components/ArticleEditor';
 import PopUpModal from 'views/components/PopUpModal';
 import UserFlyoutMenu from './views/components/UserFlyoutMenu';
-interface HeaderProps {
-  resetNotificationsClickedState: boolean;
-}
 
 function Header() {
   //#region state
   const [searchTerm, setSearchTerm] = useState('');
-  const [numberOfNotifications, setNumberOfNotifications] = useState(1);
   const [resetNotificationsClickedState, setResetNotificationsClicked] = useState(false);
 
-  console.log('Initial state: ', store.getState());
-  const counter = useSelector((state: any) => state.counter);
+  const notificationsCounter = useSelector((state: RootState) => state.notificationsCounter);
   const dispatch = useDispatch();
-
+  /* <button className="bg-red mx-6 " onClick={() => dispatch(increaseCounterByValue(2))}>
+            counter++
+          </button> 
+          <div className="text-red ml-6">test counter: {counter.value}</div>
+          */
   // needed to filter changes that the user made by her/himself
   const userData = getLoggedInUserData();
 
@@ -33,17 +32,17 @@ function Header() {
 
   // user fly out menu and notifications clicked
   const { render: renderFlyOutMenu, notificationsClicked } = UserFlyoutMenu({
-    numberOfNotifications: numberOfNotifications,
+    numberOfNotifications: notificationsCounter.value,
     resetNotificationsClickedState: resetNotificationsClickedState,
   });
   //#endregion
 
   //reset notifications when the user clicked them
-  useEffect(() => {
+  /* useEffect(() => {
     if (notificationsClicked) {
       setNumberOfNotifications(0);
     }
-  }, [notificationsClicked]);
+  }, [notificationsClicked]); */
 
   // change article view when user leaves the notification view
   /* useEffect(() => {
@@ -64,10 +63,10 @@ function Header() {
       console.log(result.data?.articleChanged?.vedaVersumArticle);
 
       // if (result.data?.articleChanged?.vedaVersumArticle.userUpdated !== userData.userEmail) {
-      setNumberOfNotifications(numberOfNotifications + 1);
+      dispatch(increaseNotificationsCounter);
       // }
     });
-  }, [client, userData, numberOfNotifications]);
+  }, [client, userData, notificationsCounter, dispatch]);
   //#endregion
 
   //#region helper functions
@@ -121,14 +120,10 @@ function Header() {
           <button onClick={() => resetToLandingPage()}>
             <img src={logoWithName} alt="VedaVersum Logo" />
           </button>
-          <button className="bg-red mx-6 " onClick={() => setNumberOfNotifications(numberOfNotifications + 1)}>
+          <button className="bg-red mx-6 " onClick={() => dispatch(increaseNotificationsCounter())}>
             notif++
           </button>
-          <button className="bg-red mx-6 " onClick={() => dispatch(increaseCounterByValue(2))}>
-            counter++
-          </button>
-          <div className="text-red ml-6">subscription data: {numberOfNotifications}</div>
-          <div className="text-red ml-6">test counter: {counter.value}</div>
+          <div className="text-red ml-6">subscription data: {notificationsCounter.value}</div>
         </div>
         <div className="w-1/2 flex items-center justify-end">
           {/* search bar */}
