@@ -1,19 +1,22 @@
 import { ApolloClient, ApolloLink, concat, from, HttpLink, InMemoryCache, split } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
-import { getMainDefinition } from '@apollo/client/utilities';
-import { readAuthContextFromLocalStorage } from '../authentication/AutContext';
-import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { WebSocketLink } from '@apollo/client/link/ws';
+import { getMainDefinition } from '@apollo/client/utilities';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
+import { readAuthContextFromLocalStorage } from '../authentication/AutContext';
 
-// TODO: Use environment variable
-const backendLink = new HttpLink({ uri: 'http://localhost:5000/graphql/' });
+const backendLink = new HttpLink({ uri: process.env.BACKEND_LINK });
 
 // .Net server uses an old subscriptions-transport-ws, so making the wsLing the old way.
 // More info: https://www.apollographql.com/docs/react/data/subscriptions#the-older-subscriptions-transport-ws-library
 const wsLink = new WebSocketLink(
-  new SubscriptionClient('ws://localhost:5000/graphql', {
-    connectionParams: { reconnect: true },
-  }),
+  new SubscriptionClient(
+    'ws://localhost:5000/graphql',
+    // TODO: fix environment variable: process.env.WEBSOCKET_BACKEND_LINK
+    {
+      connectionParams: { reconnect: true },
+    },
+  ),
 );
 
 const splitLink = split(
