@@ -1,10 +1,14 @@
 import { useQuery } from '@apollo/client';
 import { ALL_ARTICLES_QUERY, CREATED_ARTICLES_QUERY } from 'api/article-queries';
+import goBackArrow from 'assets/icons/go-back-arrow.svg';
 import { GetAllArticlesResponse, GetUserCreatedArticlesResponse } from 'model/response-types';
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setNotificationsClicked } from 'store/notificationsClicked.reducer';
+import { RootState } from 'store/store';
 import { getLoggedInUserData, LoggedInUserData } from 'utils/main';
 import ArticleList from 'views/components/ArticleList';
 import UserList from 'views/components/UserList';
+import RenderedArticles from './components/RenderedArticles';
 
 function App() {
   // login data from user need for "my articles" filter
@@ -41,57 +45,45 @@ function App() {
   }); */
   //#endregion
 
-  //#region state and child components
-  const [notificationsRead, setNotificationsRead] = useState(false);
-
-  // header and search term if exists
-  /* const {
-    render: renderHeader,
-    searchTerm: propsSearchTerm,
-    notificationsClicked,
-  } = Header({ resetNotificationsClickedState: notificationsRead }); 
-
-  const [actualSearchTerm, setActualSearchTerm] = useState(propsSearchTerm ? propsSearchTerm : '');*/
-
-  // on mount: read search term from local store
-  /*  useEffect(() => {
-    const localStorageSearchTerm = localStorage.getItem('searchTerm');
-    if (localStorageSearchTerm) {
-      setActualSearchTerm(localStorageSearchTerm);
-    } else {
-      setActualSearchTerm('');
-    }
-  }, []); */
-  //#endregion
-
-  /*  useEffect(() => {
-    setActualSearchTerm(propsSearchTerm);
-  }, [propsSearchTerm]); */
+  // get variables from global store
+  const notificationsClicked = useSelector((state: RootState) => state.notificationsClicked.value);
+  const searchTerm = useSelector((state: RootState) => state.searchTerm.value);
+  const dispatch = useDispatch();
 
   return (
     <>
       {/* {renderHeader} */}
       <div className="w-full flex items-start mt-8">
         <div className="p-8 w-1/6">
-          {/* {notificationsClicked && (
-            <button onClick={() => setNotificationsRead(true)}>
+          {(notificationsClicked || searchTerm) && (
+            <button onClick={() => dispatch(setNotificationsClicked(false))}>
               <img src={goBackArrow} alt="arrow pointing to the left" />
             </button>
-          )} */}
-        </div>{' '}
+          )}
+        </div>
         {allArticlesData && articlesCreatedByUserData ? (
           // all data properly loaded
           <div className="w-3/4">
-            {/* {notificationsClicked && <LastUpdatedArticles articles={allArticlesData.allArticles}></LastUpdatedArticles>} */}
-            {/* {!notificationsClicked && ( */}
-            <>
-              <h1 className="my-3 text-head font-semibold">Start reading</h1>
-              <ArticleList
-                allArticles={allArticlesData.allArticles}
-                articlesCreatedByUser={articlesCreatedByUserData.allArticlesCreatedByUser}
-              />
-            </>
-            {/* )} */}
+            {notificationsClicked && (
+              <>
+                <h1 className="mt-3 mb-6 text-head font-semibold">Last updated</h1>
+                <RenderedArticles articles={allArticlesData.allArticles}></RenderedArticles>
+              </>
+            )}
+            {searchTerm && (
+              <>
+                <h1 className="mt-3 mb-6 text-head font-semibold">Search results</h1>
+                <RenderedArticles articles={allArticlesData.allArticles}></RenderedArticles>
+              </>
+            )}
+            {!notificationsClicked && (
+              <>
+                <ArticleList
+                  allArticles={allArticlesData.allArticles}
+                  articlesCreatedByUser={articlesCreatedByUserData.allArticlesCreatedByUser}
+                />
+              </>
+            )}
           </div>
         ) : (
           <div className="w-3/4">

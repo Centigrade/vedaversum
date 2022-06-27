@@ -102,6 +102,7 @@ function ArticlesList(props: ArticleListProps) {
   //#region render component
   return (
     <div>
+      <h1 className="my-3 text-head font-semibold">Start reading</h1>
       {/* Tabs */}
       <div className="flex items-center p-0 mb-8">
         <div className="w-full flex border-b border-gray-600">
