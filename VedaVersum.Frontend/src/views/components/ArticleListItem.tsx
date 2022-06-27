@@ -37,7 +37,7 @@ function ArticleItem(props: ArticleItemProps) {
               : article.content}
           </p>
 
-          <div className="flex my-auto">
+          <div className="flex mt-5">
             {article.updatedAt && article.userUpdated && (
               <>
                 <span className="mr-4">Last modified by </span>
