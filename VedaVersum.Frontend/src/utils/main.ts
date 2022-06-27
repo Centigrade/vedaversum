@@ -16,7 +16,7 @@ import { VedaVersumArticle } from 'model/veda-versum-article';
 
 //#region types
 /**
- * TODO:
+ * type for the prepared user data of the user currently logged in
  */
 export interface LoggedInUserData {
   userName: string;
@@ -25,7 +25,7 @@ export interface LoggedInUserData {
 }
 
 /**
- * TODO:
+ * type for the article image paths (preview and article image)
  */
 export interface ArticleImagePaths {
   previewImage: string;

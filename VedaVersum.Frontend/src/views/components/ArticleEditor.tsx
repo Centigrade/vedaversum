@@ -99,7 +99,6 @@ function ArticleEditor(props: EditorProps) {
         setDatabaseError(error);
       },
       onCompleted: data => {
-        console.log(data);
         props.closePopup();
         localStorage.setItem('activeTab', 'newArticles');
         navigateTo('/');
@@ -117,7 +116,6 @@ function ArticleEditor(props: EditorProps) {
         setDatabaseError(error);
       },
       onCompleted: data => {
-        console.log(data);
         props.closePopup();
         navigateTo(`/${data.articleAction.id}`);
       },

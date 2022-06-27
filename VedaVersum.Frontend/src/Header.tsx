@@ -96,10 +96,6 @@ function Header() {
           <button onClick={() => handleLogoClick()}>
             <img src={logoWithName} alt="VedaVersum Logo" />
           </button>
-          <button className="bg-red mx-6 " onClick={() => dispatch(increaseNotificationsCounter())}>
-            notif++
-          </button>
-          <div className="text-red ml-6">subscription data: {notificationsCounter}</div>
         </div>
         <div className="w-1/2 flex items-center justify-end">
           {/* search bar */}
