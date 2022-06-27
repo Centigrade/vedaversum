@@ -1,15 +1,17 @@
 import { configureStore } from '@reduxjs/toolkit';
 import activeTabReducer, { ActiveTabState } from './activeTab.reducer';
-import notificationsCounterReducer from './notificationsCounter.reducer';
-import notificationsReadReducer, { NotificationsReadState } from './notificationsRead.reducer';
+import notificationsClickedReducer, { NotificationsClickedState } from './notificationsClicked.reducer';
+import notificationsCounterReducer, { NotificationsCounterState } from './notificationsCounter.reducer';
+import searchTermReducer, { SearchTermState } from './searchTerm.reducer';
 
 /**
  * type for the global store
  */
 export interface RootState {
   activeTab: ActiveTabState;
-  notificationsCounter: { value: number };
-  notificationsRead: NotificationsReadState;
+  searchTerm: SearchTermState;
+  notificationsCounter: NotificationsCounterState;
+  notificationsClicked: NotificationsClickedState;
 }
 
 /**
@@ -18,7 +20,8 @@ export interface RootState {
 export const store = configureStore({
   reducer: {
     activeTab: activeTabReducer,
+    searchTerm: searchTermReducer,
     notificationsCounter: notificationsCounterReducer,
-    notificationsRead: notificationsReadReducer,
+    notificationsClicked: notificationsClickedReducer,
   },
 });

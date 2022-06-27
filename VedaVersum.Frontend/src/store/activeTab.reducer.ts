@@ -16,7 +16,7 @@ const activeTabSlice = createSlice({
   reducers: {
     // TODO: fix this type error + actions type
     setActiveTab(state: any, action: any) {
-      console.log('increaseCounter dispatched');
+      console.log('setActiveTab dispatched');
       state.value = action.payload;
     },
   },

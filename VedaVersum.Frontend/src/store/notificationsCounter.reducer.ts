@@ -14,11 +14,9 @@ const notificationsCounterSlice = createSlice({
   initialState: { value: 0 },
   reducers: {
     increaseNotificationsCounter(state: NotificationsCounterState) {
-      console.log('increaseNotificationsCounter dispatched');
       state.value += 1;
     },
     resetNotificationsCounter(state: NotificationsCounterState) {
-      console.log('resetNotificationsCounter dispatched');
       state.value = 0;
     },
   },
