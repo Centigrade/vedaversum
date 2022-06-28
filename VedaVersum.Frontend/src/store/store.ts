@@ -19,9 +19,13 @@ export interface RootState {
  */
 export const store = configureStore({
   reducer: {
+    // active tab that defines which articles are shown in the list of articles
     activeTab: activeTabReducer,
+    // search term to search for in the articles
     searchTerm: searchTermReducer,
+    // amount of new notifications
     notificationsCounter: notificationsCounterReducer,
+    // variable to (re)set the articles view when the user clicked on the notifications
     notificationsClicked: notificationsClickedReducer,
   },
 });
