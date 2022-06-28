@@ -22,6 +22,7 @@ function App() {
     loading: loadingAllArticles,
   } = useQuery<GetAllArticlesResponse>(ALL_ARTICLES_QUERY, {
     errorPolicy: 'all',
+    fetchPolicy: 'no-cache', // 'cache-and-network' - if this is wished, a custom merge function must be written
   });
 
   // load all articles created by the user
@@ -32,6 +33,7 @@ function App() {
   } = useQuery<GetUserCreatedArticlesResponse>(CREATED_ARTICLES_QUERY, {
     errorPolicy: 'all',
     variables: { userEmail: loginUserData.userEmail },
+    fetchPolicy: 'no-cache', // 'cache-and-network' - if this is wished, a custom merge function must be written
   });
 
   // TODO: fix this with Mikhail

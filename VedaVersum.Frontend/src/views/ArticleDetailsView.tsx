@@ -40,8 +40,9 @@ function ArticleDetailsView() {
     variables: { articleId: articleId },
   });
   useEffect(() => {
-    console.log('mounted');
-  }, []); */
+    console.log('mounted details');
+  }, []);*/
+
   //#endregion
 
   //#region render view

@@ -97,7 +97,7 @@ function ArticleEditor(props: EditorProps) {
     },
     onCompleted: data => {
       props.closePopup();
-      navigateTo('/');
+      navigateTo(`/${data.articleAction.id}`);
     },
   });
 
