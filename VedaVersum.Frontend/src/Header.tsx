@@ -17,7 +17,6 @@ import UserFlyoutMenu from './views/components/UserFlyoutMenu';
 
 function Header() {
   //#region state
-
   const searchTerm = useSelector((state: RootState) => state.searchTerm.value);
   const dispatch = useDispatch();
 
@@ -26,7 +25,6 @@ function Header() {
 
   // variable needed for router navigation
   const navigateTo = useNavigate();
-
   //#endregion
 
   //#region subscription to article changes

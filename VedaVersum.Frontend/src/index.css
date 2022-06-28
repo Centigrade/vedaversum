@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* pop up style must be imported here to overwrite the default styling */
-@import url('views/components/styles/popup.scss');
-
 @font-face {
   font-family: Raleway;
   src: url(./assets/fonts/Raleway-VariableFont_wght.ttf);
@@ -37,3 +34,7 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+
+/* TODO: fix this if possible
+pop up style must be imported here to overwrite the default styling */
+@import url('views/components/styles/popup.scss');
