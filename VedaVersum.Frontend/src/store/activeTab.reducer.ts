@@ -21,13 +21,9 @@ export interface ActiveTabAction {
  */
 const activeTabSlice = createSlice({
   name: 'activeTab',
-  initialState: { value: 'allArticles' },
+  initialState: { value: 'allArticles' as ActiveTab },
   reducers: {
-    // TODO: fix this type error
-    setActiveTab(
-      state: any, //ActiveTabState
-      action: ActiveTabAction,
-    ) {
+    setActiveTab(state: ActiveTabState, action: ActiveTabAction) {
       state.value = action.payload;
     },
   },

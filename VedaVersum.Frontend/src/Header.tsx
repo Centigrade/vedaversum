@@ -18,7 +18,6 @@ import UserFlyoutMenu from './views/components/UserFlyoutMenu';
 function Header() {
   //#region state
 
-  const notificationsCounter = useSelector((state: RootState) => state.notificationsCounter.value);
   const searchTerm = useSelector((state: RootState) => state.searchTerm.value);
   const dispatch = useDispatch();
 
@@ -54,7 +53,7 @@ function Header() {
    * @param delay
    * @returns
    */
-  function debounce<T extends unknown[]>(func: (...args: T) => void, delay: number): (...args: T) => void {
+  /* function debounce<T extends unknown[]>(func: (...args: T) => void, delay: number): (...args: T) => void {
     let timer: any | null = null;
     return (...args: T) => {
       if (timer) clearTimeout(timer);
@@ -62,7 +61,7 @@ function Header() {
         func.call(null, ...args);
       }, delay);
     };
-  }
+  } */
 
   /**
    * handles click on logo = resets all view settings from the user, i.e.
