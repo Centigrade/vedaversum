@@ -23,8 +23,6 @@ const searchTermSlice = createSlice({
   initialState: { value: '' },
   reducers: {
     setSearchTerm(state: SearchTermState, action: SearchTermAction) {
-      console.log(action);
-
       state.value = action.payload;
     },
   },

@@ -95,7 +95,6 @@ function ArticleEditor(props: EditorProps) {
     useMutation(CREATE_ARTICLE_MUTATION, {
       variables: { articleTitle: title, articleContent: content },
       onError: error => {
-        console.log(error.message);
         setDatabaseError(error);
       },
       onCompleted: data => {
@@ -112,7 +111,6 @@ function ArticleEditor(props: EditorProps) {
     useMutation(UPDATE_ARTICLE_MUTATION, {
       variables: { articleId: articleData?.id, articleTitle: title, articleContent: content },
       onError: error => {
-        console.log(error.message);
         setDatabaseError(error);
       },
       onCompleted: data => {

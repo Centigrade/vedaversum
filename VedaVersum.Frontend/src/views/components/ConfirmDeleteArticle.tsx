@@ -28,11 +28,9 @@ function ConfirmDeleteArticle(props: DeleteArticleProps) {
   const [deleteArticle, { data, loading, error }] = useMutation(DELETE_ARTICLE_MUTATION, {
     variables: { articleId: props.dataContext.id, articleTitle: title, articleContent: props.dataContext.content },
     onError: error => {
-      console.log(error.message);
       setDatabaseError(error);
     },
     onCompleted: data => {
-      console.log(data);
       props.closePopup();
       localStorage.setItem('activeTab', 'allArticles');
       navigateTo('/');

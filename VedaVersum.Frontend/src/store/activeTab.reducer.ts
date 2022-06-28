@@ -28,7 +28,6 @@ const activeTabSlice = createSlice({
       state: any, //ActiveTabState
       action: ActiveTabAction,
     ) {
-      console.log('setActiveTab dispatched');
       state.value = action.payload;
     },
   },

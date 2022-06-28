@@ -39,7 +39,6 @@ export function RedirectLandingPage() {
     const codeParameter: AuthenticationMutationVariables = {
       oAuthCode: code.toString(),
     };
-    console.log(codeParameter);
 
     authenticate({ variables: codeParameter });
     callStatus.isStarted = true;
@@ -49,7 +48,6 @@ export function RedirectLandingPage() {
 }
 
 function authMutationCompleted(response: AuthenticationMutationResponse, authContext: AuthContextType) {
-  console.log('onCompleted', response);
   authContext.authToken = response.authenticationToken;
   authContext.user = response.authenticatedUser ?? undefined;
   authContext.isAuthenticated = response.authenticatedUser ? true : false;
