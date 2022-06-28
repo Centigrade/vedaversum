@@ -2,7 +2,6 @@ import burningCar from 'assets/images/BurningCar.png';
 import burningCarPreview from 'assets/images/BurningCarPreview.png';
 import campus from 'assets/images/Campus.png';
 import campusPreview from 'assets/images/CampusPreview.png';
-import imageNotFound from 'assets/images/ImageNotFound.png';
 import partyFloor from 'assets/images/PartyFloor.png';
 import partyFloorPreview from 'assets/images/PartyFloorPreview.png';
 import smiley from 'assets/images/Smiley.png';
@@ -20,17 +19,20 @@ export interface LoggedInUserData {
 }
 
 /**
- * type for the article image paths (preview and article image)
- */
-export interface ArticleImagePaths {
-  previewImage: string;
-  articleImage: string;
-}
-
-/**
  * type for sorting the articles -> these are the only valid options:
  */
 type SortingOption = 'latest' | 'trending' | 'lastModified';
+//#endregion
+
+//#region working variables
+/**
+ * max value of the access counter
+ */
+let accessCounterMaxValue = 0;
+/**
+ * defines after passing a value dependent on the accessCounterMaxValue the image of an article is chosen
+ */
+const articleImageChoiceSteps = 1 / 3;
 //#endregion
 
 /**
@@ -41,7 +43,7 @@ export function getLoggedInUserData(): LoggedInUserData {
   const loginData = readAuthContextFromLocalStorage();
   return {
     userName: loginData?.user?.name || '',
-    userEmail: loginData?.user?.email || '', // FOR TESTING: 'xyz@centigrade.de'
+    userEmail: loginData?.user?.email || '',
     visualUserName: loginData?.user?.name.split('.')[0] || '',
   };
 }
@@ -79,50 +81,49 @@ export function formatDate(date: string): string {
 }
 
 /**
- * reads article image paths from the local storage
- * @param articleId the id of the article
- * @returns an object with the preview image path and the article image path
+ * chooses an article image (preview or detailed view) for an article according to its access counter value
+ * @param articleAccessValue access counter value of the article
+ * @param preview states if the preview or the detailed image is needed
+ * @returns path to an image
  */
-export function getArticleImagePathsFromLocalStorage(articleId: string | undefined): ArticleImagePaths {
-  let previewImage = imageNotFound;
-  let articleImage = imageNotFound;
-  if (articleId) {
-    const localStoragePreviewImage = localStorage.getItem(`${articleId}_previewImage`);
-    const localStorageArticleImage = localStorage.getItem(`${articleId}_articleImage`);
-    if (localStoragePreviewImage && localStorageArticleImage) {
-      previewImage = localStoragePreviewImage;
-      articleImage = localStorageArticleImage;
-      return {
-        previewImage: previewImage,
-        articleImage: articleImage,
-      };
+export function getImagePath(articleAccessValue: number, preview: boolean): string {
+  if (articleAccessValue >= accessCounterMaxValue * 2 * articleImageChoiceSteps) {
+    if (preview) {
+      return burningCarPreview;
     } else {
-      return getRandomArticleImagePath(articleId);
+      return burningCar;
+    }
+  } else if (articleAccessValue >= accessCounterMaxValue * articleImageChoiceSteps) {
+    if (preview) {
+      return partyFloorPreview;
+    } else {
+      return partyFloor;
     }
   } else {
-    return {
-      previewImage: imageNotFound,
-      articleImage: imageNotFound,
-    };
+    if (preview) {
+      return campusPreview;
+    } else {
+      return campus;
+    }
   }
 }
 
 /**
- * selects randomly an image for the given article and stores it in the local storage
- * @param articleId the id of the article
- * @returns an object with the preview image path and the article image path
+ * calculates the maximum value of the articles' access counter
+ * @param articles : articles providing the access counter values
  */
-export function getRandomArticleImagePath(articleId: string): ArticleImagePaths {
-  const previewImages = [campusPreview, partyFloorPreview, burningCarPreview];
-  const articleImages = [campus, partyFloor, burningCar];
-  const randomImageIndex = Math.floor(Math.random() * previewImages.length);
-  const imagePaths: ArticleImagePaths = {
-    previewImage: previewImages[randomImageIndex],
-    articleImage: articleImages[randomImageIndex],
-  };
-  localStorage.setItem(`${articleId}_previewImage`, imagePaths.previewImage);
-  localStorage.setItem(`${articleId}_articleImage`, imagePaths.articleImage);
-  return imagePaths;
+export function calculateAccessCounterMaxValue(articles: VedaVersumArticle[] | undefined) {
+  if (articles) {
+    let tempMaxValue = 0;
+    articles.forEach(article => {
+      if (article.accessCounter > tempMaxValue) {
+        console.log('old temp = ' + tempMaxValue);
+        tempMaxValue = article.accessCounter;
+        console.log('new temp = ' + tempMaxValue);
+      }
+    });
+    accessCounterMaxValue = tempMaxValue;
+  }
 }
 
 /**

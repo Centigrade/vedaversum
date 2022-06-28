@@ -1,13 +1,7 @@
 import { useQuery } from '@apollo/client';
 import goBackArrow from 'assets/icons/go-back-arrow.svg';
 import { Link, useParams } from 'react-router-dom';
-import {
-  ArticleImagePaths,
-  formatDate,
-  getArticleImagePathsFromLocalStorage,
-  getLoggedInUserData,
-  LoggedInUserData,
-} from 'utils/main';
+import { formatDate, getImagePath, getLoggedInUserData, LoggedInUserData } from 'utils/main';
 import ArticleEditor from 'views/components/ArticleEditor';
 import ConfirmDeleteArticle from 'views/components/ConfirmDeleteArticle';
 import PopUpModal from 'views/components/PopUpModal';
@@ -30,9 +24,6 @@ function ArticleDetailsView() {
 
   // get login data for author validation
   const loginUserData: LoggedInUserData = getLoggedInUserData();
-
-  // get image paths from local storage
-  const articleImagePaths: ArticleImagePaths = getArticleImagePathsFromLocalStorage(currentArticle?.id);
 
   // increase access counter
   // TODO: this should work only on mount!!
@@ -62,7 +53,11 @@ function ArticleDetailsView() {
             {currentArticle && (
               <div className="py-11">
                 <div className="w-full flex mb-10">
-                  <img src={articleImagePaths.articleImage} alt="some pic" className="mx-auto h-96" />
+                  <img
+                    src={getImagePath(currentArticle.accessCounter, false)}
+                    alt="some pic"
+                    className="mx-auto h-96"
+                  />
                 </div>
                 <div className="flex items-center text-article-info mb-6">
                   <UserName email={currentArticle.userCreated} />

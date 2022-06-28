@@ -1,6 +1,6 @@
 import { VedaVersumArticle } from 'model/veda-versum-article';
 import 'reactjs-popup/dist/index.css';
-import { formatDate, getArticleImagePathsFromLocalStorage } from 'utils/main';
+import { formatDate, getImagePath } from 'utils/main';
 import UserName from './UserName';
 
 //#region type definitions
@@ -48,7 +48,7 @@ function ArticleItem(props: ArticleItemProps) {
           </div>
         </div>
         <div className="w-1/4 ml-8">
-          <img src={getArticleImagePathsFromLocalStorage(article.id).previewImage} alt="some pic" />
+          <img src={getImagePath(article.accessCounter, true)} alt="some pic" />
         </div>
       </div>
     </div>

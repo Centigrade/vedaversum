@@ -2,10 +2,11 @@ import { useQuery } from '@apollo/client';
 import { ALL_ARTICLES_QUERY, CREATED_ARTICLES_QUERY } from 'api/article-queries';
 import goBackArrow from 'assets/icons/go-back-arrow.svg';
 import { GetAllArticlesResponse, GetUserCreatedArticlesResponse } from 'model/response-types';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setNotificationsClicked } from 'store/notificationsClicked.reducer';
 import { RootState } from 'store/store';
-import { getLoggedInUserData, LoggedInUserData } from 'utils/main';
+import { calculateAccessCounterMaxValue, getLoggedInUserData, LoggedInUserData } from 'utils/main';
 import ArticleList from 'views/components/ArticleList';
 import UserList from 'views/components/UserList';
 import RenderedArticles from './components/RenderedArticles';
@@ -35,6 +36,10 @@ function App() {
     variables: { userEmail: loginUserData.userEmail },
     fetchPolicy: 'no-cache', // 'cache-and-network' - if this is wished, a custom merge function must be written
   });
+
+  useEffect(() => {
+    calculateAccessCounterMaxValue(allArticlesData?.allArticles);
+  }, [allArticlesData]);
 
   // TODO: fix this with Mikhail
   /* const {
