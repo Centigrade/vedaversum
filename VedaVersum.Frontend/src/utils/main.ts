@@ -1,16 +1,10 @@
-import ticketsPreview from 'assets/images/9EuroTicketPreview.png';
-import tickets from 'assets/images/9EuroTickets.png';
 import burningCar from 'assets/images/BurningCar.png';
 import burningCarPreview from 'assets/images/BurningCarPreview.png';
-import error from 'assets/images/Error.png';
 import imageNotFound from 'assets/images/ImageNotFound.png';
 import partyFloor from 'assets/images/PartyFloor.png';
 import partyFloorPreview from 'assets/images/PartyFloorPreview.png';
 import smiley from 'assets/images/Smiley.png';
 import tent from 'assets/images/Tent.png';
-import uiux from 'assets/images/UI-UX.png';
-import wall from 'assets/images/Wall9thFloor.png';
-import wallPreview from 'assets/images/Wall9thFloorPreview.png';
 import { readAuthContextFromLocalStorage } from 'authentication/AutContext';
 import { VedaVersumArticle } from 'model/veda-versum-article';
 
@@ -118,8 +112,8 @@ export function getArticleImagePathsFromLocalStorage(articleId: string | undefin
  * @returns an object with the preview image path and the article image path
  */
 export function getRandomArticleImagePath(articleId: string): ArticleImagePaths {
-  const previewImages = [tent, error, ticketsPreview, partyFloorPreview, smiley, wallPreview, burningCarPreview, uiux];
-  const articleImages = [tent, error, tickets, partyFloor, smiley, wall, burningCar, uiux];
+  const previewImages = [tent, partyFloorPreview, smiley, burningCarPreview];
+  const articleImages = [tent, partyFloor, smiley, burningCar];
   const randomImageIndex = Math.floor(Math.random() * previewImages.length);
   const imagePaths: ArticleImagePaths = {
     previewImage: previewImages[randomImageIndex],
