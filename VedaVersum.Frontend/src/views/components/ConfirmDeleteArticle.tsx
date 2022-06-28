@@ -32,7 +32,6 @@ function ConfirmDeleteArticle(props: DeleteArticleProps) {
     },
     onCompleted: data => {
       props.closePopup();
-      localStorage.setItem('activeTab', 'allArticles');
       navigateTo('/');
     },
   });

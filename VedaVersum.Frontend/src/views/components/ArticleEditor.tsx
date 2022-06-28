@@ -97,7 +97,6 @@ function ArticleEditor(props: EditorProps) {
     },
     onCompleted: data => {
       props.closePopup();
-      localStorage.setItem('activeTab', 'newArticles');
       navigateTo('/');
     },
   });

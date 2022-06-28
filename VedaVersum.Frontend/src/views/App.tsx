@@ -102,7 +102,6 @@ function App() {
         )}
         <div className="w-1/4 pl-12">
           <UserList />
-          {/* <p>{!loadingArticleUpdates && articleUpdatesData}</p> */}
         </div>
       </div>
     </>
