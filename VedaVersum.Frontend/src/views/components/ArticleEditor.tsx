@@ -4,7 +4,6 @@ import { CREATE_ARTICLE_MUTATION, UPDATE_ARTICLE_MUTATION } from 'api/article-mu
 import { VedaVersumArticle } from 'model/veda-versum-article';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import 'views/components/styles/popup.scss';
 
 //#region component types
 /**
@@ -91,38 +90,36 @@ function ArticleEditor(props: EditorProps) {
   /**
    * calls database mutation to insert the new article into the database
    */
-  const [insertArticle, { data: insertArticleData, loading: loadingInsertArticle, error: errorInsertArticle }] =
-    useMutation(CREATE_ARTICLE_MUTATION, {
-      variables: { articleTitle: title, articleContent: content },
-      onError: error => {
-        setDatabaseError(error);
-      },
-      onCompleted: data => {
-        props.closePopup();
-        localStorage.setItem('activeTab', 'newArticles');
-        navigateTo('/');
-      },
-    });
+  const [insertArticle] = useMutation(CREATE_ARTICLE_MUTATION, {
+    variables: { articleTitle: title, articleContent: content },
+    onError: error => {
+      setDatabaseError(error);
+    },
+    onCompleted: data => {
+      props.closePopup();
+      localStorage.setItem('activeTab', 'newArticles');
+      navigateTo('/');
+    },
+  });
 
   /**
    * calls database mutation to update an existing article in the database
    */
-  const [updateArticle, { data: updateArticleData, loading: loadingUpdateArticle, error: errorUpdateArticle }] =
-    useMutation(UPDATE_ARTICLE_MUTATION, {
-      variables: { articleId: articleData?.id, articleTitle: title, articleContent: content },
-      onError: error => {
-        setDatabaseError(error);
-      },
-      onCompleted: data => {
-        props.closePopup();
-        navigateTo(`/${data.articleAction.id}`);
-      },
-    });
+  const [updateArticle] = useMutation(UPDATE_ARTICLE_MUTATION, {
+    variables: { articleId: articleData?.id, articleTitle: title, articleContent: content },
+    onError: error => {
+      setDatabaseError(error);
+    },
+    onCompleted: data => {
+      props.closePopup();
+      navigateTo(`/${data.articleAction.id}`);
+    },
+  });
   //#endregion
 
   //#region render component
   return (
-    <div data-color-mode="light" className="article-editor">
+    <div data-color-mode="light">
       {/* header */}
       <div className="w-full flex justify-between bg-primary text-white p-3 rounded-t-lg">
         <p className="text-article-text">{editorSettings.popupTitle}</p>

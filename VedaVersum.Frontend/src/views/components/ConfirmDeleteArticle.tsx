@@ -25,7 +25,7 @@ function ConfirmDeleteArticle(props: DeleteArticleProps) {
   /**
    * calls database mutation to delete an existing article in the database
    */
-  const [deleteArticle, { data, loading, error }] = useMutation(DELETE_ARTICLE_MUTATION, {
+  const [deleteArticle] = useMutation(DELETE_ARTICLE_MUTATION, {
     variables: { articleId: props.dataContext.id, articleTitle: title, articleContent: props.dataContext.content },
     onError: error => {
       setDatabaseError(error);

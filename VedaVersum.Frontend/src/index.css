@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* pop up style must be imported here to overwrite the default styling */
+@import url('views/components/styles/popup.scss');
+
 @font-face {
   font-family: Raleway;
   src: url(./assets/fonts/Raleway-VariableFont_wght.ttf);
