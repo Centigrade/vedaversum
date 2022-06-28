@@ -1,6 +1,7 @@
 import { VedaVersumArticle } from 'model/veda-versum-article';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { setActiveTab } from 'store/activeTab.reducer';
 import { RootState } from 'store/store';
 import { sortArticlesBy } from 'utils/main';
 import RenderedArticles from './RenderedArticles';
@@ -39,39 +40,20 @@ function ArticlesList(props: ArticleListProps) {
     { name: 'Trending', type: 'trendingArticles' },
     { name: 'My', type: 'myArticles' },
   ];
-  // read active tab from local storage to keep sorting
-  const localStorageActiveTab = localStorage.getItem('activeTab');
-  let currentActiveTab: ActiveTab = 'allArticles';
-  if (localStorageActiveTab && isActiveTab(localStorageActiveTab)) {
-    currentActiveTab = localStorageActiveTab;
-  }
-  // active tab that defines which articles are shown
-  const [activeTab, setActiveTab] = useState<ActiveTab>(currentActiveTab);
 
   // set active articles according to the active tab
-  const activeTab2 = useSelector((state: RootState) => state.activeTab);
+  const activeTab = useSelector((state: RootState) => state.activeTab.value);
   const dispatch = useDispatch();
   //#endregion
 
   //#region helper functions
-  /**
-   * checks if a given string is one of the active tabs
-   * @param value string that is checked
-   * @returns boolean if value is an active tab
-   */
-  function isActiveTab(value: string): value is ActiveTab {
-    const activeTabs = ['allArticles', 'newArticles', 'trendingArticles', 'myArticles'];
-    return activeTabs.includes(value);
-  }
-
   /**
    * sets active tab and active articles according to the active tab controlled by the user
    */
   // callback makes that the active articles change automatically when the active tab has changed
   const changeActiveArticles = useCallback(
     (selectedTab: ActiveTab) => {
-      setActiveTab(selectedTab);
-      localStorage.setItem('activeTab', selectedTab);
+      dispatch(setActiveTab(selectedTab));
       switch (selectedTab) {
         case 'allArticles':
           setActiveArticles(allArticles);
@@ -90,7 +72,7 @@ function ArticlesList(props: ArticleListProps) {
           break;
       }
     },
-    [allArticles, articlesCreatedByUser],
+    [allArticles, articlesCreatedByUser, dispatch],
   );
   //#endregion
 
@@ -118,7 +100,9 @@ function ArticlesList(props: ArticleListProps) {
               {tab.name}
             </div>
           ))}
-          <div className="top-px transform translate-y-px font-medium text-xl px-3 py-4 text-gray-600">Articles</div>
+          <div className="top-px transform translate-y-px font-medium text-xl px-3 py-4 text-gray-600 ml-12">
+            Articles
+          </div>
         </div>
       </div>
       <div>
