@@ -2,7 +2,7 @@ import { useApolloClient } from '@apollo/client';
 import { ARTICLE_CHANGED_SUBSCRIPTION } from 'api/subscriptions';
 import searchIcon from 'assets/icons/search-icon.svg';
 import logoWithName from 'assets/logo-with-name.svg';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setActiveTab } from 'store/activeTab.reducer';
@@ -13,6 +13,7 @@ import { RootState } from 'store/store';
 import { getLoggedInUserData } from 'utils/main';
 import ArticleEditor from 'views/components/ArticleEditor';
 import PopUpModal from 'views/components/PopUpModal';
+import { Subscription } from 'zen-observable-ts';
 import UserFlyoutMenu from './views/components/UserFlyoutMenu';
 
 function Header() {
@@ -25,6 +26,9 @@ function Header() {
 
   // variable needed for router navigation
   const navigateTo = useNavigate();
+
+  // subscription
+  const [subscription, setSubscription] = useState<Subscription>();
   //#endregion
 
   //#region subscription to article changes
@@ -34,13 +38,29 @@ function Header() {
   const client = useApolloClient(); // Apollo client instance
   React.useEffect(() => {
     // Subscribing to GraphQL subscription:
-    client.subscribe({ query: ARTICLE_CHANGED_SUBSCRIPTION }).subscribe((result: any) => {
-      // This executes each time when GraphQL pushes subscription notification
-      if (result.data?.articleChanged?.vedaVersumArticle.userUpdated !== userData.userEmail) {
-        dispatch(increaseNotificationsCounter());
-      }
-    });
-  }, [client, userData, dispatch]);
+    if (!subscription) {
+      setSubscription(
+        client.subscribe({ query: ARTICLE_CHANGED_SUBSCRIPTION }).subscribe((result: any) => {
+          // This executes each time when GraphQL pushes subscription notification
+          if (
+            result.data?.articleChanged?.vedaVersumArticle.userUpdated !== userData.userEmail &&
+            result.data?.articleChanged?.vedaVersumArticle.userCreated !== userData.userEmail
+          ) {
+            dispatch(increaseNotificationsCounter());
+          }
+        }),
+      );
+    }
+  }, [client, userData, dispatch, subscription]);
+
+  useEffect(() => {
+    console.log('mounted');
+
+    return () => {
+      console.log('unmounted');
+      subscription?.unsubscribe();
+    };
+  }, [subscription]);
   //#endregion
 
   //#region helper functions
