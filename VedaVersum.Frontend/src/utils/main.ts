@@ -117,9 +117,7 @@ export function calculateAccessCounterMaxValue(articles: VedaVersumArticle[] | u
     let tempMaxValue = 0;
     articles.forEach(article => {
       if (article.accessCounter > tempMaxValue) {
-        console.log('old temp = ' + tempMaxValue);
         tempMaxValue = article.accessCounter;
-        console.log('new temp = ' + tempMaxValue);
       }
     });
     accessCounterMaxValue = tempMaxValue;

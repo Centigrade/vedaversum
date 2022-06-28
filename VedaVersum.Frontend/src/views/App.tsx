@@ -36,6 +36,7 @@ function App() {
     variables: { userEmail: loginUserData.userEmail },
     fetchPolicy: 'no-cache', // 'cache-and-network' - if this is wished, a custom merge function must be written
   });
+  calculateAccessCounterMaxValue(allArticlesData?.allArticles);
 
   useEffect(() => {
     calculateAccessCounterMaxValue(allArticlesData?.allArticles);
