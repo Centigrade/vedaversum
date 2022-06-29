@@ -1,17 +1,18 @@
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
+import { UPDATE_ARTICLE_ACCESS_COUNTER_MUTATION } from 'api/article-mutations';
 import goBackArrow from 'assets/icons/go-back-arrow.svg';
+import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { formatDate, getImagePath, getLoggedInUserData, LoggedInUserData } from 'utils/main';
 import ArticleEditor from 'views/components/ArticleEditor';
 import ConfirmDeleteArticle from 'views/components/ConfirmDeleteArticle';
 import PopUpModal from 'views/components/PopUpModal';
 import { ARTICLE_BY_ID_QUERY } from '../api/article-queries';
-import { GetArticleResponse } from '../model/response-types';
+import { GetArticleResponse, UpdateArticleAccessCounterResponse } from '../model/response-types';
 import UserList from './components/UserList';
 import UserName from './components/UserName';
 function ArticleDetailsView() {
   //#region get article data
-
   // read article id from the url parameters
   const { id: articleId } = useParams();
 
@@ -21,20 +22,24 @@ function ArticleDetailsView() {
     variables: { articleId: articleId },
   });
   const currentArticle = data?.article;
+  //#endregion
 
   // get login data for author validation
   const loginUserData: LoggedInUserData = getLoggedInUserData();
 
   // increase access counter
-  // TODO: this should work only on mount!!
-  /* const test = useMutation<UpdateArticleAccessCounterResponse>(UPDATE_ARTICLE_ACCESS_COUNTER_MUTATION, {
-    variables: { articleId: articleId },
-  });
-  useEffect(() => {
-    console.log('mounted details');
-  }, []);*/
 
-  //#endregion
+  const [updateArticleAccessCounter] = useMutation<UpdateArticleAccessCounterResponse>(
+    UPDATE_ARTICLE_ACCESS_COUNTER_MUTATION,
+    {
+      variables: { articleId: articleId },
+    },
+  );
+
+  useEffect(() => {
+    // in develop mode this gets called twice because in develop mode onMount (useEffect) gets called twice
+    updateArticleAccessCounter();
+  }, [updateArticleAccessCounter]);
 
   //#region render view
   return (
