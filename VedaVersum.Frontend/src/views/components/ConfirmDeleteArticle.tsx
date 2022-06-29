@@ -1,5 +1,6 @@
 import { ApolloError, useMutation } from '@apollo/client';
 import { DELETE_ARTICLE_MUTATION } from 'api/article-mutations';
+import { ArticleActionResponse } from 'model/response-types';
 import { VedaVersumArticle } from 'model/veda-versum-article';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -25,7 +26,7 @@ function ConfirmDeleteArticle(props: DeleteArticleProps) {
   /**
    * calls database mutation to delete an existing article in the database
    */
-  const [deleteArticle] = useMutation(DELETE_ARTICLE_MUTATION, {
+  const [deleteArticle] = useMutation<ArticleActionResponse>(DELETE_ARTICLE_MUTATION, {
     variables: { articleId: props.dataContext.id, articleTitle: title, articleContent: props.dataContext.content },
     onError: error => {
       setDatabaseError(error);

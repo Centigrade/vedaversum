@@ -1,6 +1,7 @@
 import { ApolloError, useMutation } from '@apollo/client';
 import MDEditor from '@uiw/react-md-editor';
 import { CREATE_ARTICLE_MUTATION, UPDATE_ARTICLE_MUTATION } from 'api/article-mutations';
+import { ArticleActionResponse } from 'model/response-types';
 import { VedaVersumArticle } from 'model/veda-versum-article';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -90,7 +91,7 @@ function ArticleEditor(props: EditorProps) {
   /**
    * calls database mutation to insert the new article into the database
    */
-  const [insertArticle] = useMutation(CREATE_ARTICLE_MUTATION, {
+  const [insertArticle] = useMutation<ArticleActionResponse>(CREATE_ARTICLE_MUTATION, {
     variables: { articleTitle: title, articleContent: content },
     onError: error => {
       setDatabaseError(error);
@@ -104,7 +105,7 @@ function ArticleEditor(props: EditorProps) {
   /**
    * calls database mutation to update an existing article in the database
    */
-  const [updateArticle] = useMutation(UPDATE_ARTICLE_MUTATION, {
+  const [updateArticle] = useMutation<ArticleActionResponse>(UPDATE_ARTICLE_MUTATION, {
     variables: { articleId: articleData?.id, articleTitle: title, articleContent: content },
     onError: error => {
       setDatabaseError(error);
