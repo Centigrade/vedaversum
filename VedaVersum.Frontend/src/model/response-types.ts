@@ -16,7 +16,7 @@ export interface ArticleActionResponse {
  * "UpdateArticleAccessCounter" method returns the article which was updated
  */
 export interface UpdateArticleAccessCounterResponse {
-  UpdateArticleAccessCounter: VedaVersumArticle;
+  updateArticleAccessCounter: VedaVersumArticle;
 }
 //#endregion
 
