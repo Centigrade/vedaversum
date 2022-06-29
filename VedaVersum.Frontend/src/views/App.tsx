@@ -63,9 +63,7 @@ function App() {
   } = useQuery<SearchArticlesResponse>(SEARCH_ARTICLES_QUERY, {
     errorPolicy: 'all',
     variables: { searchTerm: searchTerm },
-    onCompleted: data => {
-      console.log('load articles matching the search term "' + searchTerm + '" triggered');
-    },
+    onCompleted: data => {},
   });
   //#endregion
 
@@ -95,72 +93,74 @@ function App() {
 
   //#region render view
   return (
-    <>
-      <div className="w-full flex items-start mt-8">
-        {allArticlesData && articlesCreatedByUserData ? (
-          // all data properly loaded
-          <>
-            <div className="p-8 w-1/6">
-              {(notificationsClicked || searchTerm) && (
-                <button onClick={() => handleBackClick()}>
-                  <img src={goBackArrow} alt="arrow pointing to the left" />
-                </button>
-              )}
-            </div>
-            <div className="w-3/4">
-              {notificationsClicked && (
+    <div className="w-full flex items-start mt-8">
+      {allArticlesData && articlesCreatedByUserData ? (
+        // data properly loaded from database
+        <>
+          {/* go back arrow only on last modified / search result view */}
+          <div className="p-8 w-1/6">
+            {(notificationsClicked || searchTerm) && (
+              <button onClick={() => handleBackClick()}>
+                <img src={goBackArrow} alt="arrow pointing to the left" />
+              </button>
+            )}
+          </div>
+          {/* show articles depending on view variables */}
+          <div className="w-3/4">
+            {notificationsClicked ? (
+              // show last modified articles from global store
+              lastModifiedArticles ? (
                 <>
                   <h1 className="mt-3 mb-6 text-head font-semibold">{notificationsClickedHeadingText}</h1>
                   <RenderedArticles articles={lastModifiedArticles}></RenderedArticles>
                 </>
-              )}
-              {searchTerm && searchArticlesData && (
+              ) : (
+                // last modified articles empty
+                'This should never happen: Last modified articles are empty! Please try again.'
+              )
+            ) : // show search results because user entered search term
+            searchTerm ? (
+              searchArticlesData ? (
                 <>
                   <h1 className="mt-3 mb-6 text-head font-semibold">{searchResultsHeadingText}</h1>
                   <RenderedArticles articles={searchArticlesData.searchArticles}></RenderedArticles>
                 </>
-              )}
-              {!notificationsClicked && !searchTerm && (
-                <ArticleList
-                  allArticles={allArticlesData.allArticles}
-                  articlesCreatedByUser={articlesCreatedByUserData.allArticlesCreatedByUser}
-                />
-              )}
-            </div>
-          </>
-        ) : (
-          <div className="w-3/4">
-            {/* loading / error handling */}
-            <p className="text-subhead">
-              <>
-                {loadingAllArticles || loadingArticlesCreatedByUser
-                  ? // data is loading
-                    loadingText
-                  : errorAllArticles
-                  ? // error loading data
-                    errorAllArticles.message
-                  : errorArticlesCreatedByUser
-                  ? errorArticlesCreatedByUser.message
-                  : unknownErrorText}
-                {notificationsClicked &&
-                  !lastModifiedArticles &&
-                  'This should never happen: Last modified articles are empty! Please try again.'}
-                {searchTerm && loadingSearchArticles
-                  ? // data is loading
-                    loadingText
-                  : errorSearchArticles
-                  ? // error loading data
-                    errorSearchArticles.message
-                  : unknownErrorText}
-              </>
-            </p>
+              ) : // filtered articles are still loading from the database
+              loadingSearchArticles ? (
+                loadingText
+              ) : // error loading data
+              errorSearchArticles ? (
+                errorSearchArticles.message
+              ) : (
+                unknownErrorText
+              )
+            ) : (
+              // show main page with articles list
+              <ArticleList
+                allArticles={allArticlesData.allArticles}
+                articlesCreatedByUser={articlesCreatedByUserData.allArticlesCreatedByUser}
+              />
+            )}
           </div>
-        )}
-        <div className="w-1/4 pl-12">
-          <UserList />
-        </div>
-      </div>
-    </>
+          <div className="w-1/4 pl-12">
+            <UserList />
+          </div>
+        </>
+      ) : (
+        // general data (= all articles) not loaded yet or error accessing the database
+        <p className="text-subhead m-12">
+          {loadingAllArticles || loadingArticlesCreatedByUser
+            ? // data is loading
+              loadingText
+            : errorAllArticles
+            ? // error loading data
+              errorAllArticles.message
+            : errorArticlesCreatedByUser
+            ? errorArticlesCreatedByUser.message
+            : unknownErrorText}
+        </p>
+      )}
+    </div>
   );
   //#endregion
 }
