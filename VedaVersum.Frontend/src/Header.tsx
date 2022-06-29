@@ -115,21 +115,21 @@ function Header() {
         </div>
         <div className="w-1/2 flex items-center justify-end">
           {/* search bar */}
-          <label className="relative block mr-4">
-            <img
-              src={searchIcon}
-              alt="magnifying glass"
-              className="pointer-events-none w-6 h-6 absolute top-1/2 transform -translate-y-1/2 right-1 mr-2"
-            />
+          <div className="p-1 flex mr-4 bg-white rounded">
             <input
               name="searchInput"
               value={searchTerm}
               type="text"
               placeholder="Search"
-              className="w-full rounded py-2 px-2 mr-28 outline-4 focus-visible:outline-primary"
+              className="shrink grow basis-0 py-2 px-2 focus-visible:outline-none"
               onChange={handleInput}
             />
-          </label>
+            <img
+              src={searchIcon}
+              alt="magnifying glass"
+              className="shrink-0 grow-0 basis-auto pointer-events-none mr-2"
+            />
+          </div>
           {/* create new article button */}
           <PopUpModal show={ArticleEditor} openModalText="Start writing" dataContext="" />
           {/* avatar image */}
