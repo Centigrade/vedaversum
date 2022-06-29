@@ -32,4 +32,5 @@ module.exports = {
 
     extend: { boxShadow: { 'button-hover': '0px 0px 0px 4px "#BBF7D0"' } },
   },
+  plugins: [require('@tailwindcss/line-clamp')],
 };

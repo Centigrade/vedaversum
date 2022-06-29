@@ -18,9 +18,6 @@ export interface ArticleItemProps {
 function ArticleItem(props: ArticleItemProps) {
   const article = props.articleData;
 
-  // number of characters after which the article content is truncated
-  const numberOfCharacters = 220;
-
   //#region render component
   return (
     <div className="mb-12">
@@ -31,11 +28,7 @@ function ArticleItem(props: ArticleItemProps) {
             <span>{formatDate(article.created)}</span>
           </div>
           <h4 className="text-article-heading my-auto font-medium text-left">{article.title} </h4>
-          <p className="text-article-text text-gray-800 my-auto">
-            {article.content.length > numberOfCharacters
-              ? truncateText(article.content, numberOfCharacters)
-              : article.content}
-          </p>
+          <p className="text-article-text text-gray-800 mb-auto mt-4 line-clamp-3">{article.content}</p>
 
           <div className="flex mt-5">
             {article.updatedAt && article.userUpdated && (
@@ -56,16 +49,4 @@ function ArticleItem(props: ArticleItemProps) {
 }
 //#endregion
 
-//#region helper functions
-/**
- * truncates a given string after a given number of characters
- * @param content string to be truncated
- * @param numberOfCharacters number of characters after which the string is truncated
- * @returns truncated string with '...' at the end
- */
-function truncateText(content: string, numberOfCharacters: number): string {
-  let contentPreview = content;
-  return contentPreview.slice(0, numberOfCharacters) + '...';
-}
-//#endregion
 export default ArticleItem;
