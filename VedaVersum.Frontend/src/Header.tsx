@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setActiveTab } from 'store/activeTab.reducer';
+import { addArticleToLastModified } from 'store/lastModifiedArticles.reducer';
 import { setNotificationsClicked } from 'store/notificationsClicked.reducer';
 import { increaseNotificationsCounter } from 'store/notificationsCounter.reducer';
 import { setSearchTerm } from 'store/searchTerm.reducer';
@@ -29,6 +30,7 @@ function Header() {
 
   // subscription
   const [subscription, setSubscription] = useState<Subscription>();
+
   //#endregion
 
   //#region subscription to article changes
@@ -41,11 +43,13 @@ function Header() {
     if (!subscription) {
       setSubscription(
         client.subscribe({ query: ARTICLE_CHANGED_SUBSCRIPTION }).subscribe((result: any) => {
+          const updatedArticle = result.data?.articleChanged?.vedaVersumArticle;
           // This executes each time when GraphQL pushes subscription notification
           if (
-            result.data?.articleChanged?.vedaVersumArticle.userUpdated !== userData.userEmail &&
-            result.data?.articleChanged?.vedaVersumArticle.userCreated !== userData.userEmail
+            updatedArticle.userUpdated !== userData.userEmail &&
+            updatedArticle.vedaVersumArticle.userCreated !== userData.userEmail
           ) {
+            dispatch(addArticleToLastModified(updatedArticle));
             dispatch(increaseNotificationsCounter());
           }
         }),
