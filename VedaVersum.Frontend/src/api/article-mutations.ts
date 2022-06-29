@@ -44,7 +44,7 @@ export const UPDATE_ARTICLE_MUTATION = gql`
 
 export const UPDATE_ARTICLE_ACCESS_COUNTER_MUTATION = gql`
   mutation UpdateArticleAccessCounter($articleId: String!) {
-    articleAction(action: Update, articleId: $articleId) {
+    updateArticleAccessCounter(articleId: $articleId) {
       id
       title
       content

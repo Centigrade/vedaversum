@@ -58,6 +58,9 @@ namespace VedaVersum.Backend.Api
             return user;
         }
 
+        /// <summary>
+        /// Handle article actions: create, update or delete
+        /// </summary>
         [Authorize]
         public async Task<VedaVersumArticle> ArticleAction(
             VedaVersumArticleAction action,
@@ -112,13 +115,31 @@ namespace VedaVersum.Backend.Api
             return article!;
         }
 
-        /*
-        TODO:
+        
+        /// <summary>
+        /// Increase article access counter by 1
+        /// </summary>
         [Authorize]
         public async Task<VedaVersumArticle> UpdateArticleAccessCounter(
-            string? articleId
+            string articleId
         ) {
-            
-        } */
+            VedaVersumArticle? article = null;
+            if(string.IsNullOrEmpty(articleId))
+            {
+            throw new ArgumentNullException(nameof(articleId));
+            }
+            article = await _dataAccess.GetArticleById(articleId);
+            if(article == null)
+            {
+                throw new ArgumentException($"Can not find article by id '{articleId}'");
+            }
+
+            if(article != null)
+            {
+                article.AccessCounter = article.AccessCounter + 1;
+                await _dataAccess.UpdateArticle(article);
+            }
+            return article!;
+        }
     }
 }
