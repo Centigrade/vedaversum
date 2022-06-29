@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import activeTabReducer, { ActiveTabState } from './activeTab.reducer';
+import lastModifiedArticlesReducer, { LastModifiedArticlesState } from './lastModifiedArticles.reducer';
 import notificationsClickedReducer, { NotificationsClickedState } from './notificationsClicked.reducer';
 import notificationsCounterReducer, { NotificationsCounterState } from './notificationsCounter.reducer';
 import searchTermReducer, { SearchTermState } from './searchTerm.reducer';
@@ -12,6 +13,7 @@ export interface RootState {
   searchTerm: SearchTermState;
   notificationsCounter: NotificationsCounterState;
   notificationsClicked: NotificationsClickedState;
+  lastModifiedArticles: LastModifiedArticlesState;
 }
 
 /**
@@ -27,5 +29,7 @@ export const store = configureStore({
     notificationsCounter: notificationsCounterReducer,
     // variable to (re)set the articles view when the user clicked on the notifications
     notificationsClicked: notificationsClickedReducer,
+    // list of articles that were last modified = articles that are shown to the user when notifications are clicked
+    lastModifiedArticles: lastModifiedArticlesReducer,
   },
 });
