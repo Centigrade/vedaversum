@@ -19,7 +19,7 @@ function App() {
   const loginUserData: LoggedInUserData = getLoggedInUserData();
 
   const notificationsClickedHeadingText = 'Last updated';
-  const searchResultsHeadingText = 'Search results';
+  const searchResultsHeadingText = 'Search results for';
 
   const loadingText = 'Loading...';
   const unknownErrorText = 'Unknown error loading data from the database, please try again.';
@@ -63,7 +63,6 @@ function App() {
   } = useQuery<SearchArticlesResponse>(SEARCH_ARTICLES_QUERY, {
     errorPolicy: 'all',
     variables: { searchTerm: searchTerm },
-    onCompleted: data => {},
   });
   //#endregion
 
@@ -122,7 +121,9 @@ function App() {
             searchTerm ? (
               searchArticlesData ? (
                 <>
-                  <h1 className="mt-3 mb-6 text-head font-semibold">{searchResultsHeadingText}</h1>
+                  <h1 className="mt-3 mb-6 text-head font-semibold">
+                    {searchResultsHeadingText} "{searchTerm}"
+                  </h1>
                   <RenderedArticles articles={searchArticlesData.searchArticles}></RenderedArticles>
                 </>
               ) : // filtered articles are still loading from the database

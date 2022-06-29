@@ -2,15 +2,15 @@ import { useApolloClient } from '@apollo/client';
 import { ARTICLE_CHANGED_SUBSCRIPTION } from 'api/subscriptions';
 import searchIcon from 'assets/icons/search-icon.svg';
 import logoWithName from 'assets/logo-with-name.svg';
+import { useDebounce } from 'customHooks/useDebounce.hook';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setActiveTab } from 'store/activeTab.reducer';
 import { addArticleToLastModified } from 'store/lastModifiedArticles.reducer';
 import { setNotificationsClicked } from 'store/notificationsClicked.reducer';
 import { increaseNotificationsCounter } from 'store/notificationsCounter.reducer';
 import { setSearchTerm } from 'store/searchTerm.reducer';
-import { RootState } from 'store/store';
 import { getLoggedInUserData } from 'utils/main';
 import ArticleEditor from 'views/components/ArticleEditor';
 import PopUpModal from 'views/components/PopUpModal';
@@ -19,7 +19,6 @@ import UserFlyoutMenu from './views/components/UserFlyoutMenu';
 
 function Header() {
   //#region state
-  const searchTerm = useSelector((state: RootState) => state.searchTerm.value);
   const dispatch = useDispatch();
 
   // needed to filter changes that the user made by her/himself
@@ -31,6 +30,26 @@ function Header() {
   // subscription
   const [subscription, setSubscription] = useState<Subscription>();
 
+  // variables for debouncing when the user enters a search term -
+  // fires API call only when the user stops typing
+  const [componentSearchTerm, setComponentSearchTerm] = useState('');
+  const debounceDelay = 500;
+  const debouncedSearchTerm = useDebounce(componentSearchTerm, debounceDelay);
+  //#endregion
+
+  //#region search input handling
+  useEffect(() => {
+    if (debouncedSearchTerm) {
+      // if debounced search term changes, update search term in store, reset  and
+      dispatch(setSearchTerm(debouncedSearchTerm));
+      // reset search term in header
+      setComponentSearchTerm('');
+      // potentially reset view
+      dispatch(setNotificationsClicked(false));
+      // navigate to search results view
+      navigateTo('/');
+    }
+  }, [debouncedSearchTerm, dispatch, navigateTo]);
   //#endregion
 
   //#region subscription to article changes
@@ -65,23 +84,6 @@ function Header() {
   //#endregion
 
   //#region helper functions
-  // TODO:
-  /**
-   * this function should manage the search input that the api is not triggered after each letter but only when the user stopped typing
-   * @param func
-   * @param delay
-   * @returns
-   */
-  /* function debounce<T extends unknown[]>(func: (...args: T) => void, delay: number): (...args: T) => void {
-    let timer: any | null = null;
-    return (...args: T) => {
-      if (timer) clearTimeout(timer);
-      timer = setTimeout(() => {
-        func.call(null, ...args);
-      }, delay);
-    };
-  } */
-
   /**
    * handles click on logo = resets all view settings from the user, i.e.
    * the active tab (sorting) and the search term (filtering),
@@ -93,15 +95,6 @@ function Header() {
     dispatch(setNotificationsClicked(false));
     navigateTo('/');
   }
-
-  // send search term to App.tsx to trigger the api and set local storage
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // debounce((e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setSearchTerm(e.target.value));
-    dispatch(setNotificationsClicked(false));
-    navigateTo('/');
-    // }, 200);
-  };
   //#endregion
 
   //#region render component
@@ -118,11 +111,11 @@ function Header() {
           <div className="p-1 flex mr-4 bg-white rounded">
             <input
               name="searchInput"
-              value={searchTerm}
+              value={componentSearchTerm}
               type="text"
               placeholder="Search"
               className="shrink grow basis-0 py-2 px-2 focus-visible:outline-none"
-              onChange={handleInput}
+              onChange={e => setComponentSearchTerm(e.target.value)}
             />
             <img
               src={searchIcon}
