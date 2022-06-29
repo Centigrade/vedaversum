@@ -27,8 +27,7 @@ function ArticleDetailsView() {
   // get login data for author validation
   const loginUserData: LoggedInUserData = getLoggedInUserData();
 
-  // increase access counter
-
+  // mutation to increase access counter
   const [updateArticleAccessCounter] = useMutation<UpdateArticleAccessCounterResponse>(
     UPDATE_ARTICLE_ACCESS_COUNTER_MUTATION,
     {
@@ -38,6 +37,7 @@ function ArticleDetailsView() {
 
   useEffect(() => {
     // in develop mode this gets called twice because in develop mode onMount (useEffect) gets called twice
+    // increase article access counter on mount
     updateArticleAccessCounter();
   }, [updateArticleAccessCounter]);
 
