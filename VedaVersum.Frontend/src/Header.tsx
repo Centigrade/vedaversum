@@ -54,10 +54,7 @@ function Header() {
   }, [client, userData, dispatch, subscription]);
 
   useEffect(() => {
-    console.log('mounted');
-
     return () => {
-      console.log('unmounted');
       subscription?.unsubscribe();
     };
   }, [subscription]);
