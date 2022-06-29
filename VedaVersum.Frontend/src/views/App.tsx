@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
-import { ALL_ARTICLES_QUERY, CREATED_ARTICLES_QUERY } from 'api/article-queries';
+import { ALL_ARTICLES_QUERY, CREATED_ARTICLES_QUERY, SEARCH_ARTICLES_QUERY } from 'api/article-queries';
 import goBackArrow from 'assets/icons/go-back-arrow.svg';
-import { GetAllArticlesResponse, GetUserCreatedArticlesResponse } from 'model/response-types';
+import { GetAllArticlesResponse, GetUserCreatedArticlesResponse, SearchArticlesResponse } from 'model/response-types';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetLastModifiedArticles } from 'store/lastModifiedArticles.reducer';
@@ -20,6 +20,16 @@ function App() {
 
   const notificationsClickedHeadingText = 'Last updated';
   const searchResultsHeadingText = 'Search results';
+
+  const loadingText = 'Loading...';
+  const unknownErrorText = 'Unknown error loading data from the database, please try again.';
+  //#endregion
+
+  //#region get variables from global store
+  const notificationsClicked = useSelector((state: RootState) => state.notificationsClicked.value);
+  const searchTerm = useSelector((state: RootState) => state.searchTerm.value);
+  const lastModifiedArticles = useSelector((state: RootState) => state.lastModifiedArticles.value);
+  const dispatch = useDispatch();
   //#endregion
 
   //#region get data from the database
@@ -43,30 +53,28 @@ function App() {
     variables: { userEmail: loginUserData.userEmail },
     fetchPolicy: 'no-cache', // 'cache-and-network' - if this is wished, a custom merge function must be written
   });
-  // TODO: fix this with Mikhail
-  /* const {
+
+  // load articles matching the search term (currently backend functionality is not implemented yet so it returns all articles)
+  // TODO: this is triggered on mount and on search term reset - how trigger the api call only on search term change?
+  const {
     error: errorSearchArticles,
-    data: SearchArticlesData,
+    data: searchArticlesData,
     loading: loadingSearchArticles,
   } = useQuery<SearchArticlesResponse>(SEARCH_ARTICLES_QUERY, {
     errorPolicy: 'all',
     variables: { searchTerm: searchTerm },
-  }); */
+    onCompleted: data => {
+      console.log('load articles matching the search term "' + searchTerm + '" triggered');
+    },
+  });
   //#endregion
 
   //#region database data dependencies
+  // on mount and when the article list updates, (re)calculate the access counter max value for the images
   calculateAccessCounterMaxValue(allArticlesData?.allArticles);
-
   useEffect(() => {
     calculateAccessCounterMaxValue(allArticlesData?.allArticles);
   }, [allArticlesData]);
-  //#endregion
-
-  //#region get variables from global store
-  const notificationsClicked = useSelector((state: RootState) => state.notificationsClicked.value);
-  const searchTerm = useSelector((state: RootState) => state.searchTerm.value);
-  const lastModifiedArticles = useSelector((state: RootState) => state.lastModifiedArticles.value);
-  const dispatch = useDispatch();
   //#endregion
 
   //#region helper functions
@@ -85,6 +93,7 @@ function App() {
   }
   //#endregion
 
+  //#region render view
   return (
     <>
       <div className="w-full flex items-start mt-8">
@@ -99,38 +108,51 @@ function App() {
               )}
             </div>
             <div className="w-3/4">
-              {(notificationsClicked || searchTerm) && (
+              {notificationsClicked && (
                 <>
-                  <h1 className="mt-3 mb-6 text-head font-semibold">
-                    {notificationsClicked ? notificationsClickedHeadingText : searchResultsHeadingText}
-                  </h1>
-                  <RenderedArticles
-                    articles={notificationsClicked ? lastModifiedArticles : allArticlesData.allArticles}
-                  ></RenderedArticles>
+                  <h1 className="mt-3 mb-6 text-head font-semibold">{notificationsClickedHeadingText}</h1>
+                  <RenderedArticles articles={lastModifiedArticles}></RenderedArticles>
+                </>
+              )}
+              {searchTerm && searchArticlesData && (
+                <>
+                  <h1 className="mt-3 mb-6 text-head font-semibold">{searchResultsHeadingText}</h1>
+                  <RenderedArticles articles={searchArticlesData.searchArticles}></RenderedArticles>
                 </>
               )}
               {!notificationsClicked && !searchTerm && (
-                <>
-                  <ArticleList
-                    allArticles={allArticlesData.allArticles}
-                    articlesCreatedByUser={articlesCreatedByUserData.allArticlesCreatedByUser}
-                  />
-                </>
+                <ArticleList
+                  allArticles={allArticlesData.allArticles}
+                  articlesCreatedByUser={articlesCreatedByUserData.allArticlesCreatedByUser}
+                />
               )}
             </div>
           </>
         ) : (
           <div className="w-3/4">
+            {/* loading / error handling */}
             <p className="text-subhead">
-              {loadingAllArticles || loadingArticlesCreatedByUser
-                ? // data is loading
-                  'Loading...'
-                : errorAllArticles
-                ? // error loading data
-                  errorAllArticles.message
-                : errorArticlesCreatedByUser
-                ? errorArticlesCreatedByUser.message
-                : 'Unknown error, please try again.'}
+              <>
+                {loadingAllArticles || loadingArticlesCreatedByUser
+                  ? // data is loading
+                    loadingText
+                  : errorAllArticles
+                  ? // error loading data
+                    errorAllArticles.message
+                  : errorArticlesCreatedByUser
+                  ? errorArticlesCreatedByUser.message
+                  : unknownErrorText}
+                {notificationsClicked &&
+                  !lastModifiedArticles &&
+                  'This should never happen: Last modified articles are empty! Please try again.'}
+                {searchTerm && loadingSearchArticles
+                  ? // data is loading
+                    loadingText
+                  : errorSearchArticles
+                  ? // error loading data
+                    errorSearchArticles.message
+                  : unknownErrorText}
+              </>
             </p>
           </div>
         )}
@@ -140,6 +162,7 @@ function App() {
       </div>
     </>
   );
+  //#endregion
 }
 
 export default App;
