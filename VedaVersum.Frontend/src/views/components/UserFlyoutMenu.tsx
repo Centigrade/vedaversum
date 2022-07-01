@@ -1,4 +1,3 @@
-import logOutIcon from 'assets/icons/log-out-icon.svg';
 import notificationIcon from 'assets/icons/notification-icon.svg';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -62,7 +61,7 @@ function UserFlyoutMenu() {
         />
       </button>
       {menuOpen && (
-        <div className="z-10 rounded-lg fixed top-14 right-5 w-60 h-72 shadow-lg bg-white p-6 text-center">
+        <div className="z-10 rounded-lg fixed top-14 right-5 w-60 h-64 shadow-lg bg-white p-6 text-center">
           {/* user data */}
           <>
             <div className="flex justify-center">
@@ -83,10 +82,6 @@ function UserFlyoutMenu() {
             <span>Notifications</span>
             {numberOfNotifications > 0 && <span className="text-primary ml-4">{numberOfNotifications}</span>}
           </button>
-          <div className="mt-4 flex align-center hover:cursor-pointer">
-            <img src={logOutIcon} alt="a bell" className="mr-5" />
-            <span>Log out</span>
-          </div>
         </div>
       )}
     </div>

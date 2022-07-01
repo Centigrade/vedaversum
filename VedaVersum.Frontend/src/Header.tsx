@@ -1,8 +1,6 @@
 import { useApolloClient } from '@apollo/client';
 import { ARTICLE_CHANGED_SUBSCRIPTION } from 'api/subscriptions';
-import searchIcon from 'assets/icons/search-icon.svg';
 import logoWithName from 'assets/logo-with-name.svg';
-import { useDebounce } from 'customHooks/useDebounce.hook';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -29,27 +27,6 @@ function Header() {
 
   // subscription
   const [subscription, setSubscription] = useState<Subscription>();
-
-  // variables for debouncing when the user enters a search term -
-  // fires API call only when the user stops typing
-  const [componentSearchTerm, setComponentSearchTerm] = useState('');
-  const debounceDelay = 500;
-  const debouncedSearchTerm = useDebounce(componentSearchTerm, debounceDelay);
-  //#endregion
-
-  //#region search input handling
-  useEffect(() => {
-    if (debouncedSearchTerm) {
-      // if debounced search term changes, update search term in store, reset  and
-      dispatch(setSearchTerm(debouncedSearchTerm));
-      // reset search term in header
-      setComponentSearchTerm('');
-      // potentially reset view
-      dispatch(setNotificationsClicked(false));
-      // navigate to search results view
-      navigateTo('/');
-    }
-  }, [debouncedSearchTerm, dispatch, navigateTo]);
   //#endregion
 
   //#region subscription to article changes
@@ -107,22 +84,6 @@ function Header() {
           </button>
         </div>
         <div className="w-1/2 flex items-center justify-end">
-          {/* search bar */}
-          <div className="p-1 flex mr-4 bg-white rounded">
-            <input
-              name="searchInput"
-              value={componentSearchTerm}
-              type="text"
-              placeholder="Search"
-              className="shrink grow basis-0 py-2 px-2 focus-visible:outline-none"
-              onChange={e => setComponentSearchTerm(e.target.value)}
-            />
-            <img
-              src={searchIcon}
-              alt="magnifying glass"
-              className="shrink-0 grow-0 basis-auto pointer-events-none mr-2"
-            />
-          </div>
           {/* create new article button */}
           <PopUpModal show={ArticleEditor} openModalText="Start writing" dataContext="" />
           {/* avatar image */}

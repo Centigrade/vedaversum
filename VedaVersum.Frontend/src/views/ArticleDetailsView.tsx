@@ -9,7 +9,6 @@ import ConfirmDeleteArticle from 'views/components/ConfirmDeleteArticle';
 import PopUpModal from 'views/components/PopUpModal';
 import { ARTICLE_BY_ID_QUERY } from '../api/article-queries';
 import { GetArticleResponse, UpdateArticleAccessCounterResponse } from '../model/response-types';
-import UserList from './components/UserList';
 import UserName from './components/UserName';
 function ArticleDetailsView() {
   //#region get article data
@@ -93,9 +92,6 @@ function ArticleDetailsView() {
                 </div>
               </div>
             )}
-          </div>
-          <div className="w-1/4 pl-24">
-            <UserList />
           </div>
         </div>
         <div className="w-1/6"></div>

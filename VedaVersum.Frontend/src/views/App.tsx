@@ -10,7 +10,6 @@ import { setSearchTerm } from 'store/searchTerm.reducer';
 import { RootState } from 'store/store';
 import { calculateAccessCounterMaxValue, getLoggedInUserData, LoggedInUserData } from 'utils/main';
 import ArticleList from 'views/components/ArticleList';
-import UserList from 'views/components/UserList';
 import RenderedArticles from './components/RenderedArticles';
 
 function App() {
@@ -105,7 +104,7 @@ function App() {
             )}
           </div>
           {/* show articles depending on view variables */}
-          <div className="w-3/4">
+          <div className="w-2/3">
             {notificationsClicked ? (
               // show last modified articles from global store
               lastModifiedArticles ? (
@@ -143,9 +142,7 @@ function App() {
               />
             )}
           </div>
-          <div className="w-1/4 pl-12">
-            <UserList />
-          </div>
+          <div className="w-1/6"></div>
         </>
       ) : (
         // general data (= all articles) not loaded yet or error accessing the database
