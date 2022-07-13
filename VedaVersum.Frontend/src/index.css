@@ -14,6 +14,7 @@
   --primary-light: #bbf7d0;
   --gray-400: #a1a1aa;
   --gray-600: #52525b;
+  --gray-600-opacity-50: rgb(82, 82, 91, 0.5);
   --gray-800: #27272a;
   --white: #ffffff;
   --transparent: rgba(0, 0, 0, 0);
@@ -35,6 +36,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-/* TODO: fix this if possible
-pop up style must be imported here to overwrite the default styling */
-@import url('views/components/styles/popup.scss');
+/* markdown editor article preview - overwrite default style */
+.wmde-markdown {
+  padding-left: 0;
+  padding-right: 0;
+  overflow: hidden;
+  /* unfortunately this doesn't work properly
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; */
+}
