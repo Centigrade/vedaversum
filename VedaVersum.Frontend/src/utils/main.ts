@@ -18,17 +18,6 @@ export interface LoggedInUserData {
 type SortingOption = 'latest' | 'trending' | 'lastModified';
 //#endregion
 
-//#region working variables
-/**
- * max value of the access counter
- */
-let accessCounterMaxValue = 0;
-/**
- * defines after passing a value dependent on the accessCounterMaxValue the image of an article is chosen
- */
-const articleImageChoiceSteps = 1 / 3;
-//#endregion
-
 /**
  * reads the user's login data (name and email) from the local storage
  * @returns an object with the user's name, email and username for visual display
