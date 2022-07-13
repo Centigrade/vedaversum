@@ -1,15 +1,17 @@
 import { useMutation, useQuery } from '@apollo/client';
+import MDEditor from '@uiw/react-md-editor';
 import { UPDATE_ARTICLE_ACCESS_COUNTER_MUTATION } from 'api/article-mutations';
 import goBackArrow from 'assets/icons/go-back-arrow.svg';
 import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { formatDate, getImagePath, getLoggedInUserData, LoggedInUserData } from 'utils/main';
+import { formatDate, getLoggedInUserData, LoggedInUserData } from 'utils/main';
 import ArticleEditor from 'views/components/ArticleEditor';
 import ConfirmDeleteArticle from 'views/components/ConfirmDeleteArticle';
 import PopUpModal from 'views/components/PopUpModal';
 import { ARTICLE_BY_ID_QUERY } from '../api/article-queries';
 import { GetArticleResponse, UpdateArticleAccessCounterResponse } from '../model/response-types';
 import UserName from './components/UserName';
+
 function ArticleDetailsView() {
   //#region get article data
   // read article id from the url parameters
@@ -49,29 +51,32 @@ function ArticleDetailsView() {
             <img src={goBackArrow} alt="arrow pointing to the left" className="w-1/6" />
           </Link>
         </div>
-        <div className="p-10 text-gray-600 flex items-start w-2/3">
-          <div className="w-3/4">
+        <div className="pt-5 px-10 text-gray-600 flex items-start w-2/3">
+          <div className="w-full">
             {loading && <p className="text-head">Loading...</p>}
             {error && <p className="text-head">{error.message} :(</p>}
             {!data && !loading && !error && <p className="text-head">No data available</p>}
             {currentArticle && (
-              <div className="py-11">
-                <div className="w-full flex mb-10">
-                  <img
-                    src={getImagePath(currentArticle.accessCounter, false)}
-                    alt="some pic"
-                    className="mx-auto h-96"
-                  />
-                </div>
-                <div className="flex items-center text-article-info mb-6">
+              <div className="pt-11" data-color-mode="light">
+                <div className="w-full flex items-center text-article-info mb-6">
                   <UserName email={currentArticle.userCreated} />
                   <span>{formatDate(currentArticle.created)}</span>
                 </div>
-                <div>
-                  <h1 className="text-head my-auto font-medium text-left font-bold mb-6">{currentArticle.title} </h1>
-                  <p className="text-article-text text-gray-800 my-auto">{currentArticle.content}</p>
+                <div className="mb-10" id="article-details">
+                  <h1 className="text-head my-auto font-medium text-left font-bold mb-3">{currentArticle.title} </h1>
+                  <MDEditor
+                    className="shadow-none border-none pl-0 w-full"
+                    value={currentArticle.content}
+                    preview="preview"
+                    minHeight={230}
+                    height={230}
+                    hideToolbar={true}
+                    autoFocus={false}
+                    visiableDragbar={true}
+                    overflow={false}
+                  />
                 </div>
-                <div className="flex mb-8">
+                <div className="flex">
                   {currentArticle.updatedAt && currentArticle.userUpdated && (
                     <>
                       <span className="mr-4">Last modified by </span>
@@ -80,7 +85,7 @@ function ArticleDetailsView() {
                     </>
                   )}
                 </div>
-                <div className="flex justify-end items-center pt-8">
+                <div className="flex justify-end items-center pt-8 mb-8">
                   {/* edit article */}
                   <PopUpModal show={ArticleEditor} openModalText="Edit" dataContext={currentArticle} />
                   {/* delete article - only accessible if logged in user === author */}

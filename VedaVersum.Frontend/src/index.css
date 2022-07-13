@@ -1,3 +1,7 @@
+@import url('views/components/styles/popup.scss');
+@import url('views/components/styles/flyoutMenu.scss');
+@import url('views/components/styles/markdownEditor.scss');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -34,15 +38,4 @@ body {
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-}
-
-/* markdown editor article preview - overwrite default style */
-.wmde-markdown {
-  padding-left: 0;
-  padding-right: 0;
-  overflow: hidden;
-  /* unfortunately this doesn't work properly
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3; */
 }

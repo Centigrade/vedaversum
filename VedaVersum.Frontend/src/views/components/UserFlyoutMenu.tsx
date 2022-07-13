@@ -6,7 +6,6 @@ import { setNotificationsClicked } from 'store/notificationsClicked.reducer';
 import { resetNotificationsCounter } from 'store/notificationsCounter.reducer';
 import { RootState } from 'store/store';
 import { getAvatarUrl, getLoggedInUserData, LoggedInUserData } from 'utils/main';
-import 'views/components/styles/flyoutMenu.scss';
 
 function UserFlyoutMenu() {
   //#region variables

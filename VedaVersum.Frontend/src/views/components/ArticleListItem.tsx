@@ -23,17 +23,17 @@ function ArticleItem(props: ArticleItemProps) {
   return (
     <div className="mb-12 rounded-lg border border-gray-600-opacity-50 shadow-md p-5" data-color-mode="light">
       <div className="flex items-between">
-        <div className="w-full flex flex-col">
-          <div className="flex items-center text-article-info my-auto">
+        <div className="w-full flex flex-col" id="article-list-item">
+          <div className="flex items-center text-article-info mb-5">
             <UserName email={article.userCreated} />
             <span>{formatDate(article.created)}</span>
           </div>
-          <h4 className="text-article-heading my-auto font-medium text-left">{article.title} </h4>
+          <h4 className="text-article-heading font-medium text-left mb-2">{article.title} </h4>
           <MDEditor
-            className="shadow-none border-none pl-0 line-clamp-3"
+            className="shadow-none border-none pl-0"
             value={article.content}
             preview="preview"
-            minHeight={50}
+            height={140}
             hideToolbar={true}
             autoFocus={false}
             visiableDragbar={false}

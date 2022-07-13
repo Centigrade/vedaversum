@@ -1,0 +1,14 @@
+/* markdown editor article preview - overwrite default style */
+#article-list-item * .wmde-markdown {
+  padding-left: 0;
+  padding-right: 0;
+  overflow: hidden !important;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+}
+
+#article-details * .wmde-markdown {
+  padding-left: 0;
+  padding-right: 0;
+}
