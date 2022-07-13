@@ -1,9 +1,3 @@
-import burningCar from 'assets/images/BurningCar.png';
-import burningCarPreview from 'assets/images/BurningCarPreview.png';
-import campus from 'assets/images/Campus.png';
-import campusPreview from 'assets/images/CampusPreview.png';
-import partyFloor from 'assets/images/PartyFloor.png';
-import partyFloorPreview from 'assets/images/PartyFloorPreview.png';
 import smiley from 'assets/images/Smiley.png';
 import { readAuthContextFromLocalStorage } from 'authentication/AutContext';
 import { VedaVersumArticle } from 'model/veda-versum-article';
@@ -78,50 +72,6 @@ export function formatDate(date: string): string {
   };
   const formattedDate = givenDate.toLocaleDateString('en-GB', options);
   return ' – ' + formattedDate;
-}
-
-/**
- * chooses an article image (preview or detailed view) for an article according to its access counter value
- * @param articleAccessValue access counter value of the article
- * @param preview states if the preview or the detailed image is needed
- * @returns path to an image
- */
-export function getImagePath(articleAccessValue: number, preview: boolean): string {
-  if (articleAccessValue >= accessCounterMaxValue * 2 * articleImageChoiceSteps) {
-    if (preview) {
-      return burningCarPreview;
-    } else {
-      return burningCar;
-    }
-  } else if (articleAccessValue >= accessCounterMaxValue * articleImageChoiceSteps) {
-    if (preview) {
-      return partyFloorPreview;
-    } else {
-      return partyFloor;
-    }
-  } else {
-    if (preview) {
-      return campusPreview;
-    } else {
-      return campus;
-    }
-  }
-}
-
-/**
- * calculates the maximum value of the articles' access counter
- * @param articles : articles providing the access counter values
- */
-export function calculateAccessCounterMaxValue(articles: VedaVersumArticle[] | undefined) {
-  if (articles) {
-    let tempMaxValue = 0;
-    articles.forEach(article => {
-      if (article.accessCounter > tempMaxValue) {
-        tempMaxValue = article.accessCounter;
-      }
-    });
-    accessCounterMaxValue = tempMaxValue;
-  }
 }
 
 /**

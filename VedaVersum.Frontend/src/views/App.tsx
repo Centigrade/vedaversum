@@ -2,13 +2,12 @@ import { useQuery } from '@apollo/client';
 import { ALL_ARTICLES_QUERY, CREATED_ARTICLES_QUERY, SEARCH_ARTICLES_QUERY } from 'api/article-queries';
 import goBackArrow from 'assets/icons/go-back-arrow.svg';
 import { GetAllArticlesResponse, GetUserCreatedArticlesResponse, SearchArticlesResponse } from 'model/response-types';
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetLastModifiedArticles } from 'store/lastModifiedArticles.reducer';
 import { setNotificationsClicked } from 'store/notificationsClicked.reducer';
 import { setSearchTerm } from 'store/searchTerm.reducer';
 import { RootState } from 'store/store';
-import { calculateAccessCounterMaxValue, getLoggedInUserData, LoggedInUserData } from 'utils/main';
+import { getLoggedInUserData, LoggedInUserData } from 'utils/main';
 import ArticleList from 'views/components/ArticleList';
 import RenderedArticles from './components/RenderedArticles';
 
@@ -63,14 +62,6 @@ function App() {
     errorPolicy: 'all',
     variables: { searchTerm: searchTerm },
   });
-  //#endregion
-
-  //#region database data dependencies
-  // on mount and when the article list updates, (re)calculate the access counter max value for the images
-  calculateAccessCounterMaxValue(allArticlesData?.allArticles);
-  useEffect(() => {
-    calculateAccessCounterMaxValue(allArticlesData?.allArticles);
-  }, [allArticlesData]);
   //#endregion
 
   //#region helper functions

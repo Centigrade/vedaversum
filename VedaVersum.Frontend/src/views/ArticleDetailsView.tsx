@@ -57,10 +57,22 @@ function ArticleDetailsView() {
             {error && <p className="text-head">{error.message} :(</p>}
             {!data && !loading && !error && <p className="text-head">No data available</p>}
             {currentArticle && (
-              <div className="pt-11" data-color-mode="light">
-                <div className="w-full flex items-center text-article-info mb-6">
-                  <UserName email={currentArticle.userCreated} />
-                  <span>{formatDate(currentArticle.created)}</span>
+              <div className="w-full pt-11" data-color-mode="light">
+                <div className="flex items-center justify-between text-article-info mb-6">
+                  <div className="flex items-center">
+                    <UserName email={currentArticle.userCreated} />
+                    <span>{formatDate(currentArticle.created)}</span>
+                  </div>
+                  <div className="flex justify-end items-center">
+                    {/* edit article */}
+                    <PopUpModal show={ArticleEditor} openModalText="Edit" dataContext={currentArticle} />
+                    {/* delete article - only accessible if logged in user === author */}
+                    {loginUserData.userEmail === currentArticle.userCreated && (
+                      <div className="ml-2">
+                        <PopUpModal show={ConfirmDeleteArticle} openModalText="Delete" dataContext={currentArticle} />
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div className="mb-10" id="article-details">
                   <h1 className="text-head my-auto font-medium text-left font-bold mb-3">{currentArticle.title} </h1>
@@ -69,32 +81,20 @@ function ArticleDetailsView() {
                     value={currentArticle.content}
                     preview="preview"
                     minHeight={230}
-                    height={230}
+                    height={500}
                     hideToolbar={true}
                     autoFocus={false}
                     visiableDragbar={true}
                     overflow={false}
                   />
                 </div>
-                <div className="flex">
-                  {currentArticle.updatedAt && currentArticle.userUpdated && (
-                    <>
-                      <span className="mr-4">Last modified by </span>
-                      <UserName email={currentArticle.userUpdated} />
-                      <span>{formatDate(currentArticle.updatedAt)}</span>
-                    </>
-                  )}
-                </div>
-                <div className="flex justify-end items-center pt-8 mb-8">
-                  {/* edit article */}
-                  <PopUpModal show={ArticleEditor} openModalText="Edit" dataContext={currentArticle} />
-                  {/* delete article - only accessible if logged in user === author */}
-                  {loginUserData.userEmail === currentArticle.userCreated && (
-                    <div className="ml-2">
-                      <PopUpModal show={ConfirmDeleteArticle} openModalText="Delete" dataContext={currentArticle} />
-                    </div>
-                  )}
-                </div>
+                {currentArticle.updatedAt && currentArticle.userUpdated && (
+                  <div className="flex items-center mb-6">
+                    <span className="mr-4">Last modified by </span>
+                    <UserName email={currentArticle.userUpdated} />
+                    <span>{formatDate(currentArticle.updatedAt)}</span>
+                  </div>
+                )}
               </div>
             )}
           </div>
