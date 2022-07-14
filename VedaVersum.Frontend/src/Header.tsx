@@ -4,12 +4,9 @@ import logoWithName from 'assets/logo-with-name.svg';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setActiveTab } from 'store/activeTab.reducer';
 import { addArticleToLastModified } from 'store/lastModifiedArticles.reducer';
-import { setNotificationsClicked } from 'store/notificationsClicked.reducer';
 import { increaseNotificationsCounter } from 'store/notificationsCounter.reducer';
-import { setSearchTerm } from 'store/searchTerm.reducer';
-import { getLoggedInUserData } from 'utils/main';
+import { getLoggedInUserData, resetAllViewSettings } from 'utils/main';
 import ArticleEditor from 'views/components/ArticleEditor';
 import PopUpModal from 'views/components/PopUpModal';
 import { Subscription } from 'zen-observable-ts';
@@ -40,6 +37,7 @@ function Header() {
       setSubscription(
         client.subscribe({ query: ARTICLE_CHANGED_SUBSCRIPTION }).subscribe((result: any) => {
           const updatedArticle = result.data?.articleChanged?.vedaVersumArticle;
+
           // This executes each time when GraphQL pushes subscription notification
           if (
             updatedArticle.userUpdated !== userData.userEmail &&
@@ -62,15 +60,10 @@ function Header() {
 
   //#region helper functions
   /**
-   * handles click on logo = resets all view settings from the user, i.e.
-   * the active tab (sorting) and the search term (filtering),
-   * and navigates back to the landing page
+   * handles click on logo = reset all view settings
    */
   function handleLogoClick(): void {
-    dispatch(setSearchTerm(''));
-    dispatch(setActiveTab('allArticles'));
-    dispatch(setNotificationsClicked(false));
-    navigateTo('/');
+    resetAllViewSettings(dispatch, navigateTo);
   }
   //#endregion
 

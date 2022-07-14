@@ -3,7 +3,9 @@ import { DELETE_ARTICLE_MUTATION } from 'api/article-mutations';
 import { ArticleActionResponse } from 'model/response-types';
 import { VedaVersumArticle } from 'model/veda-versum-article';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { resetAllViewSettings } from 'utils/main';
 
 /**
  * type for editor props
@@ -14,6 +16,7 @@ interface DeleteArticleProps {
 }
 
 function ConfirmDeleteArticle(props: DeleteArticleProps) {
+  const dispatch = useDispatch();
   //#region state - article variables
   const title = props.dataContext.title;
   const confirmText = `Are you sure you want to delete the article "${title}"?`;
@@ -33,7 +36,7 @@ function ConfirmDeleteArticle(props: DeleteArticleProps) {
     },
     onCompleted: data => {
       props.closePopup();
-      navigateTo('/');
+      resetAllViewSettings(dispatch, navigateTo);
     },
   });
   //#endregion
