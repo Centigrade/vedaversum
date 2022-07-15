@@ -1,11 +1,10 @@
 import { useQuery } from '@apollo/client';
-import { ALL_ARTICLES_QUERY, CREATED_ARTICLES_QUERY, SEARCH_ARTICLES_QUERY } from 'api/article-queries';
+import { ALL_ARTICLES_QUERY, CREATED_ARTICLES_QUERY } from 'api/article-queries';
 import goBackArrow from 'assets/icons/go-back-arrow.svg';
-import { GetAllArticlesResponse, GetUserCreatedArticlesResponse, SearchArticlesResponse } from 'model/response-types';
+import { GetAllArticlesResponse, GetUserCreatedArticlesResponse } from 'model/response-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetLastModifiedArticles } from 'store/lastModifiedArticles.reducer';
 import { setNotificationsClicked } from 'store/notificationsClicked.reducer';
-import { setSearchTerm } from 'store/searchTerm.reducer';
 import { RootState } from 'store/store';
 import { getLoggedInUserData, LoggedInUserData } from 'utils/main';
 import ArticleList from 'views/components/ArticleList';
@@ -17,7 +16,6 @@ function App() {
   const loginUserData: LoggedInUserData = getLoggedInUserData();
 
   const notificationsClickedHeadingText = 'Last updated';
-  const searchResultsHeadingText = 'Search results for';
 
   const loadingText = 'Loading...';
   const unknownErrorText = 'Unknown error loading data from the database, please try again.';
@@ -25,7 +23,6 @@ function App() {
 
   //#region get variables from global store
   const notificationsClicked = useSelector((state: RootState) => state.notificationsClicked.value);
-  const searchTerm = useSelector((state: RootState) => state.searchTerm.value);
   const lastModifiedArticles = useSelector((state: RootState) => state.lastModifiedArticles.value);
   const dispatch = useDispatch();
   //#endregion
@@ -51,31 +48,17 @@ function App() {
     variables: { userEmail: loginUserData.userEmail },
     fetchPolicy: 'no-cache', // 'cache-and-network' - if this is wished, a custom merge function must be written
   });
-
-  // load articles matching the search term (currently backend functionality is not implemented yet so it returns all articles)
-  // TODO: this is triggered on mount and on search term reset - how trigger the api call only on search term change?
-  const {
-    error: errorSearchArticles,
-    data: searchArticlesData,
-    loading: loadingSearchArticles,
-  } = useQuery<SearchArticlesResponse>(SEARCH_ARTICLES_QUERY, {
-    errorPolicy: 'all',
-    variables: { searchTerm: searchTerm },
-  });
   //#endregion
 
   //#region helper functions
   /**
-   * handles back click actions according to the current view (notifications vs. search term)
+   * handles back click actions according to the current view (notifications)
    */
   function handleBackClick(): void {
     if (notificationsClicked) {
       // reset notifications clicked and clear last modified articles list
       dispatch(setNotificationsClicked(false));
       dispatch(resetLastModifiedArticles);
-    } else if (searchTerm) {
-      // reset search term
-      dispatch(setSearchTerm(''));
     }
   }
   //#endregion
@@ -86,9 +69,9 @@ function App() {
       {allArticlesData && articlesCreatedByUserData ? (
         // data properly loaded from database
         <>
-          {/* go back arrow only on last modified / search result view */}
+          {/* go back arrow only on last modified view */}
           <div className="p-8 w-1/6">
-            {(notificationsClicked || searchTerm) && (
+            {notificationsClicked && (
               <button onClick={() => handleBackClick()}>
                 <img src={goBackArrow} alt="arrow pointing to the left" />
               </button>
@@ -106,24 +89,6 @@ function App() {
               ) : (
                 // last modified articles empty
                 'This should never happen: Last modified articles are empty! Please try again.'
-              )
-            ) : // show search results because user entered search term
-            searchTerm ? (
-              searchArticlesData ? (
-                <>
-                  <h1 className="mt-3 mb-6 text-head font-semibold">
-                    {searchResultsHeadingText} "{searchTerm}"
-                  </h1>
-                  <RenderedArticles articles={searchArticlesData.searchArticles}></RenderedArticles>
-                </>
-              ) : // filtered articles are still loading from the database
-              loadingSearchArticles ? (
-                loadingText
-              ) : // error loading data
-              errorSearchArticles ? (
-                errorSearchArticles.message
-              ) : (
-                unknownErrorText
               )
             ) : (
               // show main page with articles list

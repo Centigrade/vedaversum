@@ -8,7 +8,7 @@ export interface NotificationsClickedState {
   value: boolean;
 }
 /**
- * type for the search term actions
+ * type for the notifications clicked actions
  */
 export interface NotificationsClickedAction {
   type: string;

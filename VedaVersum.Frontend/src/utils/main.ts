@@ -6,7 +6,6 @@ import { Dispatch } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 import { setActiveTab } from 'store/activeTab.reducer';
 import { setNotificationsClicked } from 'store/notificationsClicked.reducer';
-import { setSearchTerm } from 'store/searchTerm.reducer';
 
 //#region types
 /**
@@ -106,14 +105,13 @@ export function sortArticlesBy(sortBy: SortingOption, articles: VedaVersumArticl
 }
 
 /**
- * resets all view settings from the user, i.e.
- * the active tab (sorting) and the search term (filtering),
+ * resets all view settings from the user,
+ * i.e. the active tab (sorting),
  * and navigates back to the landing page
  * @param dispatch action handler to mutate global state
  * @param navigateTo router navigation function
  */
 export function resetAllViewSettings(dispatch: Dispatch<AnyAction>, navigateTo: NavigateFunction): void {
-  dispatch(setSearchTerm(''));
   dispatch(setActiveTab('allArticles'));
   dispatch(setNotificationsClicked(false));
   navigateTo('/');

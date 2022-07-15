@@ -85,15 +85,6 @@ namespace VedaVersum.Backend.Api
             return await dataLoader.LoadAsync(articleId, CancellationToken.None);
         }
 
-        /// <summary>
-        /// Returns articles related to the search term
-        /// </summary>
-        [Authorize]
-        public Task<IEnumerable<VedaVersumArticle>> SearchArticles(String searchTerm)
-        {
-            return _dataAccess.GetAll();//TODO
-        }
-
 
         /* ********************************************* */
         /* *** queries related to the user logged in *** */

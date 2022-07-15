@@ -43,13 +43,6 @@ export interface GetActiveUsers {
 }
 
 /**
- * "searchArticles" refers to "SearchArticles" method that returns all articles that contain the given search term
- */
-export interface SearchArticlesResponse {
-  searchArticles: VedaVersumArticle[];
-}
-
-/**
  * "allArticlesCreatedByUser" refers to "GetAllArticlesCreatedByUser" method that returns all articles created by the given user
  */
 export interface GetUserCreatedArticlesResponse {

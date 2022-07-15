@@ -56,22 +56,3 @@ export const ARTICLE_BY_ID_QUERY = gql`
     }
   }
 `;
-
-/**
- * query to get articles related to a given search term
- *  */
-export const SEARCH_ARTICLES_QUERY = gql`
-  query SearchArticles($searchTerm: String!) {
-    searchArticles(searchTerm: $searchTerm) {
-      id
-      title
-      content
-      created
-      userCreated
-      relatedArticleIds
-      userUpdated
-      updatedAt
-      accessCounter
-    }
-  }
-`;
