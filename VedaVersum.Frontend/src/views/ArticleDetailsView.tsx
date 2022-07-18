@@ -2,6 +2,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import MDEditor from '@uiw/react-md-editor';
 import { UPDATE_ARTICLE_ACCESS_COUNTER_MUTATION } from 'api/article-mutations';
 import goBackArrow from 'assets/icons/go-back-arrow.svg';
+import { VedaVersumArticle } from 'model/veda-versum-article';
 import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { formatDate, getLoggedInUserData, LoggedInUserData } from 'utils/main';
@@ -15,14 +16,14 @@ import UserName from './components/UserName';
 function ArticleDetailsView() {
   //#region get article data
   // read article id from the url parameters
-  const { id: articleId } = useParams();
+  const { id: currentArticleId } = useParams();
 
   // get article data from the database
   const { error, data, loading } = useQuery<GetArticleResponse>(ARTICLE_BY_ID_QUERY, {
     errorPolicy: 'all',
-    variables: { articleId: articleId },
+    variables: { articleId: currentArticleId },
   });
-  const currentArticle = data?.article;
+  const currentArticle: VedaVersumArticle | undefined = data?.article;
   //#endregion
 
   // get login data for author validation
@@ -32,7 +33,7 @@ function ArticleDetailsView() {
   const [updateArticleAccessCounter] = useMutation<UpdateArticleAccessCounterResponse>(
     UPDATE_ARTICLE_ACCESS_COUNTER_MUTATION,
     {
-      variables: { articleId: articleId },
+      variables: { articleId: currentArticleId },
     },
   );
 
