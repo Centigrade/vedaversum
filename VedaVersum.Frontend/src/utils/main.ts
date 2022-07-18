@@ -9,6 +9,11 @@ import { setNotificationsClicked } from 'store/notificationsClicked.reducer';
 
 //#region types
 /**
+ * type for article actions
+ */
+export type articleAction = 'CREATE' | 'UPDATE' | 'DELETE';
+
+/**
  * type for the prepared user data of the user currently logged in
  */
 export interface LoggedInUserData {

@@ -12,7 +12,10 @@ export interface LastModifiedArticlesState {
  */
 export interface LastModifiedArticlesAction {
   type: string;
-  payload: VedaVersumArticle;
+  payload: {
+    updatedArticle: VedaVersumArticle;
+    deleted: boolean;
+  };
 }
 //#endregion
 
@@ -24,15 +27,26 @@ const lastModifiedArticlesSlice = createSlice({
   initialState: { value: [] },
   reducers: {
     addArticleToLastModified(state: LastModifiedArticlesState, action: LastModifiedArticlesAction) {
-      const newArticle = action.payload;
+      const newArticle = action.payload.updatedArticle;
       const articleToReplace = state.value.find(article => article.id === newArticle.id);
       let replaceIndex = -1;
+
       if (articleToReplace) {
         replaceIndex = state.value.indexOf(articleToReplace);
         if (articleToReplace && replaceIndex !== -1) {
-          state.value[replaceIndex] = newArticle;
+          // DELETED
+          if (action.payload.deleted) {
+            console.log('entered deleted');
+            state.value.splice(replaceIndex, 1);
+            // UPDATED
+          } else {
+            console.log('entered updated');
+            state.value[replaceIndex] = newArticle;
+          }
         }
+        // CREATED
       } else {
+        console.log('entered created');
         state.value.push(newArticle);
       }
     },

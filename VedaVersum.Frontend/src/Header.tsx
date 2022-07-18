@@ -1,12 +1,13 @@
 import { useApolloClient } from '@apollo/client';
 import { ARTICLE_CHANGED_SUBSCRIPTION } from 'api/subscriptions';
 import logoWithName from 'assets/logo-with-name.svg';
+import { VedaVersumArticle } from 'model/veda-versum-article';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { addArticleToLastModified } from 'store/lastModifiedArticles.reducer';
 import { increaseNotificationsCounter } from 'store/notificationsCounter.reducer';
-import { getLoggedInUserData, resetAllViewSettings } from 'utils/main';
+import { articleAction, getLoggedInUserData, resetAllViewSettings } from 'utils/main';
 import ArticleEditor from 'views/components/ArticleEditor';
 import PopUpModal from 'views/components/PopUpModal';
 import { Subscription } from 'zen-observable-ts';
@@ -36,14 +37,17 @@ function Header() {
     if (!subscription) {
       setSubscription(
         client.subscribe({ query: ARTICLE_CHANGED_SUBSCRIPTION }).subscribe((result: any) => {
-          const updatedArticle = result.data?.articleChanged?.vedaVersumArticle;
+          const articleAction: articleAction = result.data?.articleChanged?.action;
+          const updatedArticle: VedaVersumArticle = result.data?.articleChanged?.vedaVersumArticle;
 
           // This executes each time when GraphQL pushes subscription notification
-          if (
+          if (articleAction === 'DELETE') {
+            dispatch(addArticleToLastModified({ updatedArticle: updatedArticle, deleted: true }));
+          } else if (
             updatedArticle.userUpdated !== userData.userEmail &&
-            updatedArticle.vedaVersumArticle.userCreated !== userData.userEmail
+            updatedArticle.userCreated !== userData.userEmail
           ) {
-            dispatch(addArticleToLastModified(updatedArticle));
+            dispatch(addArticleToLastModified({ updatedArticle: updatedArticle, deleted: false }));
             dispatch(increaseNotificationsCounter());
           }
         }),

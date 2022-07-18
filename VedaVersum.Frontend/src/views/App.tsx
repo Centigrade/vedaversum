@@ -81,14 +81,17 @@ function App() {
           <div className="w-2/3">
             {notificationsClicked ? (
               // show last modified articles from global store
-              lastModifiedArticles ? (
+              lastModifiedArticles.length > 0 ? (
                 <>
                   <h1 className="mt-3 mb-6 text-head font-semibold">{notificationsClickedHeadingText}</h1>
                   <RenderedArticles articles={lastModifiedArticles}></RenderedArticles>
                 </>
               ) : (
                 // last modified articles empty
-                'This should never happen: Last modified articles are empty! Please try again.'
+                <>
+                  <h1 className="mt-3 mb-6 text-head font-semibold">{notificationsClickedHeadingText}</h1>
+                  <p>{'Last modified articles are empty! Maybe the updated article(s) were meanwhile deleted.'}</p>
+                </>
               )
             ) : (
               // show main page with articles list
