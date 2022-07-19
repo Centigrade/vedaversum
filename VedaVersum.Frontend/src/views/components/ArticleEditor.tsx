@@ -4,7 +4,7 @@ import { CREATE_ARTICLE_MUTATION, UPDATE_ARTICLE_MUTATION } from 'api/article-mu
 import { ArticleActionResponse } from 'model/response-types';
 import { VedaVersumArticle } from 'model/veda-versum-article';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
 
 //#region component types
 /**
@@ -47,7 +47,7 @@ function ArticleEditor(props: EditorProps) {
   };
 
   // variable needed for router navigation
-  let navigateTo = useNavigate();
+  let navigateTo: NavigateFunction = useNavigate();
   //#endregion
 
   //#region editor variables

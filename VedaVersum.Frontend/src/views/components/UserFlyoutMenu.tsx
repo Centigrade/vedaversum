@@ -1,7 +1,8 @@
+import { AnyAction } from '@reduxjs/toolkit';
 import notificationIcon from 'assets/icons/notification-icon.svg';
-import { useState } from 'react';
+import { Dispatch, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { setNotificationsClicked } from 'store/notificationsClicked.reducer';
 import { resetNotificationsCounter } from 'store/notificationsCounter.reducer';
 import { RootState } from 'store/store';
@@ -15,11 +16,11 @@ function UserFlyoutMenu() {
   const avatarUrl = getAvatarUrl(loginUserData.userName);
 
   // variable needed for router navigation
-  let navigateTo = useNavigate();
+  let navigateTo: NavigateFunction = useNavigate();
 
   // get variables from global store
   const numberOfNotifications = useSelector((state: RootState) => state.notificationsCounter.value);
-  const dispatch = useDispatch();
+  const dispatch: Dispatch<AnyAction> = useDispatch();
 
   // component state
   const [menuOpen, setMenuOpen] = useState(false);

@@ -1,10 +1,11 @@
 import { ApolloError, useMutation } from '@apollo/client';
+import { AnyAction } from '@reduxjs/toolkit';
 import { DELETE_ARTICLE_MUTATION } from 'api/article-mutations';
 import { ArticleActionResponse } from 'model/response-types';
 import { VedaVersumArticle } from 'model/veda-versum-article';
-import { useState } from 'react';
+import { Dispatch, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { resetAllViewSettings } from 'utils/main';
 
 /**
@@ -16,7 +17,7 @@ interface DeleteArticleProps {
 }
 
 function ConfirmDeleteArticle(props: DeleteArticleProps) {
-  const dispatch = useDispatch();
+  const dispatch: Dispatch<AnyAction> = useDispatch();
   //#region state - article variables
   const title = props.dataContext.title;
   const confirmText = `Are you sure you want to delete the article "${title}"?`;
@@ -24,7 +25,7 @@ function ConfirmDeleteArticle(props: DeleteArticleProps) {
   const [databaseError, setDatabaseError] = useState<ApolloError | undefined>(undefined);
 
   // variable needed for router navigation
-  let navigateTo = useNavigate();
+  let navigateTo: NavigateFunction = useNavigate();
 
   /**
    * calls database mutation to delete an existing article in the database

@@ -17,7 +17,7 @@ export interface ArticleItemProps {
 //#endregion
 
 function ArticleItem(props: ArticleItemProps) {
-  const article = props.articleData;
+  const article: VedaVersumArticle = props.articleData;
 
   //#region render component
   return (

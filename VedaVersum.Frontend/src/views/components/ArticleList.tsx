@@ -1,5 +1,6 @@
+import { AnyAction } from '@reduxjs/toolkit';
 import { VedaVersumArticle } from 'model/veda-versum-article';
-import { useCallback, useEffect, useState } from 'react';
+import { Dispatch, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveTab } from 'store/activeTab.reducer';
 import { RootState } from 'store/store';
@@ -42,8 +43,8 @@ function ArticlesList(props: ArticleListProps) {
   ];
 
   // set active articles according to the active tab
-  const activeTab = useSelector((state: RootState) => state.activeTab.value);
-  const dispatch = useDispatch();
+  const activeTab: ActiveTab = useSelector((state: RootState) => state.activeTab.value);
+  const dispatch: Dispatch<AnyAction> = useDispatch();
   //#endregion
 
   //#region helper functions

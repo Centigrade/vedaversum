@@ -1,7 +1,10 @@
 import { useQuery } from '@apollo/client';
+import { AnyAction } from '@reduxjs/toolkit';
 import { ALL_ARTICLES_QUERY, CREATED_ARTICLES_QUERY } from 'api/article-queries';
 import goBackArrow from 'assets/icons/go-back-arrow.svg';
 import { GetAllArticlesResponse, GetUserCreatedArticlesResponse } from 'model/response-types';
+import { VedaVersumArticle } from 'model/veda-versum-article';
+import { Dispatch } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetLastModifiedArticles } from 'store/lastModifiedArticles.reducer';
 import { setNotificationsClicked } from 'store/notificationsClicked.reducer';
@@ -23,8 +26,8 @@ function App() {
 
   //#region get variables from global store
   const notificationsClicked = useSelector((state: RootState) => state.notificationsClicked.value);
-  const lastModifiedArticles = useSelector((state: RootState) => state.lastModifiedArticles.value);
-  const dispatch = useDispatch();
+  const lastModifiedArticles: VedaVersumArticle[] = useSelector((state: RootState) => state.lastModifiedArticles.value);
+  const dispatch: Dispatch<AnyAction> = useDispatch();
   //#endregion
 
   //#region get data from the database

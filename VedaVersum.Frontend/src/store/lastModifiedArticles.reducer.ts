@@ -13,7 +13,13 @@ export interface LastModifiedArticlesState {
 export interface LastModifiedArticlesAction {
   type: string;
   payload: {
+    /**
+     * article that was created, updated or deleted
+     */
     updatedArticle: VedaVersumArticle;
+    /**
+     * boolean indicating if the given article was deleted
+     */
     deleted: boolean;
   };
 }
@@ -27,9 +33,9 @@ const lastModifiedArticlesSlice = createSlice({
   initialState: { value: [] },
   reducers: {
     addArticleToLastModified(state: LastModifiedArticlesState, action: LastModifiedArticlesAction) {
-      const newArticle = action.payload.updatedArticle;
+      const newArticle: VedaVersumArticle = action.payload.updatedArticle;
       // check if article is already in the last modified articles list
-      const articleToReplace = state.value.find(article => article.id === newArticle.id);
+      const articleToReplace: VedaVersumArticle | undefined = state.value.find(article => article.id === newArticle.id);
       let replaceIndex = -1;
       if (articleToReplace) {
         // if article is already in the last modified articles list,
@@ -55,7 +61,6 @@ const lastModifiedArticlesSlice = createSlice({
           state.value.push(newArticle);
         }
       }
-
       /* }  */
     },
     resetLastModifiedArticles(state: LastModifiedArticlesState) {

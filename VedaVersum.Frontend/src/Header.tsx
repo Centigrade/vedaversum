@@ -1,31 +1,30 @@
 import { useSubscription } from '@apollo/client';
+import { AnyAction } from '@reduxjs/toolkit';
 import { ARTICLE_CHANGED_SUBSCRIPTION } from 'api/subscriptions';
 import logoWithName from 'assets/logo-with-name.svg';
 import { VedaVersumArticle } from 'model/veda-versum-article';
-import { useEffect } from 'react';
+import { Dispatch, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { addArticleToLastModified } from 'store/lastModifiedArticles.reducer';
 import { increaseNotificationsCounter } from 'store/notificationsCounter.reducer';
-import { articleAction, getLoggedInUserData, resetAllViewSettings } from 'utils/main';
+import { articleAction, getLoggedInUserData, LoggedInUserData, resetAllViewSettings } from 'utils/main';
 import ArticleEditor from 'views/components/ArticleEditor';
 import PopUpModal from 'views/components/PopUpModal';
 import UserFlyoutMenu from './views/components/UserFlyoutMenu';
 
 function Header() {
   //#region state
-  const dispatch = useDispatch();
+  const dispatch: Dispatch<AnyAction> = useDispatch();
 
   // needed to filter changes that the user made by her/himself
-  const userData = getLoggedInUserData();
+  const userData: LoggedInUserData = getLoggedInUserData();
 
   // variable needed for router navigation
-  const navigateTo = useNavigate();
+  const navigateTo: NavigateFunction = useNavigate();
   //#endregion
 
   //#region subscription to article changes
-
-  //#region article changed subscription
   const { data: subscriptionData } = useSubscription(ARTICLE_CHANGED_SUBSCRIPTION);
 
   useEffect(() => {
