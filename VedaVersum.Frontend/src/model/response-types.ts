@@ -1,3 +1,4 @@
+import { articleAction } from 'utils/main';
 import { User } from './user';
 import { VedaVersumArticle } from './veda-versum-article';
 
@@ -73,4 +74,21 @@ export interface AuthenticationMutationResponse {
 export interface AuthenticationMutationVariables {
   oAuthCode: string;
 }
+//#endregion
+
+//#region subscription response types
+/**
+ * properties of the article that was changed via an article action
+ */
+export interface ChangedArticleProps {
+  action: articleAction;
+  vedaVersumArticle: VedaVersumArticle;
+}
+/**
+ * "ArticleChanged" subscription returns the article that was changed and the action which was done
+ */
+export interface ArticleChangedSubscriptionResponse {
+  articleChanged: ChangedArticleProps;
+}
+
 //#endregion

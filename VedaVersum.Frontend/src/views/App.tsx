@@ -18,7 +18,7 @@ function App() {
   // login data from user need for "my articles" filter
   const loginUserData: LoggedInUserData = getLoggedInUserData();
 
-  const notificationsClickedHeadingText = 'Last updated';
+  const notificationsClickedHeadingText = 'Last modified';
 
   const loadingText = 'Loading...';
   const unknownErrorText = 'Unknown error loading data from the database, please try again.';

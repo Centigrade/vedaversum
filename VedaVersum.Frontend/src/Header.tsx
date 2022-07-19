@@ -2,6 +2,7 @@ import { useSubscription } from '@apollo/client';
 import { AnyAction } from '@reduxjs/toolkit';
 import { ARTICLE_CHANGED_SUBSCRIPTION } from 'api/subscriptions';
 import logoWithName from 'assets/logo-with-name.svg';
+import { ArticleChangedSubscriptionResponse } from 'model/response-types';
 import { VedaVersumArticle } from 'model/veda-versum-article';
 import { Dispatch, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
@@ -25,7 +26,7 @@ function Header() {
   //#endregion
 
   //#region subscription to article changes
-  const { data: subscriptionData } = useSubscription(ARTICLE_CHANGED_SUBSCRIPTION);
+  const { data: subscriptionData } = useSubscription<ArticleChangedSubscriptionResponse>(ARTICLE_CHANGED_SUBSCRIPTION);
 
   useEffect(() => {
     if (subscriptionData) {

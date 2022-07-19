@@ -11,7 +11,7 @@ interface RenderedArticlesProps {
 }
 //#endregion
 function RenderedArticles(props: RenderedArticlesProps) {
-  const activeArticles: VedaVersumArticle[] | undefined = props.articles;
+  const activeArticles: VedaVersumArticle[] = props.articles ?? [];
 
   return (
     <div>
