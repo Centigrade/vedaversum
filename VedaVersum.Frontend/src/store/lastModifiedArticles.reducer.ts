@@ -28,27 +28,35 @@ const lastModifiedArticlesSlice = createSlice({
   reducers: {
     addArticleToLastModified(state: LastModifiedArticlesState, action: LastModifiedArticlesAction) {
       const newArticle = action.payload.updatedArticle;
+      // check if article is already in the last modified articles list
       const articleToReplace = state.value.find(article => article.id === newArticle.id);
       let replaceIndex = -1;
-
       if (articleToReplace) {
+        // if article is already in the last modified articles list,
+        // get index of the article
         replaceIndex = state.value.indexOf(articleToReplace);
-        if (articleToReplace && replaceIndex !== -1) {
-          // DELETED
-          if (action.payload.deleted) {
-            console.log('entered deleted');
-            state.value.splice(replaceIndex, 1);
-            // UPDATED
-          } else {
-            console.log('entered updated');
-            state.value[replaceIndex] = newArticle;
-          }
-        }
-        // CREATED
-      } else {
-        console.log('entered created');
-        state.value.push(newArticle);
       }
+
+      // article was DELETED
+      if (action.payload.deleted) {
+        // if article is in the last modified articles list,
+        // remove it; if not, do nothing
+        if (articleToReplace && replaceIndex !== -1) {
+          state.value.splice(replaceIndex, 1);
+        }
+      } else {
+        // article was UPDATED or CREATED
+        if (articleToReplace && replaceIndex !== -1) {
+          // if article is in the last modified articles list,
+          // replace the article with the new version
+          state.value[replaceIndex] = newArticle;
+        } else {
+          // add article to the last modified articles list
+          state.value.push(newArticle);
+        }
+      }
+
+      /* }  */
     },
     resetLastModifiedArticles(state: LastModifiedArticlesState) {
       state.value.length = 0;
