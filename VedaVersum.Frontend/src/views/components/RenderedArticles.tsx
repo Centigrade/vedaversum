@@ -18,16 +18,7 @@ function RenderedArticles(props: RenderedArticlesProps) {
       {/* data available */}
       {activeArticles &&
         activeArticles.map((article, index) => (
-          // TODO: pretty url
-          // const articleURL = article.title.replace(" ", "-"); /${replaceSpaces(article.title)}
           <Link to={`/${article.id}`} key={index}>
-            {/* <Link
-                to={{
-                  pathname: `/${article.title}`,
-                  state: { id: article.id },
-                }}
-                key={index}
-              > */}
             <ArticleListItem articleData={article} />
           </Link>
         ))}

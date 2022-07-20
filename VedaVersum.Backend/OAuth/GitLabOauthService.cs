@@ -70,7 +70,7 @@ namespace VedaVersum.Backend.OAuth
                 { "client_secret", _settings.Secret },
                 { "code", oAuthCode },
                 { "grant_type", "authorization_code" },
-                { "redirect_uri", "http://localhost:3000/login" } // TODO: Use environment variable
+                { "redirect_uri", "http://localhost:3000/login" } 
             };
             var encodedContent = new FormUrlEncodedContent(parameters!);
 

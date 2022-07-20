@@ -90,6 +90,5 @@ namespace VedaVersum.Test
                 TestUser));
         }
 
-        // TODO: Check if UpdateCard or DeleteCard method were called if "Update" or "Delete" actions were passed
     }
 }
