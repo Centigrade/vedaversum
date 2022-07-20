@@ -21,7 +21,7 @@ function ArticleItem(props: ArticleItemProps) {
 
   //#region render component
   return (
-    <div className="mb-12 rounded-lg border border-gray-600-opacity-50 shadow-md p-5" data-color-mode="light">
+    <div className="mb-12 rounded-lg border border-gray-600/50 shadow-md p-5" data-color-mode="light">
       <div className="flex items-between">
         <div className="w-full flex flex-col" id="article-list-item">
           <div className="flex items-center text-article-info mb-5">

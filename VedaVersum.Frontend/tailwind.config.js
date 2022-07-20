@@ -8,18 +8,6 @@ module.exports = {
       xl: '1280px',
       '2xl': '1536px',
     },
-    colors: {
-      primary: 'var(--primary)',
-      'primary-dark': 'var(--primary-dark)',
-      'primary-light': 'var(--primary-light)',
-      'gray-400': 'var(--gray-400)',
-      'gray-600': 'var(--gray-600)',
-      'gray-600-opacity-50': 'var(--gray-600-opacity-50)',
-      'gray-800': 'var(--gray-800)',
-      white: 'var(--white)',
-      transparent: 'var(--transparent)',
-      red: 'var(--red)',
-    },
     fontSize: {
       head: ['64px', '96px'],
       subhead: ['36px', '54px'],
@@ -30,8 +18,20 @@ module.exports = {
     fontFamily: {
       raleway: 'Raleway',
     },
-
-    extend: { boxShadow: { 'button-hover': '0px 0px 0px 4px "#BBF7D0"' } },
+    extend: {
+      boxShadow: { 'button-hover': '0px 0px 0px 4px "#BBF7D0"' },
+      colors: {
+        primary: 'var(--primary)',
+        'primary-dark': 'var(--primary-dark)',
+        'primary-light': 'var(--primary-light)',
+        'gray-400': 'var(--gray-400)',
+        'gray-600': 'var(--gray-600)',
+        'gray-800': 'var(--gray-800)',
+        white: 'var(--white)',
+        transparent: 'var(--transparent)',
+        red: 'var(--red)',
+      },
+    },
   },
   plugins: [require('@tailwindcss/line-clamp')],
 };
