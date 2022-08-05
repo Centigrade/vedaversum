@@ -263,5 +263,5 @@ __pycache__/
 
 # SonarQube
 .sonarqube
-VedaVersum.Frontend/src/authentication/RequreAuth.tsx
+VedaVersum.Frontend/src/authentication/GitLabAuth.ts
 VedaVersum.Backend/global.json
